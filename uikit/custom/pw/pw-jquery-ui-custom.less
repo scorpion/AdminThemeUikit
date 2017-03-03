@@ -1,0 +1,438 @@
+// Theme specific jQuery UI overrides and additions
+
+@pw-ui-widget-link-color: @global-link-color;
+@pw-ui-widget-link-hover-color: @global-link-hover-color;
+@pw-ui-widget-overlay-background: @global-secondary-background;
+
+@pw-ui-state-default-color: @global-inverse-color;
+@pw-ui-state-default-background: @global-primary-background;
+@pw-ui-state-hover-color: @pw-ui-state-default-color;
+@pw-ui-state-hover-background: lighten(@pw-ui-state-default-background, 5%);
+
+@pw-button-font-size: @button-font-size;
+@pw-button-border-radius: 4px;
+@pw-button-background: @button-primary-background;
+@pw-button-color: @button-primary-color;
+@pw-button-hover-background: @button-primary-hover-background;
+@pw-button-hover-color: @button-primary-hover-color;
+@pw-button-secondary-background: lighten(@pw-button-background, 7%);
+@pw-button-secondary-color: @pw-button-color;
+@pw-button-secondary-hover-background: @pw-button-background;
+@pw-button-secondary-hover-color: @pw-button-color;
+
+@pw-accordion-header-background: @global-primary-background;
+@pw-accordion-header-color: @global-inverse-color;
+
+@pw-progress-background: lighten(@progress-bar-background, 20%);
+@pw-progress-bar-background: @progress-bar-background;
+@pw-progress-bar-color: @global-inverse-color;
+
+@pw-dialog-titlebar-background: @background-muted-background;
+@pw-dialog-titlebar-color: @global-color;
+@pw-dialog-titlebar-height: @global-line-height;
+@pw-dialog-buttonpane-background: @background-muted-background;
+
+@pw-slider-range-background: @global-primary-background;
+@pw-slider-background: lighten(@pw-slider-range-background, 35%);
+@pw-slider-height: 8px; // recommended 
+
+@pw-tooltip-padding: 10px 20px;
+@pw-tooltip-color: @global-inverse-color;
+@pw-tooltip-background: @global-color;
+@pw-tooltip-border: 2px solid @global-inverse-color;
+@pw-tooltip-box-shadow: 0 0 7px @global-color;
+
+
+.ui-widget {
+  font-size: @global-font-size;
+}
+
+// for the most part, .ui-icon is no longer used by the PW core
+.ui-icon {
+  float: left;
+  margin-right: 2px;
+}
+
+// .Inputfields li:not(.Inputfield) .ui-widget-header .ui-icon,
+.ui-state-default .ui-icon,
+.ui-state-hover .ui-icon,
+.ui-state-highlight .ui-icon,
+.ui-state-error .ui-icon {
+  /* use white icons */
+  background-image: url(images/ui-icons_ffffff_256x240.png);
+}
+
+// asmSelect and similar
+.pw-content {
+  .ui-widget-content a {
+    color: @pw-ui-widget-link-color;
+  }
+
+  li.ui-state-default,
+  .ui-widget-content li.ui-state-default {
+    background: @pw-ui-state-default-background; 
+    border-color: @pw-ui-state-default-background; 
+    color: @pw-ui-state-default-color; 
+  }
+  li.ui-state-default a,
+  .ui-widget-content li.ui-state-default a {
+    color: @pw-ui-state-default-color; 
+  }
+  li.ui-state-hover,
+  .ui-widget-content li.ui-state-hover {
+    background: @pw-ui-state-hover-background; 
+    border-color: @pw-ui-state-hover-background; 
+    color: @pw-ui-state-hover-color;
+  }
+  li.ui-state-hover a,
+  .ui-widget-content li.ui-state-hover a {
+    color: @pw-ui-state-hover-color;
+  }
+}
+
+// accordion
+.ui-accordion.ui-widget {
+  .ui-accordion-header {
+    padding-left: 1.5em;
+    background: @pw-accordion-header-background;
+    border: none;
+    border-radius: 0;
+    &, h1, h2, h3, h4, a {
+      color: @pw-accordion-header-color;
+      > a {
+        color: @pw-accordion-header-color;
+      }
+    }
+  }
+  .ui-accordion-content {
+    margin-top: 0;
+    padding-left: @global-small-margin;
+    padding-right: @global-small-margin;
+    border-radius: 0;
+    border: @global-border;
+  }
+}
+
+// highlight and error sates
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+  color: @alert-primary-color;
+  background: @alert-primary-background;
+  border: none;
+}
+
+.ui-state-error,
+.ui-widget-content .ui-state-error {
+  background: @alert-danger-background;
+  color: @alert-danger-color;
+  border: none;
+}
+
+// modal dialog windows
+.ui-dialog {
+  border: none;
+  padding: 0;
+
+  .ui-dialog-titlebar {
+    margin: 0;
+    background: @pw-dialog-titlebar-background;
+    border: none;
+    color: @pw-dialog-titlebar-color;
+    border-radius: 0;
+    line-height: @pw-dialog-titlebar-height;
+
+    .ui-button {
+      color: @pw-dialog-titlebar-color;
+      border: none;
+      background: none;
+      outline: none;
+      padding: 0 1.5em;
+      top: 9px;
+      line-height: @pw-dialog-titlebar-height;
+      .ui-button-text {
+        display: none;
+      }
+    }
+  }
+
+  .ui-dialog-buttonpane {
+    background: @pw-dialog-buttonpane-background;
+    border: none;
+    padding: 1px 8px 1px 8px;
+  }
+
+  .ui-dialog-content {
+    padding: 0;
+    max-width: 100%; // prevents safari overflow 
+  }
+
+}
+
+.ui-widget-overlay {
+  background: @pw-ui-widget-overlay-background;
+}
+
+// buttons
+.ui-button,
+.ui-button.ui-state-default,
+.ui-button.ui-state-hover {
+  white-space: nowrap;
+  border-radius: @pw-button-border-radius;
+  .uk-button();
+  .uk-button-primary();
+  background: @pw-button-background;
+  color: @pw-button-color;
+  font-size: @pw-button-font-size;
+  
+  &.ui-priority-secondary {
+    background: @pw-button-secondary-background;
+    color: @pw-button-secondary-color;
+  }
+}
+small .ui-button,
+small .ui-button.ui-state-default,
+small .ui-button.ui-state-hover {
+  // smaller buttons
+  line-height: 30px;
+  padding: 0 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  background: @pw-button-secondary-background;
+  color: @pw-button-secondary-color;
+  &:hover,
+  .ui-state-hover {
+    background: @pw-button-background;
+    color: @pw-button-color;
+  }
+}
+
+.ui-button {
+  span.ui-button-text {
+    padding: 0;
+ }
+ 
+  // hovered button
+  &:hover,
+  &.ui-state-hover {
+    cursor: pointer;
+    background-color: @pw-button-hover-background;
+    color: @pw-button-hover-color;
+   
+    // hovered secondary button
+    &.ui-priority-secondary {
+      background: @pw-button-secondary-hover-background;
+      color: @pw-button-secondary-hover-color;
+    }
+  }
+ 
+  // active button
+  &.ui-state-active {
+    // not yet used
+  }
+
+  // two buttons next to eachother
+  & + .ui-button {
+    margin-left: @global-small-margin;
+  }
+}
+
+// button with wrapping <a> tag
+a > .ui-button {
+  text-decoration: none;
+}
+
+// button followed by a no-margin div with wrapping a tag
+div + a > .ui-button {
+  margin-top: @global-margin;
+}
+
+// buttons with dropdown, consist of two .ui-buttons right next to each other: main + toggle
+button.ui-button.pw-button-dropdown-main {
+  // main button
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0 !important;
+}
+
+button.ui-button.pw-button-dropdown-toggle {
+  // toggle button
+  outline: none !important;
+  margin-left: 0 !important;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid rgba(255,255,255,0.5); // line separating main and toggle 
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+// Sliders
+.ui-slider .ui-slider-range,
+.ui-widget .ui-slider .ui-slider-range,
+.ui-widget-content .ui-slider .ui-slider-range {
+  background: @pw-slider-range-background;
+  // remove padding added to Inputfields that was getting inherited here 
+  padding: 0;
+}
+
+.ui-slider,
+.ui-slider-horizontal {
+  background: @pw-slider-background;
+}
+
+.ui-slider-horizontal {
+  height: @pw-slider-height;
+  border: none;
+  .ui-slider-handle {
+    top: -5px;
+  }
+}
+
+.ui-slider-horizontal,
+.ui-slider-range {
+  border-radius: 4px;
+}
+
+.ui-slider .ui-slider-handle {
+  border-width: 0;
+  outline: none;
+  border: none;
+  width: 17px;
+  height: 21px;
+  background-color: transparent;
+  background: url(images/slider_handles.png) 0 0 no-repeat;
+}
+
+body.hidpi-device .ui-slider .ui-slider-handle {
+  // higher res slider for hidpi
+  background: url(images/slider_handles2x.png) 0 0 no-repeat;
+  background-size: 34px 21px;
+}
+
+// Tooltips
+.ui-tooltip {
+  padding: @pw-tooltip-padding;
+  color: @pw-tooltip-color;
+  box-shadow: @pw-tooltip-box-shadow;
+  background: @pw-tooltip-background;
+  border: @pw-tooltip-border;
+}
+
+a.pw-tooltip:hover,
+a.tooltip:hover {
+  border: none;
+  background: inherit;
+  cursor: help;
+}
+
+/*
+.arrow {
+  // tooltip arrow/pointer: doesn't appear to be in use
+  width: 70px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  bottom: -16px;
+
+  &.top {
+    top: -16px;
+    bottom: auto;
+  }
+  &.left {
+    left: 20%;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px @global-color;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    tranform: rotate(45deg);
+  }
+  &.top:after {
+    bottom: -20px;
+    top: auto;
+  }
+}
+*/
+
+/*
+
+<div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+	<div class="ui-progressbar-value ui-widget-header InputfieldItemHeader ui-corner-left" style="width: 45.9389%;"><span>45%</span>
+	</div>
+</div>
+
+
+*/
+
+// progressbar primarily used by the PW core for file uploads
+.ui-progressbar {
+  border: none;
+  padding: 0;
+  background: @pw-progress-background;
+  margin-top: 1px;
+  border-radius: 0;
+
+  .ui-progressbar-value {
+    background: @pw-progress-bar-background;
+    color: @pw-progress-bar-color;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    span {
+      font-weight: normal;
+      padding-right: @global-small-margin;
+    }
+  }
+}
+
+.ui-timepicker-div {
+  margin-top: 1em;
+}
+
+/**
+ * ui-autocomplete
+ *
+ */
+/*
+.ui-autocomplete {
+  
+  z-index: 200 !important;
+  background: none;
+
+  li {
+    background: @button-primary-background;
+    a {
+      cursor: pointer;
+      background: @button-primary-background;
+    }
+  }
+  .ui-widget-header {
+    background: none;
+    border: none;
+    &:hover {
+      border: none;
+      margin: 0;
+    }
+
+    a, a:hover {
+      background: lighten(@button-primary-background, 5%);
+      color: @button-primary-color;
+      border: none;
+      margin: 0;
+      text-shadow: none;
+      pointer: arrow;
+    }
+  }
+}
+*/
+

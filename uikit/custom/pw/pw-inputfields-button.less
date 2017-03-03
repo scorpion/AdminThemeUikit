@@ -1,0 +1,44 @@
+/*** Buttons *****************************************************************/
+
+.InputfieldSubmit,
+.InputfieldButton {
+  .InputfieldHeader {
+    // no need for a header with buttons 
+    display: none;
+  }
+  .InputfieldContent {
+    // we don't need any extra visual furniture for buttons 
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+  }
+}
+
+// floated buttons
+.Inputfields {
+  .InputfieldButton + .InputfieldButton,
+  .InputfieldButton + .InputfieldSubmit,
+  .InputfieldSubmit + .InputfieldSubmit,
+  .InputfieldSubmit + .InputfieldButton {
+    // two buttons next to each other 
+    float: left;
+    margin-left: @pw-inputfield-button-margin;
+    margin-top: 0;
+  }
+
+  .Inputfield:not(.InputfieldSubmit):not(.InputfieldButton) + .InputfieldButton,
+  .Inputfield:not(.InputfieldSubmit):not(.InputfieldButton) + .InputfieldSubmit {
+    clear: left;
+  }
+}
+
+#pw-content-head-buttons {
+  // offset head buttons from each other
+  > * + * {
+    margin-right: @pw-inputfield-button-margin;
+  }
+}
+
+

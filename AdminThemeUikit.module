@@ -24,12 +24,12 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			'requires' => 'ProcessWire>=3.0.54'
 		); 
 	}
-	
+
 	/**
-	 * Debugging mode to be active only during development
+	 * Development mode, to be used when developing this module’s code
 	 *
 	 */
-	const debug = true;
+	const dev = false;
 
 	/**
 	 * Default logo image file (relative to this dir)
@@ -474,7 +474,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 */
 	public function renderPrimaryNavItems() {
 
-		$cache = self::debug ? '' : $this->wire('session')->getFor($this, 'prnav');
+		$cache = self::dev ? '' : $this->wire('session')->getFor($this, 'prnav');
 		if($cache) {
 			$this->markCurrentNavItems($cache);
 			return $cache;
@@ -487,7 +487,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$out .= $this->renderPrimaryNavItem($item);
 		}
 
-		if(!self::debug) $this->wire('session')->setFor($this, 'prnav', $out);
+		if(!self::dev) $this->wire('session')->setFor($this, 'prnav', $out);
 		$this->markCurrentNavItems($out);
 
 		return $out;
@@ -503,7 +503,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 */
 	public function renderSidebarNavItems() {
 
-		$cache = self::debug ? '' : $this->wire('session')->getFor($this, 'sidenav');
+		$cache = self::dev ? '' : $this->wire('session')->getFor($this, 'sidenav');
 
 		if($cache) {
 			$this->markCurrentNavItems($cache);
@@ -643,6 +643,21 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$logoURL = $this->wire('config')->urls->root . ltrim($logoURL, '/');
 		}
 		return $this->wire('sanitizer')->entities($logoURL);
+	}
+
+	/**
+	 * Get the primary Uikit CSS file to use
+	 * 
+	 * @return string
+	 * 
+	 */
+	public function getUikitCSS() {
+		$config = $this->wire('config');
+		if(self::dev) {
+			return $config->urls->adminTemplates . 'uikit/custom/pw.css';
+		} else {
+			return $config->urls->adminTemplates . 'uikit/dist/css/uikit.pw.min.css';
+		}
 	}
 
 	/**

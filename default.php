@@ -23,14 +23,8 @@ if(!defined("PROCESSWIRE")) die();
 if(!isset($content)) $content = '';
 $version = $adminTheme->version . 'a';
 
-if($config->debug && is_file(__DIR__ . '/DEVELOP.txt')) {
-	$uikitCSS = $config->urls->adminTemplates . "uikit/custom/pw.css";
-} else {
-	$uikitCSS = $config->urls->adminTemplates . "uikit/dist/css/uikit.pw.min.css?v=$version";
-}
-	
 $config->styles->prepend($config->urls->root . "wire/templates-admin/styles/AdminTheme.css?v=$version");
-$config->styles->prepend($uikitCSS);
+$config->styles->prepend($adminTheme->getUikitCSS());
 $config->styles->append($config->urls->root . "wire/templates-admin/styles/font-awesome/css/font-awesome.min.css?v=$version"); 
 	
 $ext = $config->debug ? "js" : "min.js";

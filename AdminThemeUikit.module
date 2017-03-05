@@ -382,7 +382,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			'listMarkup' => "<ul class='pw-notices' id='notices'>{out}</ul><!--/notices-->",
 			'itemMarkup' =>
 				"<li class='{class}'>" .
-					"<div class='uk-container'>{remove}{icon}{text}</div>" .
+					"<div class='uk-container uk-container-expand'>{remove}{icon}{text}</div>" .
 				"</li>"
 		);
 

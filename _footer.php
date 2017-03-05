@@ -12,7 +12,7 @@ if(!defined("PROCESSWIRE")) die();
 <!-- FOOTER -->
 <hr>
 <footer id='pw-footer' class='uk-margin'>
-	<div class='uk-container'>
+	<div class='uk-container uk-container-expand'>
 		<div uk-grid>
 			<div class='uk-width-1-3@m uk-flex-last@m uk-text-right@m uk-text-center'>
 				<div id='pw-uk-debug-toggle' class='uk-text-small'></div>

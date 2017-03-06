@@ -12682,6 +12682,13 @@ body .ui-tooltip {
 .ui-widget {
   font-size: 16px;
 }
+/****************************************************************
+ * ui-icon
+ * 
+ * Note that PW no longer uses ui-icons, so these apply
+ * only to addons that might still be using them. 
+ *
+ */
 .ui-icon {
   float: left;
   margin-right: 2px;
@@ -12690,9 +12697,12 @@ body .ui-tooltip {
 .ui-state-hover .ui-icon,
 .ui-state-highlight .ui-icon,
 .ui-state-error .ui-icon {
-  /* use white icons */
   background-image: url(images/ui-icons_ffffff_256x240.png);
 }
+/****************************************************************
+ * asmSelect and related
+ *
+ */
 .pw-content .ui-widget-content a {
   color: #1e87f0;
 }
@@ -12716,6 +12726,10 @@ body .ui-tooltip {
 .pw-content .ui-widget-content li.ui-state-hover a {
   color: #fff;
 }
+/****************************************************************
+ * ui-accordion
+ *
+ */
 .ui-accordion.ui-widget .ui-accordion-header {
   padding-left: 1.5em;
   background: #1e87f0;
@@ -12745,6 +12759,10 @@ body .ui-tooltip {
   border-radius: 0;
   border: #e5e5e5;
 }
+/****************************************************************
+ * highlight and error states
+ *
+ */
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
@@ -12758,6 +12776,10 @@ body .ui-tooltip {
   color: #f0506e;
   border: none;
 }
+/****************************************************************
+ * ui-dialog
+ *
+ */
 .ui-dialog {
   border: none;
   padding: 0;
@@ -12794,6 +12816,10 @@ body .ui-tooltip {
 .ui-widget-overlay {
   background: #222;
 }
+/****************************************************************
+ * ui-button
+ *
+ */
 .ui-button,
 .ui-button.ui-state-default,
 .ui-button.ui-state-hover {
@@ -12894,6 +12920,10 @@ button.ui-button.pw-button-dropdown-toggle {
   padding-left: 8px;
   padding-right: 8px;
 }
+/****************************************************************
+ * ui-slider
+ *
+ */
 .ui-slider .ui-slider-range,
 .ui-widget .ui-slider .ui-slider-range,
 .ui-widget-content .ui-slider .ui-slider-range {
@@ -12928,6 +12958,10 @@ body.hidpi-device .ui-slider .ui-slider-handle {
   background: url(images/slider_handles2x.png) 0 0 no-repeat;
   background-size: 34px 21px;
 }
+/****************************************************************
+ * ui-tooltip
+ *
+ */
 .ui-tooltip {
   padding: 10px 20px;
   color: #fff;
@@ -12941,53 +12975,10 @@ a.tooltip:hover {
   background: inherit;
   cursor: help;
 }
-/*
-.arrow {
-  // tooltip arrow/pointer: doesn't appear to be in use
-  width: 70px;
-  height: 16px;
-  overflow: hidden;
-  position: absolute;
-  left: 50%;
-  margin-left: -35px;
-  bottom: -16px;
-
-  &.top {
-    top: -16px;
-    bottom: auto;
-  }
-  &.left {
-    left: 20%;
-  }
-  &:after {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: -20px;
-    width: 25px;
-    height: 25px;
-    box-shadow: 6px 5px 9px -9px @global-color;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    tranform: rotate(45deg);
-  }
-  &.top:after {
-    bottom: -20px;
-    top: auto;
-  }
-}
-*/
-/*
-
-<div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-	<div class="ui-progressbar-value ui-widget-header InputfieldItemHeader ui-corner-left" style="width: 45.9389%;"><span>45%</span>
-	</div>
-</div>
-
-
-*/
+/****************************************************************
+ * ui-progressbar
+ *
+ */
 .ui-progressbar {
   border: none;
   padding: 0;
@@ -13006,45 +12997,205 @@ a.tooltip:hover {
   font-weight: normal;
   padding-right: 10px;
 }
-.ui-timepicker-div {
-  margin-top: 1em;
-}
-/**
- * ui-autocomplete
+/*****************************************************************
+ * ui-datepicker and timepicker
+ *
+ * Pulled from Renobird's AdminThemeReno 
  *
  */
-/*
-.ui-autocomplete {
-  
-  z-index: 200 !important;
-  background: none;
-
-  li {
-    background: @button-primary-background;
-    a {
-      cursor: pointer;
-      background: @button-primary-background;
-    }
-  }
-  .ui-widget-header {
-    background: none;
-    border: none;
-    &:hover {
-      border: none;
-      margin: 0;
-    }
-
-    a, a:hover {
-      background: lighten(@button-primary-background, 5%);
-      color: @button-primary-color;
-      border: none;
-      margin: 0;
-      text-shadow: none;
-      pointer: arrow;
-    }
-  }
+.ui-datepicker {
+  font-size: 0.875rem;
+  z-index: 100;
+  min-width: 260px;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  background: #222;
+  color: #fff;
 }
-*/
+.ui-datepicker table {
+  table-layout: fixed;
+  margin: 0 0 15px 0;
+}
+.ui-datepicker table th {
+  color: #fff;
+  font-weight: normal;
+}
+.ui-datepicker table td {
+  padding: 0;
+  width: 14.25%;
+}
+.ui-datepicker table td a {
+  padding: 0.6em 0;
+}
+.ui-datepicker table td .ui-state-default {
+  background: none;
+  text-align: center;
+  border: 1px solid #222;
+  border-radius: 3px;
+  line-height: 1.2em;
+  color: #fff;
+}
+.ui-datepicker table td .ui-state-default:hover {
+  background: #363636;
+  border: 1px solid #363636;
+  color: #fff;
+}
+.ui-datepicker table td .ui-state-highlight,
+.ui-datepicker table td .ui-state-highlight:hover {
+  border: 1px solid #363636;
+  background: #363636;
+  color: #fff;
+}
+.ui-datepicker table td .ui-state-active,
+.ui-datepicker table td .ui-state-active:hover {
+  background: #1e87f0;
+  border-color: #1e87f0;
+  color: #fff;
+}
+.ui-datepicker .ui-datepicker-title {
+  color: #fff;
+}
+.ui-datepicker .ui-datepicker-title .ui-datepicker-month {
+  margin-right: 3px;
+}
+.ui-datepicker .ui-widget-content {
+  border: none;
+}
+.ui-datepicker .ui-datepicker-header {
+  background: none;
+  border-radius: 0;
+  border-width: 0 0 1px 0;
+  border-bottom: 1px solid #363636;
+  padding: 0 0 0.8em 0;
+  margin: 0 0 0.5em 0;
+  line-height: 1;
+}
+.ui-datepicker .ui-datepicker-next {
+  right: 0;
+  background: none;
+  font-weight: normal;
+  color: #626262;
+}
+.ui-datepicker .ui-datepicker-next .ui-icon {
+  display: none;
+}
+.ui-datepicker .ui-datepicker-next:before {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  font-size: 1.4em;
+  content: "\f138";
+  font-family: fontAwesome;
+  margin: 0 5px 0 0;
+}
+.ui-datepicker .ui-datepicker-next.ui-datepicker-next-hover {
+  border: none;
+  top: 2px;
+  right: 0;
+  color: #1e87f0;
+  cursor: pointer;
+}
+.ui-datepicker .ui-datepicker-prev {
+  left: 0;
+  background: none;
+  font-weight: normal;
+  color: #626262;
+}
+.ui-datepicker .ui-datepicker-prev .ui-icon {
+  display: none;
+}
+.ui-datepicker .ui-datepicker-prev:before {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  font-size: 1.4em;
+  content: "\f137";
+  font-family: fontAwesome;
+  margin: 0 5px 0 0;
+}
+.ui-datepicker .ui-datepicker-prev.ui-datepicker-prev-hover {
+  border: none;
+  top: 2px;
+  left: 0;
+  color: #1e87f0;
+  cursor: pointer;
+}
+.ui-datepicker button.ui-datepicker-current {
+  color: #fff;
+  background: #555555;
+  border-color: #555555;
+  font-size: 1em;
+}
+.ui-datepicker button.ui-datepicker-current:before {
+  content: "\f017";
+  font-family: fontAwesome;
+  margin: 0 5px 0 0;
+}
+.ui-datepicker button.ui-datepicker-close {
+  background: #1e87f0;
+  border-color: #1e87f0;
+  color: #fff;
+  font-weight: normal;
+  transition: all 150ms ease-in;
+  font-size: 1em;
+}
+.ui-datepicker button.ui-datepicker-close:hover {
+  background: #1e87f0;
+  border-color: #1e87f0;
+}
+.ui-datepicker button.ui-datepicker-close:before {
+  content: "\f058";
+  font-family: fontAwesome;
+  margin: 0 5px 0 0;
+}
+.ui-datepicker .ui-slider,
+.ui-datepicker .ui-slider-horizontal {
+  background: #555555;
+}
+.ui-datepicker .ui-timepicker-div {
+  padding: 15px 0 15px 0 !important;
+  border-top: 1px solid #313131;
+  border-bottom: 1px solid #313131;
+  margin-top: 1em;
+}
+.ui-datepicker .ui-timepicker-div #ui_tpicker_time_Inputfield_date {
+  color: #fff;
+}
+.ui-datepicker .ui-timepicker-div .ui-widget-header {
+  margin-bottom: 8px;
+}
+.ui-datepicker .ui-timepicker-div .ui-timepicker-select {
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 12px;
+}
+.ui-datepicker .ui-timepicker-div .ui-slider-horizontal {
+  top: 4px;
+}
+.ui-datepicker .ui-timepicker-div dt,
+.ui-datepicker .ui-timepicker-div .ui_tpicker_time_input {
+  font-size: 12px;
+}
+.ui-datepicker .ui-timepicker-div .ui-tpicker-grid-label {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+.ui-datepicker .ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input {
+  border: none;
+}
+.ui-datepicker .ui-timepicker-div .ui-timepicker-rtl {
+  direction: rtl;
+}
+.ui-datepicker .ui-timepicker-div .ui-timepicker-rtl dl {
+  text-align: right;
+}
+.ui-datepicker .ui-timepicker-div .ui-timepicker-rtl dl dd {
+  margin: 0 65px 10px 10px;
+}
 .ui-menu {
   background: #fff;
   padding: 10px 0;

@@ -206,9 +206,11 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		
 		/** @var InputfieldWrapper $inputfields */
 		$inputfields = $event->return;
+		if(!$inputfields) return;
 		
 		/** @var InputfieldFieldset $fieldsetVisibility */
 		$fieldsetVisibility = $inputfields->getChildByName('visibility');
+		if(!$fieldsetVisibility) return;
 		
 		/** @var InputfieldFieldset $fieldset */
 		$fieldset = $this->wire('modules')->get('InputfieldFieldset');

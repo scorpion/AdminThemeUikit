@@ -232,7 +232,14 @@ var ProcessWireAdminTheme = {
 			$ul.append($spinner);
 			$.getJSON(url, function(data) {
 				var $a2 = $a.clone();
-				$a2.removeAttr('data-json').removeAttr('class').find('i').attr('class', 'fa fa-fw fa-arrow-circle-right pw-nav-icon');
+				var $icon2 = $a2.find('i');
+				if(!$icon2.length) {
+					$icon2 = $("<i></i>");
+					$a2.prepend($icon2);
+				}
+				$icon2.attr('class', 'fa fa-fw fa-arrow-circle-right pw-nav-icon');
+				$a2.removeAttr('data-json').removeAttr('class')
+				$a2.find('small').remove(); // i.e. numChildren
 				var $li = $("<li></li>").addClass('pw-nav-dup').append($a2);
 				$ul.append($li);
 				if(data.add) {
@@ -248,18 +255,45 @@ var ProcessWireAdminTheme = {
 				// populate the retrieved items
 				$.each(data.list, function(n) {
 					var icon = '';
+					var $label = $("<div>" + this.label + "</div>");
+					var label = $label.text();
+					if(label.length > 30) {
+						// truncate label
+						var $small = $label.find('small');
+						if($small.length) $small.remove();
+						label = $label.text();
+						label = label.substring(0, 30);
+						var n = label.lastIndexOf(' ');
+						if(n > 3) label = label.substring(0, n) + '… ';
+						$label.html(label);
+						if($small.length) $label.append($small);
+						//label = $label.html();
+					}
+					label = $label.html().replace('&nbsp;', ' ');
 					if(this.icon) icon = "<i class='ui-priority-secondary fa fa-fw fa-" + this.icon + " pw-nav-icon'></i>";
 					var url = this.url.indexOf('/') === 0 ? this.url : data.url + this.url;
-					var $li = $("<li><a href='" + url + "'>" + icon + this.label + "</a></li>");
+					var $a = $("<a href='" + url + "'>" + icon + label + "</a>");
+					var $li = $("<li></li>").append($a);
+					if(this.navJSON != "undefined" && this.navJSON) {
+						$a.addClass('pw-has-items pw-has-ajax-items').attr('data-json', this.navJSON);
+						var $ul2 = $("<ul class='uk-nav-sub uk-nav-parent-icon'></ul>");
+						$li.addClass('uk-parent').append($ul2);
+						UIkit.nav($ul2, { multiple: true });
+					}
 					if(typeof this.className != "undefined" && this.className && this.className.length) {
 						$li.addClass(this.className);
 					}
-					$ul.append($li);
+					if($li.hasClass('pw-nav-add') || $li.hasClass('pw-pagelist-show-all')) {
+						$ul.children('.pw-nav-dup').after($li.removeClass('separator').addClass('pw-nav-add'));
+					} else {
+						$ul.append($li);
+					}
 				});
 				$spinner.remove();
 				$ul.addClass('navJSON').addClass('length' + parseInt(data.list.length)).hide();
 				if($ul.children().length) $ul.css('opacity', 1.0).fadeIn('fast');
 			});
+			return false;
 		}); 
 	},
 

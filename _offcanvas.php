@@ -26,7 +26,7 @@ if(!defined("PROCESSWIRE")) die();
 		</form>
 		-->
 		<?php include(__DIR__ . '/_search-form.php'); ?>
-		<ul class='pw-sidebar-nav uk-nav uk-nav-primary uk-nav-parent-icon' data-uk-nav='animation: false;'>
+		<ul class='pw-sidebar-nav uk-nav uk-nav-primary uk-nav-parent-icon' data-uk-nav='animation: false; multiple: true;'>
 			<?php echo $adminTheme->renderSidebarNavItems(); ?>
 		</ul>	
 	</div>

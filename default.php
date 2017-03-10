@@ -21,7 +21,7 @@
 if(!defined("PROCESSWIRE")) die();
 
 if(!isset($content)) $content = '';
-$version = $adminTheme->version . 'a';
+$version = $adminTheme->version . 'b';
 
 $config->styles->prepend($config->urls->root . "wire/templates-admin/styles/AdminTheme.css?v=$version");
 $config->styles->prepend($adminTheme->getUikitCSS());

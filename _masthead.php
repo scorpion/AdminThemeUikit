@@ -23,7 +23,7 @@ if(!defined("PROCESSWIRE")) die();
 	<div class='uk-container uk-container-expand'>
 		<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 			<div class="uk-navbar-left">
-				<a class="uk-logo uk-margin-right" href="<?php echo $urls->admin; ?>">
+				<a class="uk-logo uk-margin-right" href='#' onclick='$("#offcanvas-toggle").click(); return false;'>
 					<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire'>
 				</a>
 				<?php if($adminTheme->isLoggedIn): ?>

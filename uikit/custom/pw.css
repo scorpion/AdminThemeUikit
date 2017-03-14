@@ -13575,6 +13575,12 @@ a.tooltip:hover {
 .InputfieldIsOffset:last-child {
   margin-bottom: 0;
 }
+table .InputfieldIsOffset,
+.InputfieldFieldset .InputfieldColumnWidth.InputfieldIsOffset,
+.InputfieldRepeater .InputfieldIsOffset {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .InputfieldNoBorder:not(.InputfieldIsOffset):not(.InputfieldColumnWidth) {
   margin-top: 1px;
 }
@@ -13737,6 +13743,17 @@ a.tooltip:hover {
 .Inputfield.uk-card > .InputfieldHeaderHidden + .InputfieldContent {
   padding-top: 20px;
 }
+/*** Inputfields in table, like in Lister/ListerPro *****************************************/
+table.AdminDataTable .Inputfields {
+  margin: 0;
+  padding: 0;
+}
+table.AdminDataTable .Inputfields .Inputfield {
+  outline: none;
+}
+table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
+  padding: 0;
+}
 /*** Inputfield color support ********************************************************/
 .InputfieldIsPrimary:not(.InputfieldNoBorder) {
   outline: 1px solid #add3fa !important;
@@ -13833,32 +13850,40 @@ a.tooltip:hover {
   padding-left: 25px;
 }
 /*** Buttons *****************************************************************/
+.InputfieldSubmit,
+.InputfieldButton {
+  display: inline;
+  width: auto !important;
+  background: none !important;
+}
 .InputfieldSubmit .InputfieldHeader,
 .InputfieldButton .InputfieldHeader {
   display: none;
 }
 .InputfieldSubmit .InputfieldContent,
 .InputfieldButton .InputfieldContent {
+  display: inline;
   padding: 0;
   margin: 0;
   background: none;
   border: none;
   outline: none;
 }
-.Inputfields .InputfieldButton + .InputfieldButton,
-.Inputfields .InputfieldButton + .InputfieldSubmit,
-.Inputfields .InputfieldSubmit + .InputfieldSubmit,
-.Inputfields .InputfieldSubmit + .InputfieldButton {
-  float: left;
-  margin-left: 10px;
-  margin-top: 0;
+.InputfieldSubmit .InputfieldContent .ui-button,
+.InputfieldButton .InputfieldContent .ui-button {
+  display: inline;
 }
 .Inputfields .Inputfield:not(.InputfieldSubmit):not(.InputfieldButton) + .InputfieldButton,
 .Inputfields .Inputfield:not(.InputfieldSubmit):not(.InputfieldButton) + .InputfieldSubmit {
   clear: left;
 }
-#pw-content-head-buttons > * + * {
+.pw-content .ui-button {
+  margin-left: 0;
   margin-right: 10px;
+}
+#pw-content-head-buttons .ui-button {
+  margin-left: 10px;
+  margin-right: 0;
 }
 /*** Language Tabs **********************************************************/
 .Inputfields .langTabsContainer .pw-description,
@@ -13942,10 +13967,6 @@ a.tooltip:hover {
 .InputfieldCheckboxes ul,
 .InputfieldRadios ul {
   margin-bottom: 0;
-}
-.InputfieldFile:not(.InputfieldStateCollapsed) > .InputfieldHeader,
-.InputfieldFile:not(.InputfieldStateCollapsed) > .InputfieldContent {
-  background: #f8f8f8;
 }
 .InputfieldFile > .InputfieldContent {
   padding-top: 1px;
@@ -14068,10 +14089,6 @@ a.tooltip:hover {
 }
 */
 /*** InputfieldImage ************************************************/
-.InputfieldImage:not(.InputfieldStateCollapsed) > .InputfieldHeader,
-.InputfieldImage:not(.InputfieldStateCollapsed) > .InputfieldContent {
-  background: #f8f8f8;
-}
 .InputfieldImage:not(.InputfieldStateCollapsed) > .InputfieldContent {
   padding-top: 1px;
 }

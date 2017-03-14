@@ -11,14 +11,15 @@
  * @property array $cardTypes Inputfield class names that should always use the card option.
  * @property array $offsetTypes Inputfield class names that should always use the offset option.
  * @property string $logoURL URL to custom logo, relative to PW installation root. 
+ * @property string $cssURL URL to custom CSS file, relative to PW installation root. 
  * 
  */
 class AdminThemeUikit extends AdminThemeFramework implements Module, ConfigurableModule {
 
 	public static function getModuleInfo() {
 		return array(
-			'title' => 'Uikit admin theme',
-			'version' => 2,
+			'title' => 'Uikit',
+			'version' => 3,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => 'template=admin',
 			'requires' => 'ProcessWire>=3.0.54'
@@ -48,6 +49,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$this->set('cardTypes', array());
 		$this->set('offsetTypes', array());
 		$this->set('logoURL', '');
+		$this->set('cssURL', '');
 		$this->set('noBorderTypes', array(
 			'InputfieldCKEditor', 
 		));
@@ -125,6 +127,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		}
 		
 		$inputfield->addClass("uk-width-$ukClass@m", 'wrapClass');
+		$themeColor = '';
 		
 		if($isWrapper) {
 			return; // no further settings necessary for InputfieldWrapper
@@ -140,12 +143,14 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		} else if($inputfield instanceof InputfieldRadios) {
 			$inputfield->addClass('uk-radio');
 			$inputfield->addClass('uk-form-controls-text', 'contentClass');
+		} else if($inputfield instanceof InputfieldFile) {
+			$themeColor = 'secondary';
 		}
 
 		// determine custom settings which may be defined with Inputfield or with Field
 		$themeBorder = $inputfield->getSetting('themeBorder');
 		$themeOffset = $inputfield->getSetting('themeOffset');
-		$themeColor = $inputfield->getSetting('themeColor');
+		$themeColor = $themeColor ? $themeColor : $inputfield->getSetting('themeColor');
 		$field = $inputfield->hasField;
 
 		if($field) {
@@ -184,7 +189,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		} else if($useCard) {
 			$inputfield->addClass('uk-card uk-card-default', 'wrapClass');
 		}
-		
+	
 		if($useOffset || $themeOffset) {
 			$inputfield->addClass('InputfieldIsOffset', 'wrapClass');
 		}
@@ -636,11 +641,9 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * 
 	 */
 	public function getLogoURL() {
-		static $logoURL = '';
-		if(!empty($logoURL)) return $logoURL;
 		$logoURL = $this->get('logoURL');
 		if(empty($logoURL)) {
-			$logoURL = $this->wire('config')->urls($this->className()) . self::logo;
+			return $this->wire('config')->urls($this->className()) . self::logo;
 		} else if(strpos($logoURL, '//') === false) {
 			$logoURL = $this->wire('config')->urls->root . ltrim($logoURL, '/');
 		}
@@ -655,7 +658,11 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 */
 	public function getUikitCSS() {
 		$config = $this->wire('config');
-		if(self::dev) {
+		$cssURL = $this->get('cssURL');
+		if($cssURL) {
+			if(strpos($cssURL, '//') === false) $cssURL = $config->urls->root . ltrim($cssURL, '/');
+			return $this->wire('sanitizer')->entities($cssURL);
+		} else if(self::dev) {
 			return $config->urls->adminTemplates . 'uikit/custom/pw.css';
 		} else {
 			return $config->urls->adminTemplates . 'uikit/dist/css/uikit.pw.min.css';
@@ -672,6 +679,38 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		
 		parent::getModuleConfigInputfields($inputfields);
 	
+		$defaultNote = $this->_('When blank, the default file used.') . ' ';
+		$defaultDesc = $this->_('Enter path relative to homepage URL.');
+
+		/** @var InputfieldFieldset $fieldset */
+		$fieldset = $this->modules->get('InputfieldFieldset');
+		$fieldset->label = $this->_('Custom files');
+		$fieldset->collapsed = Inputfield::collapsedBlank;
+		$fieldset->icon = 'files-o';
+		$inputfields->add($fieldset);
+	
+		/** @var InputfieldText $f */
+		$f = $this->modules->get('InputfieldText'); 
+		$f->attr('name', 'cssURL'); 
+		$f->attr('value', $this->get('cssURL'));
+		$f->label = $this->_('Primary CSS file'); 
+		$f->description = $defaultDesc;
+		$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css";
+		$f->collapsed = Inputfield::collapsedBlank;
+		$f->icon = 'file-code-o';
+		$fieldset->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $this->modules->get('InputfieldText');
+		$f->attr('name', 'logoURL');
+		$f->attr('value', $this->get('logoURL'));
+		$f->label = $this->_('Logo image file');
+		$f->description = $defaultDesc;
+		$f->notes = $defaultNote . $this->_('File should be PNG, GIF or JPG and at least 100px in both dimensions.');
+		$f->collapsed = Inputfield::collapsedBlank;
+		$f->icon = 'file-image-o';
+		$fieldset->add($f);
+	
 		/** @var InputfieldFieldset $fieldset */
 		$fieldset = $this->modules->get('InputfieldFieldset');
 		$fieldset->label = $this->_('Form field visibility settings');
@@ -681,6 +720,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$this->_('If you specify a setting here, it will override individual field settings.') . ' ' .
 			$this->_('See: Setup > Fields > [any field] > Visibility > Theme settings.');
 		$fieldset->icon = 'flask';
+		$fieldset->collapsed = Inputfield::collapsedBlank;
 		$inputfields->add($fieldset);
 	
 		$types = $this->modules->findByPrefix('Inputfield');
@@ -711,7 +751,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$f->label = $this->_('Input types that should use the “Card” style');
 		$f->description = $this->_('This field is an example of the card style.');
 		$f->notes = $this->_('Does not apply to types selected to have no border.');
-		$f->icon = 'low-vision';
+		$f->icon = 'list-alt';
 		$f->set('themeBorder', 'card');
 		$f->set('themeOffset', true);
 		foreach($types as $className => $name) {
@@ -736,11 +776,12 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		/** @var InputfieldCheckboxes $f */
 		$f = $this->modules->get('InputfieldCheckbox');
 		$f->attr('name', 'useOffset');
-		$f->label = $this->_('Vertically offset ALL input types');
+		$f->label = $this->_('Vertically offset ALL input types?');
 		$f->description =
 			$this->_('When checked, a vertical margin is added to every field.') . ' ' .
 			$this->_('This may provide additional clarity in some cases, but consumes more vertical space.');
 		$f->collapsed = Inputfield::collapsedBlank;
+		$f->icon = 'arrows-v';
 		if($this->useOffset) $f->attr('checked', 'checked');
 		$fieldset->add($f);
 

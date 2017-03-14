@@ -141,6 +141,13 @@
 .InputfieldIsOffset:last-child {
   margin-bottom: 0;
 }
+table .InputfieldIsOffset,
+.InputfieldFieldset .InputfieldColumnWidth.InputfieldIsOffset,
+.InputfieldRepeater .InputfieldIsOffset {
+  // offsets don't apply in repeaters and some other contexts
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .InputfieldNoBorder:not(.InputfieldIsOffset):not(.InputfieldColumnWidth) {
   // ensures that a no-border field doesn't hide the outline from the previous field
   margin-top: 1px;
@@ -375,4 +382,19 @@
   }
 }
 
+
+/*** Inputfields in table, like in Lister/ListerPro *****************************************/
+
+table.AdminDataTable {
+  .Inputfields {
+    margin: 0;
+    padding: 0;
+    .Inputfield {
+      outline: none;
+      .InputfieldContent {
+        padding: 0;
+      }
+    }
+  }
+}
 

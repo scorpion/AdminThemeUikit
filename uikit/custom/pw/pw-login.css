@@ -40,6 +40,13 @@
 .ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit input {
   text-align: center;
 }
+.ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit {
+  display: inline-block;
+  margin: 0 auto !important;
+}
+.ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit .ui-button {
+  margin: 0;
+}
 .ProcessLogin hr {
   display: none;
 }

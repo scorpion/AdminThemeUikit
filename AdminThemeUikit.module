@@ -12,6 +12,7 @@
  * @property array $offsetTypes Inputfield class names that should always use the offset option.
  * @property string $logoURL URL to custom logo, relative to PW installation root. 
  * @property string $cssURL URL to custom CSS file, relative to PW installation root. 
+ * @property string $layout Layout type (blank=default, sidenav=multi-pane)
  * 
  */
 class AdminThemeUikit extends AdminThemeFramework implements Module, ConfigurableModule {
@@ -19,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 3,
+			'version' => 4,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => 'template=admin',
 			'requires' => 'ProcessWire>=3.0.54'
@@ -50,6 +51,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$this->set('offsetTypes', array());
 		$this->set('logoURL', '');
 		$this->set('cssURL', '');
+		$this->set('layout', '');
 		$this->set('noBorderTypes', array(
 			'InputfieldCKEditor', 
 		));
@@ -65,11 +67,21 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		
 		// if this is not the current admin theme, exit now so no hooks are attached
 		if(!$this->isCurrent()) return;
+
+		// override admin theme setting if layout specified in session
+		$layout = $this->wire('input')->get->alpha('admin_layout');
+		if($layout && ($layout === 'default' || $layout === 'sidenav')) {
+			$this->wire('session')->setFor($this, 'layout', $layout); 
+		} else {
+			$layout = $this->wire('session')->getFor($this, 'layout');
+		}
+		if($layout) $this->layout = $layout;
 	
 		// add rendering hooks
 		$this->addHookBefore('Inputfield::render', $this, 'hookBeforeRenderInputfield');
 		$this->addHookAfter('Inputfield::getConfigInputfields', $this, 'hookAfterInputfieldGetConfigInputfields');
 		$this->addHookAfter('MarkupAdminDataTable::render', $this, 'hookAfterTableRender');
+		if($this->layout == 'sidenav') $this->addHookAfter('ProcessLogin::afterLoginURL', $this, 'hookAfterLoginURL');
 		
 		// add cache clearing hooks
 		$this->wire('pages')->addHookAfter('saved', $this, 'hookClearCaches');
@@ -301,6 +313,14 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$this->wire('session')->message("Cleared the admin theme navigation cache (primary nav)", Notice::debug);
 		}
 	}
+	
+	public function hookAfterLoginURL(HookEvent $event) {
+		$layout = $this->layout;
+		if(!$layout) return;
+		$url = $event->return;
+		$url .= (strpos($url, '?') !== false ? '&' : '?') . "layout=$this->layout-init";
+		$event->return = $url;
+	}
 
 	
 	/*******************************************************************************************
@@ -320,11 +340,14 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$process = $this->wire('page')->process;
 		if($process == 'ProcessPageList') return '';
 		$breadcrumbs = $this->wire('breadcrumbs');
+		$out = '';
 
 		// don't show breadcrumbs if only one of them (subjective)
 		if(count($breadcrumbs) < 2 && $process != 'ProcessPageEdit') return '';
 
-		$out = "<li>" . $this->renderQuickTreeLink() . "</li>";
+		if($this->layout != 'sidenav') {
+			$out = "<li>" . $this->renderQuickTreeLink() . "</li>";
+		}
 
 		foreach($breadcrumbs as $breadcrumb) {
 			$title = $breadcrumb->get('titleMarkup');
@@ -389,7 +412,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			'listMarkup' => "<ul class='pw-notices' id='notices'>{out}</ul><!--/notices-->",
 			'itemMarkup' =>
 				"<li class='{class}'>" .
-					"<div class='uk-container uk-container-expand'>{remove}{icon}{text}</div>" .
+					"<div class='pw-container uk-container uk-container-expand'>{remove}{icon}{text}</div>" .
 				"</li>"
 		);
 
@@ -610,7 +633,8 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		foreach($items as $item) {
 			$label = $this->wire('sanitizer')->entities($item['title']);
 			$icon = isset($item['icon']) ? $this->renderNavIcon($item['icon']) : ' ';
-			$out .= "<li><a href='$item[url]'>$icon$label</a></li>";
+			$target = isset($item['target']) ? " target='$item[target]'" : '';
+			$out .= "<li><a$target href='$item[url]'>$icon$label</a></li>";
 		}
 
 		return $out;
@@ -681,6 +705,22 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	
 		$defaultNote = $this->_('When blank, the default file used.') . ' ';
 		$defaultDesc = $this->_('Enter path relative to homepage URL.');
+		
+		/** @var InputfieldFieldset $fieldset */
+		$fieldset = $this->modules->get('InputfieldFieldset');
+		$fieldset->label = $this->_('Layout');
+		$fieldset->collapsed = Inputfield::collapsedBlank;
+		$fieldset->icon = '';
+		$inputfields->add($fieldset);
+	
+		/** @var InputfieldRadios $f */
+		$f = $this->modules->get('InputfieldRadios');
+		$f->attr('name', 'layout');
+		$f->label = $this->_('Layout type');
+		$f->addOption('', $this->_('Default (top navigation)'));
+		$f->addOption('sidenav', $this->_('Sidebars (side navigation panels)'));
+		$f->attr('value', $this->layout);
+		$fieldset->add($f);
 
 		/** @var InputfieldFieldset $fieldset */
 		$fieldset = $this->modules->get('InputfieldFieldset');

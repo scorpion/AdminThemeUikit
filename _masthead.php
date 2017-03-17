@@ -3,15 +3,15 @@
 if(!defined("PROCESSWIRE")) die();
 
 /** @var AdminThemeUikit $adminTheme */
-/** @var AdminThemeUikitMarkup $markup */
 /** @var User $user */
 /** @var array $extras */
 /** @var Paths $urls */
 /** @var Config $config */
+/** @var Notices $notices */
 
 ?>
 <header id='pw-masthead-mobile' class='uk-hidden@m uk-background-muted'>
-	<div class='uk-container uk-container-expand'>
+	<div class='pw-container uk-container uk-container-expand'>
 		<div class='uk-padding-small uk-text-center'>
 			<a href='#' onclick='$("#offcanvas-toggle").click(); return false;'>
 				<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire' />
@@ -20,7 +20,7 @@ if(!defined("PROCESSWIRE")) die();
 	</div>	
 </header>
 <header id='pw-masthead' class='uk-background-muted uk-visible@m'>
-	<div class='uk-container uk-container-expand'>
+	<div class='pw-container uk-container uk-container-expand'>
 		<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 			<div class="uk-navbar-left">
 				<a class="uk-logo uk-margin-right" href='#' onclick='$("#offcanvas-toggle").click(); return false;'>
@@ -41,12 +41,17 @@ if(!defined("PROCESSWIRE")) die();
 						</a>
 						<ul class="pw-dropdown-menu" data-my="left top" data-at="left bottom" style="display: none;">
 							<?php if($config->debug): ?>
-								<li>	
+							<li>	
 								<a href='#' onclick="$('#debug_toggle').click(); return false;">
 									<?php echo $adminTheme->renderNavIcon('bug') . __('Debug'); ?>
 								</a>
 							</li>
 							<?php endif; ?>
+							<li>	
+								<a target='_top' href='<?php echo $urls->admin; ?>?admin_layout=sidenav'>
+									<?php echo $adminTheme->renderNavIcon('indent') . __('Enable sidebars'); ?>
+								</a>
+							</li>
 							<?php echo $adminTheme->renderUserNavItems(); ?>
 						</ul>
 					</li>
@@ -60,4 +65,5 @@ if(!defined("PROCESSWIRE")) die();
 	</div>
 	<?php echo $adminTheme->renderExtraMarkup('masthead'); ?>
 </header>
+<?php echo $adminTheme->renderNotices($notices); ?>
 

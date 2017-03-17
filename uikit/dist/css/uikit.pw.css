@@ -14281,6 +14281,22 @@ body.modal.modal-inline #main {
 body.modal .InputfieldForm {
   margin-top: 20px;
 }
+body.pw-layout-sidenav .pw-container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+body.pw-layout-sidenav #pw-masthead .pw-logo {
+  height: 40px;
+}
+body.pw-layout-sidenav #pw-masthead .uk-navbar-nav > li > a {
+  height: 60px;
+}
+body.pw-layout-sidenav #pw-masthead .uk-breadcrumb {
+  margin-left: 20px;
+}
+body.pw-layout-sidenav-side #pw-sidenav-bar {
+  padding-top: 0 !important;
+}
 .pw-search-input {
   padding-left: 30px;
 }
@@ -14403,6 +14419,13 @@ body.modal .InputfieldForm {
 .ProcessLogin #ProcessLoginForm #wrap_login_pass input,
 .ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit input {
   text-align: center;
+}
+.ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit {
+  display: inline-block;
+  margin: 0 auto !important;
+}
+.ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit .ui-button {
+  margin: 0;
 }
 .ProcessLogin hr {
   display: none;

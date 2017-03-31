@@ -39,7 +39,7 @@ $config->scripts->append($config->urls->adminTemplates . "scripts/main.js?v=$ver
 	<script>
 		<?php if($adminTheme->isLoggedIn && $layout == 'sidenav'): ?>
 			// add panes
-			if(typeof parent.toggleSidebarPane == "undefined") {
+			if(typeof parent.isPresent == "undefined") {
 				var href = window.location.href;
 				href += (href.indexOf('?') > 0 ? '&' : '?') + 'layout=sidenav-init';
 				window.location.href = href;

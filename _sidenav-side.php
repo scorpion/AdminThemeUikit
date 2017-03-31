@@ -38,7 +38,7 @@ if(!defined("PROCESSWIRE")) die();
 		$(document).on('mouseover', 'a', ProcessWireAdminTheme.linkTargetMainMouseoverEvent);
 	</script>
 </head>
-<body class='<?php echo $adminTheme->getBodyClass(); ?> uk-background-secondary'>
+<body class='<?php echo $adminTheme->getBodyClass(); ?> uk-background-secondary pw-iframe'>
 
 	<?php if($adminTheme->isLoggedIn): ?>
 		<div id='pw-sidenav-bar' class="uk-background-secondary uk-light uk-padding-small">

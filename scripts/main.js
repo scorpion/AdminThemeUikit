@@ -47,6 +47,13 @@ var ProcessWireAdminTheme = {
 			e.stopPropagation();
 		});
 	
+		/*
+		if($('body').hasClass('pw-layout-main') && typeof window.parent.isPresent != "undefined") {
+			// send URL to parent window
+			console.log('send: href=' + window.location.href);
+			parent.window.postMessage('href=' + window.location.href, '*');
+		}
+		*/
 	},
 
 	/**
@@ -54,12 +61,16 @@ var ProcessWireAdminTheme = {
 	 * 
 	 */
 	checkLayout: function() {
-		if($('body').attr('class').indexOf('pw-layout-sidenav') > -1) {
-			if(typeof parent == "undefined" || typeof parent.isPresent == "undefined") {
-				var href = window.location.href;
-				href += (href.indexOf('?') > -1 ? '&' : '?') + 'layout=sidenav-init';
-				window.location.href = href;
+		if($('body').attr('class').indexOf('pw-layout-sidenav') == -1) return; 
+		if($('body').hasClass('pw-layout-sidenav-init')) return;
+		if(typeof parent == "undefined" || typeof parent.isPresent == "undefined") {
+			var href = window.location.href;
+			if(href.indexOf('layout=') > -1) {
+				href = href.replace(/([?&]layout)=[-_a-zA-Z0-9]+/, '$1=sidenav-init');
+			} else {
+				href += (href.indexOf('?') > 0 ? '&' : '?') + 'layout=sidenav-init';
 			}
+			window.location.href = href;
 		}
 	}, 
 
@@ -357,7 +368,10 @@ var ProcessWireAdminTheme = {
 			$(".ui-widget.Inputfield, .ui-widget-header.InputfieldHeader, .ui-widget-content.InputfieldContent")
 				.removeClass('ui-widget ui-widget-header ui-widget-content');
 
-			//$(".Inputfield:not(.InputfieldColumnWidth)").addClass('InputfieldColumnWidthFirst');
+			// pagination, if present
+			$('.MarkupPagerNav:not(.uk-pagination)').each(function() {
+				$(this).addClass('uk-pagination');
+			});
 		}
 
 		function ukGridClass(width) {
@@ -467,7 +481,8 @@ var ProcessWireAdminTheme = {
 			updateInputfieldRow($inputfield);
 		};
 
-		$(document).on('reloaded', initFormMarkup);
+		
+		$(document).on('reloaded', function() { initFormMarkup() }); // function() intentional
 		$(document).on('hideInputfield', showHideInputfield);
 		$(document).on('showInputfield', showHideInputfield);
 

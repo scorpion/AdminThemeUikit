@@ -19,7 +19,7 @@ if(!isset($content)) $content = '';
 <head>
 	<?php include($config->paths->adminTemplates . '_head.php'); ?>
 </head>
-<body class='<?php echo $adminTheme->getBodyClass(); ?> pw-narrow-width'>
+<body class='<?php echo $adminTheme->getBodyClass(); ?> pw-narrow-width pw-iframe'>
 	<main id='main' class='pw-container uk-container uk-container-expand uk-margin-small-top uk-margin-small-left uk-margin-large-bottom'>
 		<div class='pw-content' id='content'>
 			<div id='pw-content-body'>

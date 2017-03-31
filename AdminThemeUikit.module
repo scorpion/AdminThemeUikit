@@ -20,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 5,
+			'version' => 6,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
 			'requires' => 'ProcessWire>=3.0.57'
@@ -343,7 +343,13 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$this->wire('session')->message("Cleared the admin theme navigation cache (primary nav)", Notice::debug);
 		}
 	}
-	
+
+	/**
+	 * Hook to ProcessLogin::afterLoginURL()
+	 * 
+	 * @param HookEvent $event
+	 * 
+	 */
 	public function hookAfterLoginURL(HookEvent $event) {
 		$layout = $this->layout;
 		if(!$layout) return;

@@ -41,9 +41,9 @@ if(!isset($content)) $content = '';
 	} else if($layout == 'sidenav-tree' || $layout == 'sidenav-tree-alt') {
 		// masthead not rendered in this frame
 		if(strpos($process, 'ProcessPageList') === 0) {
-			echo "<script>parent.closeTreePane();</script>";
+			echo "<script>if(typeof parent.isPresent != 'undefined') parent.closeTreePane();</script>";
 		} else {
-			echo "<script>if(!parent.isMobileWidth()) parent.openTreePane();</script>";
+			echo "<script>if(typeof parent.isPresent != 'undefined' && !parent.isMobileWidth()) parent.openTreePane();</script>";
 		}
 		echo $adminTheme->renderNotices($notices);
 		

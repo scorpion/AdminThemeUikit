@@ -13207,6 +13207,9 @@ a.tooltip:hover {
   background-color: #d2d2d2;
   border-color: #d2d2d2;
 }
+.ui-tabs > .ui-tabs-nav > .ui-tabs-active > a.ui-tabs-anchor {
+  color: #000;
+}
 .ui-menu {
   background: #fff;
   padding: 10px 0;
@@ -13346,6 +13349,7 @@ a.tooltip:hover {
   position: relative;
   top: -1px;
   padding-left: 0;
+  line-height: 1.4;
 }
 .PageList .ProcessListerTable tr.open {
   background-color: #f8f8f8;
@@ -13554,6 +13558,9 @@ body.pw-narrow-width .PageList .PageList {
 .Inputfield input[type=checkbox],
 .Inputfield input[type=radio] {
   font-size: 16px;
+}
+.Inputfield select {
+  max-width: 100%;
 }
 .Inputfield textarea {
   /* 1 */
@@ -13980,6 +13987,10 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
 /*** Misc **********************************************************/
 .InputfieldMarkup.InputfieldHeaderHidden {
   outline: none !important;
+}
+.InputfieldMarkup.InputfieldHeaderHidden > .InputfieldContent {
+  padding-left: 0;
+  padding-right: 0;
 }
 .InputfieldCheckboxes ul,
 .InputfieldRadios ul {

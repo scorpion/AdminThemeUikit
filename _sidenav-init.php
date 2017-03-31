@@ -18,8 +18,13 @@ $treePaneLocation = $treePaneLeft ? 'west' : 'east';
 $sidePaneLocation = $treePaneLeft ? 'east' : 'west';
 
 // URL for main pane 
-$mainURL = $page->url();
-if($input->get('id')) $mainURL .= "?id=" . (int) $input->get('id');
+$mainURL = $input->url(true);
+if(strpos($mainURL, 'layout=')) {
+	$mainURL = preg_replace('/([&?]layout)=([-_a-zA-Z0-9]+)/', '$1=sidenav-main', $mainURL);
+} else {
+	$mainURL .= (strpos($mainURL, '?') ? '&' : '?') . 'layout=sidenav-main';
+}
+$mainURL = $sanitizer->entities($mainURL);
 
 // pane definition iframes
 $panes = array(
@@ -69,20 +74,25 @@ $panes = array(
 	</style>
 	
 	<script src="<?php echo $config->urls->adminTemplates; ?>layout/source/stable/jquery.layout.js"></script>
+	<script src="<?php echo $config->urls->adminTemplates; ?>layout/source/stable/plugins/jquery.layout.state.js"></script>
 </head>
 <body class='pw-layout-sidenav-init'>	
 
-	<?php if($treePane): ?>
-	<div id='pw-admin-head' class='pane ui-layout-north'>
-		<?php include(__DIR__ . '/_masthead.php'); ?>
-	</div>
-	<?php endif; ?>
-
 	<?php
-	echo $panes['main'];
-	echo $treePane ? $panes['tree'] : $panes['side'] . $panes['tree'];
-	if($adminTheme->isLoggedIn) include(__DIR__ . '/_offcanvas.php');
+	if($treePane) {
+		echo "<div id='pw-admin-head' style='overflow:visible'>";
+		include(__DIR__ . '/_masthead.php');
+		echo "</div>";
+	}
 	?>
+
+	<div id='pw-layout-container' style='height:100%'>
+		<?php
+		echo $panes['main'];
+		echo $treePane ? $panes['tree'] : $panes['side'] . $panes['tree'];
+		if($adminTheme->isLoggedIn) include(__DIR__ . '/_offcanvas.php');
+		?>
+	</div>	
     
 	<script>
 		var isPresent = true; // required
@@ -105,17 +115,15 @@ $panes = array(
 				maskContents: true,
 				applyDefaultStyles: false,
 				fxName: 'none',
-				north: {
-					size: 80, // #pw-masthead height (in px) 
-					resizable: false,
-					slideable: false,
-					closable: false,
-					spacing_open: 0
+				stateManagement: {
+					enabled: true,
+					// stateKeys: "west.size,east.size,west.isClosed,east.isClosed",
+					autoLoad: true,
+					autoSave: true
 				},
 				<?php
 				if($treePane) {
-					echo "$treePaneLocation: { size: treePaneWidth, initClosed: false },";
-					// echo "$sidePaneLocation: { size: sidePaneWidth, initClosed: true}";
+					echo "$treePaneLocation: { size: treePaneWidth },";
 				} else {
 					echo "$sidePaneLocation: { size: sidePaneWidth, initClosed: false },";
 					echo "$treePaneLocation: { size: treePaneWidth, initClosed: true }";
@@ -136,11 +144,25 @@ $panes = array(
 			}
 
 			// initialize layout
-			var layout = $('body').layout(layoutOptions);
+			var layout = $('#pw-layout-container').layout(layoutOptions);
 
-			// populate title from main pane to this window 
+			// populate title and url from main pane to this window 
 			$('#pw-admin-main').on('load', function() {
-				var title = $('#pw-admin-main')[0].contentWindow.document.title;
+				
+				var main = $('#pw-admin-main')[0].contentWindow;
+				var title = main.document.title;
+				var href = main.location.href;
+				
+				if(href.search(/^http[s]?:\/\/<?php echo preg_quote($config->httpHost); ?>/i) !== 0) {
+					console.log('Invalid main frame http host: ' + href);
+					return;
+				}
+				
+				if(href.indexOf('layout=')) {
+					href = href.replace(/([?&]layout)=[-_a-z0-9]+/g, ''); 
+				}
+				
+				window.history.pushState('obj', 'newtitle', href);
 				$('title').text(title);
 			});
 

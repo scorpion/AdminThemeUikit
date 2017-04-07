@@ -11175,6 +11175,9 @@ table.ProcessListerTable thead th {
 table.ProcessListerTable thead th:hover {
   text-decoration: underline;
 }
+table.AdminDataTable {
+  width: 100%;
+}
 /*
 @pagination-item-color:                         @global-inverse-color;
 */
@@ -13485,6 +13488,18 @@ a.tooltip:hover {
 body.pw-narrow-width .PageList .PageList {
   margin-left: 1em;
 }
+.uk-nav a .PageListStatusUnpublished,
+.pw-dropdown-menu a .PageListStatusUnpublished {
+  text-decoration: line-through;
+}
+.uk-nav a .PageListStatusHidden,
+.pw-dropdown-menu a .PageListStatusHidden {
+  opacity: 0.5;
+}
+.uk-nav a .PageListStatusNotEditable,
+.pw-dropdown-menu a .PageListStatusNotEditable {
+  cursor: not-allowed;
+}
 .InputfieldForm {
   margin-bottom: 20px;
 }
@@ -13515,12 +13530,12 @@ body.pw-narrow-width .PageList .PageList {
   /* i.e. asmSelect */
   margin-top: 0.1em;
 }
-.Inputfield input[type=text],
-.Inputfield input[type=email],
-.Inputfield input[type=date],
-.Inputfield input[type=datetime],
-.Inputfield input[type=number],
-.Inputfield input[type=url] {
+.Inputfield input[type=text]:not(.uk-input),
+.Inputfield input[type=email]:not(.uk-input),
+.Inputfield input[type=date]:not(.uk-input),
+.Inputfield input[type=datetime]:not(.uk-input),
+.Inputfield input[type=number]:not(.uk-input),
+.Inputfield input[type=url]:not(.uk-input) {
   /* 1 */
   box-sizing: border-box;
   /* 2 */
@@ -13552,7 +13567,17 @@ body.pw-narrow-width .PageList .PageList {
   display: inline-block;
   /* 2 */
   line-height: 38px;
-  width: auto;
+}
+.Inputfield input[type=text]:not(.uk-input).InputfieldMaxWidth,
+.Inputfield input[type=email]:not(.uk-input).InputfieldMaxWidth,
+.Inputfield input[type=date]:not(.uk-input).InputfieldMaxWidth,
+.Inputfield input[type=datetime]:not(.uk-input).InputfieldMaxWidth,
+.Inputfield input[type=number]:not(.uk-input).InputfieldMaxWidth,
+.Inputfield input[type=url]:not(.uk-input).InputfieldMaxWidth {
+  width: 100%;
+}
+.Inputfield .InputfieldMaxWidth {
+  width: 100%;
 }
 .Inputfield select,
 .Inputfield input[type=checkbox],
@@ -13596,8 +13621,15 @@ body.pw-narrow-width .PageList .PageList {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.InputfieldIsOffset:last-child {
+.InputfieldIsOffset.InputfieldRowFirst:not(.WireTab) {
+  margin-top: 0;
+}
+.InputfieldIsOffset.InputfieldRowLast:not(.InputfieldWrapper):not(.InputfieldFieldset) {
   margin-bottom: 0;
+}
+.InputfieldIsOffset.InputfieldSubmit.InputfieldIsOffset,
+.InputfieldIsOffset.InputfieldButton.InputfieldIsOffset {
+  margin-top: 0 !important;
 }
 table .InputfieldIsOffset,
 .InputfieldFieldset .InputfieldColumnWidth.InputfieldIsOffset,
@@ -14284,15 +14316,16 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+/*
+#pw-layout-container {
+  height: calc(100vh - 70px);
+}
+*/
+#pw-masthead {
+  height: 80px;
+}
 .pw-logo {
   max-height: 50px;
-}
-#pw-masthead.pw-overflow {
-  position: absolute;
-  top: -200px;
-}
-#pw-masthead.pw-overflow .pw-logo {
-  display: none;
 }
 .pw-nav-icon {
   margin-right: 5px !important;

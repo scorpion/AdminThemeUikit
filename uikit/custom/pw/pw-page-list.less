@@ -216,3 +216,19 @@
 body.pw-narrow-width .PageList .PageList {
   margin-left: @pw-page-list-indent-small;
 }
+
+// tree menus
+.uk-nav a,
+.pw-dropdown-menu a {
+  .PageListStatusUnpublished {
+    text-decoration: line-through;
+  }
+
+  .PageListStatusHidden {
+    opacity: 0.5;
+  }
+
+  .PageListStatusNotEditable {
+    cursor: not-allowed;
+  }
+}

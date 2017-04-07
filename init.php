@@ -43,6 +43,10 @@ $config->set('InputfieldForm', array(
 	'ukGridWidths' => $ukGridWidths
 ));
 
+$config->set('InputfieldRadios', array(
+	'wbr' => false
+));
+
 $config->set('JqueryWireTabs', array(
 	'ulClass' => 'WireTabs',
 	'ulAttrs' => 'uk-tab',
@@ -114,7 +118,7 @@ $classes = InputfieldWrapper::getClasses();
 $classes['form'] = 'InputfieldFormNoWidths InputfieldFormVertical uk-form-vertical';
 $classes['list'] = 'Inputfields uk-grid-collapse';
 $classes['item_column_width_first'] = 'InputfieldColumnWidthFirst uk-first-column';
-$classes['item'] = 'Inputfield {class} Inputfield_{name}';
+$classes['item'] = 'Inputfield {class} Inputfield_{name}' . ($adminTheme->get('useOffset') ? ' InputfieldIsOffset' : '');
 $classes['item_error'] = "InputfieldStateError uk-alert-danger";
 InputfieldWrapper::setClasses($classes);
 

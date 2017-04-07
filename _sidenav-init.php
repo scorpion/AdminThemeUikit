@@ -71,6 +71,9 @@ $panes = array(
 		.ui-layout-pane {
 			padding: 0;
 		}
+		#pw-admin-head {
+			overflow: visible;
+		}
 	</style>
 	
 	<script src="<?php echo $config->urls->adminTemplates; ?>layout/source/stable/jquery.layout.js"></script>
@@ -80,13 +83,13 @@ $panes = array(
 
 	<?php
 	if($treePane) {
-		echo "<div id='pw-admin-head' style='overflow:visible'>";
+		echo "<div id='pw-admin-head'>";
 		include(__DIR__ . '/_masthead.php');
 		echo "</div>";
 	}
 	?>
 
-	<div id='pw-layout-container' style='height:100%'>
+	<div id='pw-layout-container' style='height: calc(100vh - 80px);'>
 		<?php
 		echo $panes['main'];
 		echo $treePane ? $panes['tree'] : $panes['side'] . $panes['tree'];
@@ -117,7 +120,7 @@ $panes = array(
 				fxName: 'none',
 				stateManagement: {
 					enabled: true,
-					// stateKeys: "west.size,east.size,west.isClosed,east.isClosed",
+					stateKeys: "west.size,east.size,west.isClosed,east.isClosed",
 					autoLoad: true,
 					autoSave: true
 				},
@@ -272,6 +275,22 @@ $panes = array(
 		 */
 		function sidebarPaneClosed() {
 			<?php echo "return layout.state.$sidePaneLocation.isClosed;"; ?>
+		}
+
+		/**
+		 * Reload/refresh the tree pane, optionally for children of specific page ID
+		 * 
+		 * If page ID provided, it refreshes just children of that page ID. 
+		 * If no argument provided, then it refreshes the entire pane. 
+		 *
+		 */
+		function refreshTreePane(pageID) {
+			var pane = $('#pw-admin-tree')[0].contentWindow;
+			if(typeof pageID == "undefined") {
+				pane.location.reload(true);
+			} else if(typeof pane.pageListRefresh != "undefined") {
+				pane.pageListRefresh.refreshPage(pageID);
+			}
 		}
 
 	</script>

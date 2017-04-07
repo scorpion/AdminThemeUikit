@@ -26,13 +26,13 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$opt = __('Masthead navigation + page tree navigation in sidebar');
 	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)'));
 	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)')); 
-	$f->addOption('sidenav', __('Sidebar navigation (left) + collapsed page tree navigation (right)'));
+	$f->addOption('sidenav', __('Sidebar navigation (left) + page tree navigation (right)'));
 	$f->attr('value', $layout);
 	$f->icon = 'newspaper-o';
 	$inputfields->add($f);
 
 	$lastLayout = $session->getFor($adminTheme, 'lastLayout');
-	if($lastLayout && $lastLayout != $layout) {
+	if($lastLayout != $layout) {
 		$o = '[script]';
 		if(strpos($layout, 'sidenav') === 0) {
 			$o .=
@@ -99,8 +99,11 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$skipTypes = array('Button', 'Submit', 'Form', 'Hidden');
 	foreach($types as $key => $name) {
 		$name = str_replace('Inputfield', '', $name);
-		if(in_array($name, $skipTypes)) continue;
-		$types[$key] = $name;
+		if(in_array($name, $skipTypes)) {
+			unset($types[$key]);
+		} else {
+			$types[$key] = $name;
+		}
 	}
 
 	/** @var InputfieldAsmSelect $f */

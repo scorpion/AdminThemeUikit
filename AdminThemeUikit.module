@@ -20,10 +20,10 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 6,
+			'version' => 7,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
-			'requires' => 'ProcessWire>=3.0.57'
+			'requires' => 'ProcessWire>=3.0.59'
 		); 
 	}
 
@@ -150,7 +150,6 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$isFieldset = $inputfield instanceof InputfieldFieldset;
 		$isWrapper = $inputfield instanceof InputfieldWrapper && !$isFieldset;
 		
-		$useOffset = $formSettings['useOffset'] || $this->useOffset || in_array($class, $this->offsetTypes);
 		$useNoBorder = $formSettings['useBorders'] === false || (in_array($class, $this->noBorderTypes) && $columnWidth == 100);
 		$useCard = in_array($class, $this->cardTypes);
 		
@@ -191,7 +190,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 
 		// determine custom settings which may be defined with Inputfield or with Field
 		$themeBorder = $inputfield->getSetting('themeBorder');
-		$themeOffset = $inputfield->getSetting('themeOffset');
+		$themeOffset = $inputfield->getSetting('themeOffset') || in_array($class, $this->offsetTypes);
 		$themeColor = $themeColor ? $themeColor : $inputfield->getSetting('themeColor');
 		$field = $inputfield->hasField;
 
@@ -232,7 +231,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$inputfield->addClass('uk-card uk-card-default', 'wrapClass');
 		}
 	
-		if($useOffset || $themeOffset) {
+		if($themeOffset && !$this->useOffset) {
 			$inputfield->addClass('InputfieldIsOffset', 'wrapClass');
 		}
 	}

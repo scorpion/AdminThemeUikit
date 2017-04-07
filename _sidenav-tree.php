@@ -18,6 +18,14 @@ if(!isset($content)) $content = '';
 	/* this intentionally on a separate line */ ?>">
 <head>
 	<?php include($config->paths->adminTemplates . '_head.php'); ?>
+	<script>
+		var pageListRefresh = {
+			refreshPage: function(id) {
+				$(document).trigger('pageListRefresh', id); 
+			}
+		};
+		$(document).on('mouseover', 'a', ProcessWireAdminTheme.linkTargetMainMouseoverEvent);
+	</script>
 </head>
 <body class='<?php echo $adminTheme->getBodyClass(); ?> pw-narrow-width pw-iframe'>
 	<main id='main' class='pw-container uk-container uk-container-expand uk-margin-small-top uk-margin-small-left uk-margin-large-bottom'>
@@ -27,8 +35,5 @@ if(!isset($content)) $content = '';
 			</div>	
 		</div>
 	</main>
-	<script>
-		$(document).on('mouseover', 'a', ProcessWireAdminTheme.linkTargetMainMouseoverEvent);
-	</script>
 </body>
 </html>

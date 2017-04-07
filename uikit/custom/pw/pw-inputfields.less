@@ -99,7 +99,6 @@
     width: 100%;
   }
   
-
   &.ui-state-error {
     border: none;
   }
@@ -109,14 +108,21 @@
     margin-top: 0.1em;
   }
   
-  input[type=text],
-  input[type=email],
-  input[type=date],
-  input[type=datetime],
-  input[type=number],
-  input[type=url] {
+  input[type=text]:not(.uk-input),
+  input[type=email]:not(.uk-input),
+  input[type=date]:not(.uk-input),
+  input[type=datetime]:not(.uk-input),
+  input[type=number]:not(.uk-input),
+  input[type=url]:not(.uk-input) {
     .uk-input();
-    width: auto;
+    // width: auto;
+    &.InputfieldMaxWidth {
+      width: 100%;
+    }
+  }
+  
+  .InputfieldMaxWidth {
+    width: 100%;
   }
   
   select,
@@ -140,10 +146,25 @@
   // By default, Inputfield elements have no margins, so this adds one
   margin-top: @pw-inputfield-margin;
   margin-bottom: @pw-inputfield-margin;
+  
+  &.InputfieldRowFirst:not(.WireTab) {
+    // first row of offset fields needs no top margin
+    margin-top: 0;
+  }
+  
+  &.InputfieldRowLast:not(.InputfieldWrapper):not(.InputfieldFieldset) {
+    // last row of offset fields needs no bottom margin
+    margin-bottom: 0;
+  }
+  
+  &.InputfieldSubmit.InputfieldIsOffset,
+  &.InputfieldButton.InputfieldIsOffset {
+    // offsets don't apply to buttons
+    margin-top: 0 !important;
+  }
+  
 }
-.InputfieldIsOffset:last-child {
-  margin-bottom: 0;
-}
+
 table .InputfieldIsOffset,
 .InputfieldFieldset .InputfieldColumnWidth.InputfieldIsOffset,
 .InputfieldRepeater .InputfieldIsOffset {

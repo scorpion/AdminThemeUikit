@@ -136,7 +136,6 @@ var ProcessWireAdminTheme = {
 		});
 	
 		for(var id in toggles) {
-			console.log(id);
 			var $toggle = toggles[id];
 			var $button = $('#' + id);
 			$button.after($toggle);
@@ -363,6 +362,11 @@ var ProcessWireAdminTheme = {
 					$t = $f;
 				} while(true);
 			});
+	
+			// identify first and last rows for each group of inputfields
+			$(".Inputfields").each(function() {
+				identifyFirstLastRows($(this));
+			});
 
 			// update any legacy inputfield declarations
 			$(".ui-widget.Inputfield, .ui-widget-header.InputfieldHeader, .ui-widget-content.InputfieldContent")
@@ -372,6 +376,26 @@ var ProcessWireAdminTheme = {
 			$('.MarkupPagerNav:not(.uk-pagination)').each(function() {
 				$(this).addClass('uk-pagination');
 			});
+		}
+		
+		function identifyFirstLastRows($inputfields) {
+			$(".InputfieldRowFirst", $inputfields).removeClass("InputfieldRowFirst");
+			$(".InputfieldRowLast", $inputfields).removeClass("InputfieldRowLast");
+			var $in = $inputfields.children(".Inputfield:not(.InputfieldStateHidden):eq(0)");
+			if(!$in.length) return; 
+			do {
+				$in.addClass('InputfieldRowFirst');
+				$in = $in.next('.Inputfield:not(.InputfieldStateHidden)');
+			} while($in.hasClass('InputfieldColumnWidth') && !$in.hasClass('InputfieldColumnWidthFirst'));
+			$in = $inputfields.children('.Inputfield:last-child');
+			while($in.length && $in.hasClass('InputfieldStateHidden')) {
+				$in = $in.prev('.Inputfield');
+			}
+			do {
+				$in.addClass('InputfieldRowLast');
+				if(!$in.hasClass('InputfieldColumnWidth') || $in.hasClass('InputfieldColumnWidthFirst')) break;
+				$in = $in.prev('.Inputfield:not(.InputfieldStateHidden)');
+			} while($in.hasClass('InputfieldColumnWidth'));
 		}
 
 		function ukGridClass(width) {
@@ -468,6 +492,8 @@ var ProcessWireAdminTheme = {
 				updateLastInputfield(w);
 			}
 		}
+		
+		var showHideInputfieldTimer = null;
 
 		// event called when an inputfield is hidden or shown
 		var showHideInputfield = function(event, inputfield) {
@@ -479,6 +505,17 @@ var ProcessWireAdminTheme = {
 				$inputfield.addClass('uk-hidden');
 			}
 			updateInputfieldRow($inputfield);
+			if(showHideInputfieldTimer) return;
+			showHideInputfieldTimer = setTimeout(function() {
+				identifyFirstLastRows($inputfield.closest('.Inputfields'));
+				var $inputfields = $inputfield.find('.Inputfields');
+				if($inputfields.length) {
+					$inputfields.each(function() {
+						identifyFirstLastRows($(this));
+					});
+				}
+				showHideInputfieldTimer = null;	
+			}, 100);
 		};
 
 		

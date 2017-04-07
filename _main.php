@@ -40,11 +40,6 @@ if(!isset($content)) $content = '';
 		
 	} else if($layout == 'sidenav-tree' || $layout == 'sidenav-tree-alt') {
 		// masthead not rendered in this frame
-		if(strpos($process, 'ProcessPageList') === 0) {
-			echo "<script>if(typeof parent.isPresent != 'undefined') parent.closeTreePane();</script>";
-		} else {
-			echo "<script>if(typeof parent.isPresent != 'undefined' && !parent.isMobileWidth()) parent.openTreePane();</script>";
-		}
 		echo $adminTheme->renderNotices($notices);
 		
 	} else if($layout == 'modal') {
@@ -92,8 +87,24 @@ if(!isset($content)) $content = '';
 	}
 	echo $adminTheme->renderExtraMarkup('body');
 	?>
-
-	<script>ProcessWireAdminTheme.init();</script>
+	
+	<script>
+		<?php	
+		if(strpos($layout, 'sidenav-tree') === 0) {
+			echo "if(typeof parent.isPresent != 'undefined'){";
+			if(strpos($process, 'ProcessPageList') === 0) {
+				echo "parent.closeTreePane();";
+			} else {
+				echo "if(!parent.isMobileWidth()) parent.openTreePane();";
+			}
+			if($process == 'ProcessPageEdit' && ($input->get('s') || $input->get('new'))) {
+				echo "parent.refreshTreePane(" . ((int) $input->get('id')) . ");";
+			}
+			echo "}";
+		}
+		?>
+		ProcessWireAdminTheme.init();
+	</script>
 
 </body>
 </html>

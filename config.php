@@ -22,7 +22,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f = $modules->get('InputfieldRadios');
 	$f->attr('name', 'layout');
 	$f->label = __('Layout');
-	$f->addOption('', __('Masthead navigation only (default)'));
+	$f->addOption('', __('Masthead navigation only (RECOMMENDED)'));
 	$opt = __('Masthead navigation + page tree navigation in sidebar');
 	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)'));
 	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)')); 

@@ -41,6 +41,7 @@ if(!isset($content)) $content = '';
 	} else if($layout == 'sidenav-tree' || $layout == 'sidenav-tree-alt') {
 		// masthead not rendered in this frame
 		echo $adminTheme->renderNotices($notices);
+		echo "<div class='uk-margin-small'></div>";
 		
 	} else if($layout == 'modal') {
 		// no masthead

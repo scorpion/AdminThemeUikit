@@ -252,6 +252,16 @@ $panes = array(
 		}
 		
 		/**
+		 * Hide the tree pane
+		 *
+		 */
+		function hideTreePane() {
+			if(!layout.state.<?php echo $treePaneLocation; ?>.isHidden) {
+				layout.hide('<?php echo $treePaneLocation; ?>');
+			}
+		}
+		
+		/**
 		 * Open the tree pane
 		 *
 		 */
@@ -262,11 +272,29 @@ $panes = array(
 		}
 		
 		/**
+		 * Show the tree pane (if hidden)
+		 *
+		 */
+		function showTreePane() {
+			if(layout.state.<?php echo $treePaneLocation; ?>.isHidden) {
+				layout.show('<?php echo $treePaneLocation; ?>');
+			}
+		}
+		
+		/**
 		 * Is the tree pane currently closed? 
 		 * 
 		 */
 		function treePaneClosed() {
 			<?php echo "return layout.state.$treePaneLocation.isClosed;"; ?>
+		}
+		
+		/**
+		 * Is the tree pane currently hidden?
+		 *
+		 */
+		function treePaneHidden() {
+			<?php echo "return layout.state.$treePaneLocation.isHidden;"; ?>
 		}
 		
 		/**

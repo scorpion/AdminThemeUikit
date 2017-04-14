@@ -417,16 +417,13 @@ var ProcessWireAdminTheme = {
 			var $lastInputfield = null;
 			var width = 0;
 			var w = 0;
+			var lastW = 0;
 			var lastGridClass = '';
 
 			function consoleLog($in, msg) {
-				/*
 				 var id = $in.attr('id');
 				 id = id.replace('wrap_Inputfield_', '');
-				 if(id == 'noChildren' || id == 'noParents' || id == 'childTemplates') {
 				 console.log(id + ' (width=' + width + ', w=' + w + '): ' + msg);	
-				 }
-				 */
 			}
 
 			function updateLastInputfield(w) {
@@ -439,7 +436,7 @@ var ProcessWireAdminTheme = {
 				} else if(w >= 100) {
 					gridClass = 'uk-width-1-1';
 				} else {
-					gridClass = ukGridClass(100 - width);
+					// gridClass = ukGridClass(100 - width);
 				}
 				if(gridClass.length) {
 					if(lastGridClass.length) $lastInputfield.removeClass(lastGridClass);
@@ -469,7 +466,7 @@ var ProcessWireAdminTheme = {
 					width = 0;
 				} else if(width + w > 100) {
 					// start new row and update width for last column
-					updateLastInputfield(w);
+					updateLastInputfield(lastW);
 					width = 0;
 				} else {
 					// column that isn't first column
@@ -482,6 +479,7 @@ var ProcessWireAdminTheme = {
 				}
 
 				width += w;
+				lastW = w; 
 				$lastInputfield = $inputfield;
 				lastGridClass = ukGridClass(w);
 				$inputfield.addClass(lastGridClass);

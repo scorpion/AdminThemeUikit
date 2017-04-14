@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.16 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -17,12 +17,15 @@ function plugin(UIkit) {
     var $ = util.$;
     var doc = util.docElement;
     var extend = util.extend;
+    var getDimensions = util.getDimensions;
     var isWithin = util.isWithin;
     var on = util.on;
     var off = util.off;
+    var offsetTop = util.offsetTop;
     var pointerDown = util.pointerDown;
     var pointerMove = util.pointerMove;
     var pointerUp = util.pointerUp;
+    var promise = util.promise;
     var win = util.win;
 
     UIkit.component('sortable', {
@@ -95,7 +98,7 @@ function plugin(UIkit) {
 
                 this.drag.offset({top: this.pos.y + this.origin.top, left: this.pos.x + this.origin.left});
 
-                var top = this.drag.offset().top, bottom = top + this.drag[0].offsetHeight;
+                var top = offsetTop(this.drag), bottom = top + this.drag[0].offsetHeight;
 
                 if (top > 0 && top < this.scrollY) {
                     setTimeout(function () { return win.scrollTop(this$1.scrollY - 5); }, 5);
@@ -154,7 +157,7 @@ function plugin(UIkit) {
 
                 this.drag.children().first().height(this.placeholder.children().height());
 
-                var ref = this.placeholder.offset();
+                var ref = getDimensions(this.placeholder);
                 var left = ref.left;
                 var top = ref.top;
                 extend(this.origin, {left: left - this.pos.x, top: top - this.pos.y});
@@ -324,7 +327,7 @@ function plugin(UIkit) {
                 this.$el.css('min-height', this.$el.height());
 
                 var positions = children.map(function (el) { return el.position(); });
-                $.when.apply($, children.map(function (el, i) { return el.css(props[i]).animate(positions[i], this$1.animation).promise(); }))
+                promise.all(children.map(function (el, i) { return el.css(props[i]).animate(positions[i], this$1.animation).promise(); }))
                     .then(function () {
                         this$1.$el.css('min-height', '').children().css(reset);
                         this$1.$updateSync('update', true);

@@ -134,7 +134,7 @@
     max-width: 100%;
   }
   
-  textarea {
+  textarea:not(.uk-textarea) {
     .uk-textarea();
   }
  
@@ -146,6 +146,11 @@
   // By default, Inputfield elements have no margins, so this adds one
   margin-top: @pw-inputfield-margin;
   margin-bottom: @pw-inputfield-margin;
+  
+  &.InputfieldNoBorder {
+    // to prevent it from being overridden when no-border active
+    margin-top: @pw-inputfield-margin;
+  }
   
   &.InputfieldRowFirst:not(.WireTab) {
     // first row of offset fields needs no top margin

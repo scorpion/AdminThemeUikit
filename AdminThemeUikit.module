@@ -20,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 7,
+			'version' => 8,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
 			'requires' => 'ProcessWire>=3.0.59'
@@ -138,8 +138,9 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$class = $inputfield->className();
 		$formSettings = $event->wire('config')->get('InputfieldForm');
 		$widths = $formSettings['ukGridWidths'];
-		$columnWidth = $inputfield->getSetting('columnWidth'); 
+		$columnWidth = (int) $inputfield->getSetting('columnWidth'); 
 		if($columnWidth < 10) $columnWidth = 100;
+		
 		
 		if($inputfield instanceof InputfieldSubmit) {
 			// button
@@ -154,7 +155,6 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$useCard = in_array($class, $this->cardTypes);
 		
 		// determine column width class
-		$columnWidth = $inputfield->getSetting('columnWidth');
 		$ukClass = '1-1';
 		
 		if($columnWidth && $columnWidth < 100) {

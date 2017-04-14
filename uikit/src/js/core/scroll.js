@@ -1,4 +1,4 @@
-import { $, doc } from '../util/index';
+import { $, offsetTop } from '../util/index';
 
 export default function (UIkit) {
 
@@ -23,8 +23,8 @@ export default function (UIkit) {
                 el = $(el);
 
                 // get / set parameters
-                var target = el.offset().top - this.offset,
-                    docHeight = doc.height(),
+                var target = offsetTop(el) - this.offset,
+                    docHeight = document.documentElement.offsetHeight,
                     winHeight = window.innerHeight;
 
                 if (target + winHeight > docHeight) {
@@ -60,7 +60,7 @@ export default function (UIkit) {
 
     if (!$.easing.easeOutExpo) {
         $.easing.easeOutExpo = function (x, t, b, c, d) {
-            return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+            return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
         };
     }
 

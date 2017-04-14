@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.16 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -32,7 +32,8 @@ function plugin(UIkit) {
             timeout: 5000,
             group: null,
             pos: 'top-center',
-            onClose: null
+            onClose: null,
+            clsClose: 'uk-notification-close'
         },
 
         created: function created() {
@@ -42,7 +43,7 @@ function plugin(UIkit) {
             }
 
             this.$mount($(
-                ("<div class=\"uk-notification-message" + (this.status ? (" uk-notification-message-" + (this.status)) : '') + "\">\n                    <a href=\"#\" class=\"uk-notification-close\" data-uk-close></a>\n                    <div>" + (this.message) + "</div>\n                </div>")
+                ("<div class=\"uk-notification-message" + (this.status ? (" uk-notification-message-" + (this.status)) : '') + "\">\n                    <a href=\"#\" class=\"" + (this.clsClose) + "\" data-uk-close></a>\n                    <div>" + (this.message) + "</div>\n                </div>")
             ).appendTo(containers[this.pos].show())[0]);
 
         },
@@ -70,7 +71,9 @@ function plugin(UIkit) {
         events: {
 
             click: function click(e) {
-                e.preventDefault();
+                if ($(e.target).closest('a[href="#"]').length) {
+                    e.preventDefault();
+                }
                 this.close();
             }
 

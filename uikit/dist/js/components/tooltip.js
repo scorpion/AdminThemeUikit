@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.16 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -35,6 +35,8 @@ function plugin(UIkit) {
 
     UIkit.component('tooltip', {
 
+        attrs: true,
+
         mixins: [mixin.toggable, mixin.position],
 
         props: {
@@ -47,7 +49,7 @@ function plugin(UIkit) {
             pos: 'top',
             title: '',
             delay: 0,
-            animation: 'uk-animation-scale-up',
+            animation: ['uk-animation-scale-up'],
             duration: 100,
             cls: 'uk-active',
             clsPos: 'uk-tooltip',
@@ -55,10 +57,17 @@ function plugin(UIkit) {
         },
 
         init: function init() {
+            this.container = this.container === true && UIkit.container || this.container && toJQuery(this.container);
+        },
+
+        connected: function connected() {
             var this$1 = this;
 
-            this.container = this.container === true && UIkit.container || this.container && toJQuery(this.container);
             fastdom.mutate(function () { return this$1.$el.removeAttr('title').attr('aria-expanded', false); });
+        },
+
+        disconnected: function disconnected() {
+            this.hide();
         },
 
         methods: {

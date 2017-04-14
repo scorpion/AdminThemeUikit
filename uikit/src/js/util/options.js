@@ -4,7 +4,6 @@ var strats = {};
 
 // concat strategy
 strats.args =
-strats.attrs =
 strats.created =
 strats.events =
 strats.init =
@@ -43,6 +42,7 @@ strats.props = function (parentVal, childVal) {
 };
 
 // extend strategy
+strats.computed =
 strats.defaults =
 strats.methods = function (parentVal, childVal) {
     return childVal

@@ -64,9 +64,13 @@ if(!isset($content)) $content = '';
 					<?php echo $adminTheme->renderAddNewButton(); ?>
 				</div>
 
-				<?php if(!$adminTheme->isModal): ?>
-					<h1 class='uk-margin-remove-top'><?php echo $adminTheme->getHeadline(); ?></h1>
-				<?php endif; ?>
+				<?php 
+				$headline = $adminTheme->getHeadline();
+				$headlinePos = strpos($content, ">$headline</h1>");
+				if(!$adminTheme->isModal && ($headlinePos === false || $headlinePos < 500)) {
+					echo "<h1 class='uk-margin-remove-top'>$headline</h1>";
+				}
+				?>
 				
 			</header>	
 			

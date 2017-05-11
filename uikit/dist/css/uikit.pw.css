@@ -15043,11 +15043,6 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-/*
-#pw-layout-container {
-  height: calc(100vh - 70px);
-}
-*/
 #pw-masthead {
   height: 80px;
 }
@@ -15183,6 +15178,9 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 .pw-sidebar-nav > li > ul > li > ul > li {
   padding: 0;
   line-height: 1.1em;
+}
+.pw-layout-sidenav-tree .ProDraftsNotice {
+  margin-top: 20px;
 }
 .ProcessLogin #pw-masthead {
   display: none;

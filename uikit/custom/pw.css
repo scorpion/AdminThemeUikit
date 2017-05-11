@@ -13903,6 +13903,9 @@ table .InputfieldIsOffset,
   margin-right: 0.5em;
   margin-left: 0;
 }
+.InputfieldStateCollapsed > .InputfieldHeaderHidden {
+  display: block;
+}
 .pw-init .toggle-icon {
   display: none;
 }

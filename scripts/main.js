@@ -6,7 +6,7 @@
  */
 
 var ProcessWireAdminTheme = {
-
+	
 	/**
 	 * Initialization to be called before closing </body> tag
 	 * 
@@ -30,9 +30,11 @@ var ProcessWireAdminTheme = {
 
 		var $body = $("body");
 		$body.removeClass("pw-init").addClass("pw-ready");
-		
+
 		$(document).on('wiretabclick opened', function(e) {
+			$('body').addClass('pw-fake-resize');
 			$(window).resize(); // force Uikit to update grid
+			setTimeout(function() { $('body').removeClass('pw-fake-resize'); }, 100);
 		});
 		
 		$('a.notice-remove', '#notices').click(function() {
@@ -47,6 +49,16 @@ var ProcessWireAdminTheme = {
 			e.stopPropagation();
 		});
 	
+		var resizeTimer = null;
+		$(window).resize(function() {
+			if(resizeTimer) return;
+			resizeTimer = setTimeout(function() {
+				ProcessWireAdminTheme.windowResized();
+				resizeTimer = null;
+			}, 250);
+		});
+		this.windowResized();
+		
 		/*
 		if($('body').hasClass('pw-layout-main') && typeof window.parent.isPresent != "undefined") {
 			// send URL to parent window
@@ -71,6 +83,40 @@ var ProcessWireAdminTheme = {
 				href += (href.indexOf('?') > 0 ? '&' : '?') + 'layout=sidenav-init';
 			}
 			window.location.href = href;
+		}
+	},
+
+	/**
+	 * Called after window successfully resized
+	 * 
+	 */
+	windowResized: function() {
+		
+		if($('body').hasClass('pw-fake-resize')) return;
+		
+		var $masthead = $('#pw-masthead');
+		var $mastheadMobile = $('#pw-masthead-mobile');
+		var height = $masthead.children('.pw-container').height();
+		var maxHeight = parseInt($masthead.data('pw-height'));
+		
+		if(height > maxHeight) {
+			// hide masthead, show mobile masthead
+			if(!$masthead.hasClass('pw-masthead-hidden')) {
+				$masthead.addClass('pw-masthead-hidden').css({
+					position: 'absolute',
+					top: '-9999px'
+				});
+				$mastheadMobile.removeClass('uk-hidden');
+			}
+		} else {
+			// show masthead, hide mobile masthead
+			if($masthead.hasClass('pw-masthead-hidden')) {
+				$mastheadMobile.addClass('uk-hidden');
+				$masthead.removeClass('pw-masthead-hidden').css({
+					position: 'relative',
+					top: 0
+				});
+			}
 		}
 	}, 
 

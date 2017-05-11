@@ -120,9 +120,10 @@
     /* 9 */
     border: none;
     color: @search-color;
+    .hook-search-input;
 }
 
-.uk-search-input:focus { outline: 0; }
+.uk-search-input:focus { outline: none; }
 
 /* Placeholder */
 .uk-search-input:-ms-input-placeholder { color: @search-placeholder-color !important; }
@@ -334,6 +335,7 @@
 
 .hook-search-misc;
 
+.hook-search-input() {}
 .hook-search-default-input() {}
 .hook-search-default-input-focus() {}
 .hook-search-navbar-input() {}

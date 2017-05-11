@@ -17,6 +17,7 @@ export default function (UIkit) {
             clsActive: String,
             clsInactive: String,
             clsFixed: String,
+            clsBelow: String,
             widthElement: 'jQuery',
             showOnUp: Boolean,
             media: 'media',
@@ -31,6 +32,7 @@ export default function (UIkit) {
             clsActive: 'uk-active',
             clsInactive: '',
             clsFixed: 'uk-sticky-fixed',
+            clsBelow: 'uk-sticky-below',
             widthElement: false,
             showOnUp: false,
             media: false,
@@ -91,7 +93,7 @@ export default function (UIkit) {
 
                 write() {
 
-                    var outerHeight = this.$el[0].offsetHeight, el;
+                    var outerHeight = (this.isActive ? this.placeholder : this.$el)[0].offsetHeight, el;
 
                     this.placeholder
                         .css('height', this.$el.css('position') !== 'absolute' ? outerHeight : '')
@@ -153,7 +155,7 @@ export default function (UIkit) {
             {
 
                 read() {
-                    this.offsetTop = offsetTop(this.$el)
+                    this.offsetTop = offsetTop(this.$el);
                 },
 
                 write({dir} = {}) {
@@ -175,7 +177,7 @@ export default function (UIkit) {
 
                         this.isActive = false;
 
-                        if (this.animation && this.bottomOffset < this.offsetTop) {
+                        if (this.animation && scroll > this.topOffset) {
                             Animation.cancel(this.$el).then(() => Animation.out(this.$el, this.animation).then(() => this.hide()));
                         } else {
                             this.hide();
@@ -221,6 +223,7 @@ export default function (UIkit) {
                     .addClass(this.clsInactive)
                     .removeClass(this.clsFixed)
                     .removeClass(this.clsActive)
+                    .removeClass(this.clsBelow)
                     .css({position: '', top: '', width: ''})
                     .trigger('inactive');
 
@@ -244,7 +247,8 @@ export default function (UIkit) {
                     })
                     .addClass(this.clsFixed)
                     .toggleClass(this.clsActive, active)
-                    .toggleClass(this.clsInactive, !active);
+                    .toggleClass(this.clsInactive, !active)
+                    .toggleClass(this.clsBelow, scroll > this.bottomOffset);
 
             }
 

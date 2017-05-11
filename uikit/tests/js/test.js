@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.22 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
@@ -27,6 +27,7 @@ var styles = $.extend({
 var component = location.pathname.split('/').pop().replace(/.html$/, '');
 var components = [
         'lightbox',
+        'marker',
         'notification',
         'sortable',
         'tooltip',
@@ -81,6 +82,7 @@ $(function () {
         'column',
         'comment',
         'container',
+        'countdown',
         'cover',
         'description-list',
         'divider',
@@ -186,7 +188,7 @@ $(function () {
     // RTL
     // ------------------------------
 
-    var $rtl = $('<input type="checkbox" class="uk-checkbox uk-form-width-small" />').on('change', function () {
+    var $rtl = $('<input type="checkbox" class="uk-checkbox" />').on('change', function () {
         storage._uikit_dir = $rtl.prop('checked') ? 'rtl' : 'ltr';
         location.reload();
     }).appendTo($label).after('<span style="margin:5px;">RTL</span>');

@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.22 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -23,21 +23,14 @@ function plugin(UIkit) {
     var pointerDown = util.pointerDown;
     var pointerEnter = util.pointerEnter;
     var pointerLeave = util.pointerLeave;
-    var toJQuery = util.toJQuery;
 
     var active;
-
-    doc.on('click', function (e) {
-        if (active && !isWithin(e.target, active.$el)) {
-            active.hide();
-        }
-    });
 
     UIkit.component('tooltip', {
 
         attrs: true,
 
-        mixins: [mixin.toggable, mixin.position],
+        mixins: [mixin.togglable, mixin.position],
 
         props: {
             delay: Number,
@@ -56,8 +49,12 @@ function plugin(UIkit) {
             container: true,
         },
 
-        init: function init() {
-            this.container = this.container === true && UIkit.container || this.container && toJQuery(this.container);
+        computed: {
+
+            container: function container() {
+                return $(this.$props.container === true && UIkit.container || this.$props.container || UIkit.container);
+            }
+
         },
 
         connected: function connected() {
@@ -85,6 +82,12 @@ function plugin(UIkit) {
                 }
 
                 active = this;
+
+                doc.on(("click." + (this.$options.name)), function (e) {
+                    if (!isWithin(e.target, this$1.$el)) {
+                        this$1.hide();
+                    }
+                });
 
                 clearTimeout(this.showTimer);
 
@@ -121,12 +124,16 @@ function plugin(UIkit) {
                 this.toggleElement(this.tooltip, false);
                 this.tooltip && this.tooltip.remove();
                 this.tooltip = false;
+                doc.off(("click." + (this.$options.name)));
+
             }
 
         },
 
         events: ( obj = {
+
             'blur': 'hide'
+
         }, obj[("focus " + pointerEnter + " " + pointerDown)] = function (e) {
                 if (e.type !== pointerDown || !isTouch(e)) {
                     this.show();

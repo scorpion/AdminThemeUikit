@@ -1,5 +1,5 @@
 import { Class } from '../mixin/index';
-import { $, extend, isRtl, isWithin, pointerEnter, query, Transition } from '../util/index';
+import { $, assign, isRtl, isWithin, pointerEnter, query, Transition } from '../util/index';
 
 export default function (UIkit) {
 
@@ -65,7 +65,7 @@ export default function (UIkit) {
 
         update() {
 
-            UIkit.drop($(`${this.dropdown} .${this.clsDrop}`, this.$el), extend({}, this))
+            UIkit.drop($(`${this.dropdown} .${this.clsDrop}`, this.$el), assign({}, this.$props, {boundary: this.boundary, pos: this.pos}));
 
         },
 
@@ -128,10 +128,12 @@ export default function (UIkit) {
                     return this.navbar.$el;
                 },
 
-                handler(_, {$el, dir}) {
+                handler(_, drop) {
+                    var {$el, dir} = drop;
                     if (dir === 'bottom' && !isWithin($el, this.$el)) {
                         $el.appendTo(this.$el);
-                        this.$el.trigger('beforeshow', [{$el}]);
+                        drop.show();
+                        return false;
                     }
                 }
             },

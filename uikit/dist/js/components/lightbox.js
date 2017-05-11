@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.20 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.22 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -14,27 +14,13 @@ function plugin(UIkit) {
 
     var ref = UIkit.util;
     var $ = ref.$;
+    var ajax = ref.ajax;
     var doc = ref.doc;
+    var Event = ref.Event;
     var extend = ref.extend;
     var Dimensions = ref.Dimensions;
     var getIndex = ref.getIndex;
     var Transition = ref.Transition;
-    var active;
-
-    doc.on({
-        keydown: function (e) {
-            if (active) {
-                switch (e.keyCode) {
-                    case 37:
-                        active.show('previous');
-                        break;
-                    case 39:
-                        active.show('next');
-                        break;
-                }
-            }
-        }
-    });
 
     UIkit.component('lightbox', {
 
@@ -178,26 +164,35 @@ function plugin(UIkit) {
                     });
                 }
 
-                active = this;
-
                 this.modal.panel.find('[uk-transition-hide]').hide();
                 this.modal.panel.find('[uk-transition-show]').show();
 
                 this.modal.content && this.modal.content.remove();
                 this.modal.caption.text(this.getItem().title);
 
-                var event = $.Event('showitem');
+                var event = Event('showitem');
                 this.$el.trigger(event);
                 if (!event.isImmediatePropagationStopped()) {
                     this.setError(this.getItem());
                 }
+
+                doc.on(("keydown." + (this.$options.name)), function (e) {
+                    switch (e.keyCode) {
+                        case 37:
+                            this$1.show('previous');
+                            break;
+                        case 39:
+                            this$1.show('next');
+                            break;
+                    }
+                });
             },
 
             hide: function hide() {
                 var this$1 = this;
 
 
-                active = active && active !== this && active;
+                doc.off(("keydown." + (this.$options.name)));
 
                 this.modal.hide().then(function () {
                     this$1.modal.$destroy(true);
@@ -338,7 +333,7 @@ function plugin(UIkit) {
                 var id = matches[2],
                     setIframe = function (width, height) { return this$1.setItem(item, ("<iframe src=\"//player.vimeo.com/video/" + id + "\" width=\"" + width + "\" height=\"" + height + "\" style=\"max-width:100%;box-sizing:border-box;\"></iframe>"), width, height); };
 
-                $.ajax({type: 'GET', url: ("http://vimeo.com/api/oembed.json?url=" + (encodeURI(item.source))), jsonp: 'callback', dataType: 'jsonp'}).then(function (res) { return setIframe(res.width, res.height); });
+                ajax({type: 'GET', url: ("http://vimeo.com/api/oembed.json?url=" + (encodeURI(item.source))), jsonp: 'callback', dataType: 'jsonp'}).then(function (res) { return setIframe(res.width, res.height); });
 
                 e.stopImmediatePropagation();
             }

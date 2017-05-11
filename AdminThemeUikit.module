@@ -31,7 +31,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * Development mode, to be used when developing this module’s code
 	 *
 	 */
-	const dev = false;
+	const dev = true;
 
 	/**
 	 * Default logo image file (relative to this dir)
@@ -101,6 +101,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 
 		// add rendering hooks
 		$this->addHookBefore('Inputfield::render', $this, 'hookBeforeRenderInputfield');
+		$this->addHookBefore('Inputfield::renderValue', $this, 'hookBeforeRenderInputfield');
 		$this->addHookAfter('Inputfield::getConfigInputfields', $this, 'hookAfterInputfieldGetConfigInputfields');
 		$this->addHookAfter('MarkupAdminDataTable::render', $this, 'hookAfterTableRender');
 	

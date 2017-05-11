@@ -4,6 +4,56 @@
 
 ### Added
 
+- Add Marker component
+- Add Form Range component
+- Add hidden classes for touch devices to visiblity component
+- Add transform center to utility component
+- Add clsBelow option for Sticky component (uk-sticky-below)
+
+### Changed
+
+- IMPORTANT: Move Less/Sass imports into one file. Use `components/_import.less`
+- Improved flip behaviour in Drop component
+
+### Fixed
+
+- Fix support for more than two digits in Countdown component
+- Fix typo in Togglable mixin name
+- Fix form select image for RTL
+- Fix scrollspy 'cls' option
+- Fix HeightMatch not working on initial page load
+- Fix touch events
+- Fix click event firing twice in iOS <= 9.2
+- Prevent inital page jump (Safari)
+
+## 3.0.0 beta 22 (April 24, 2017)
+
+### Added
+
+- Add Countdown component
+- Add divider, justify and responsive modifier to table component
+- Add inverse support for table component
+- Add box-shadow bottom to utility component
+
+### Changed
+
+- IMPORTANT: Remove style from default table component. Use `uk-table-divider` modifier
+- Move border style to table row instead of table cell
+- Remove margin from the last-child in table component cell
+
+### Fixed
+
+- Fix swiping in Switcher
+- Fix scrolling in Scrollspy Nav (FF)
+- Fix Navbar Dropbar
+- Fix Tooltip with different animations
+- Fix sass showing error when using different color mode in certain components
+
+## 3.0.0 beta 21 (April 11, 2017)
+
+### Added
+
+- Add Gitter icon
 - Attribute observer listens for changes to 'component' attribute too
 
 ### Fixed
@@ -11,6 +61,7 @@
 - Fix instagram, tumblr and vimeo icons
 - Fix unexpected closing of Modal Dialog
 - Fix 'click' default behaviour prevention in Toggle
+- Fix memory leak in Icons
 
 ## 3.0.0 beta 20 (April 5, 2017)
 
@@ -249,7 +300,7 @@
 
 ### Added
 
-- Toggable triggers 'shown'/'hidden' events, when animations complete
+- Togglable triggers 'shown'/'hidden' events, when animations complete
 
 ### Fixed
 

@@ -20,10 +20,10 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 8,
+			'version' => 11,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
-			'requires' => 'ProcessWire>=3.0.59'
+			'requires' => 'ProcessWire>=3.0.61'
 		); 
 	}
 
@@ -31,7 +31,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * Development mode, to be used when developing this module’s code
 	 *
 	 */
-	const dev = true;
+	const dev = false;
 
 	/**
 	 * Default logo image file (relative to this dir)

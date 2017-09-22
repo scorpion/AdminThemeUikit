@@ -37,7 +37,7 @@ if(!defined("PROCESSWIRE")) die();
 				<ul class='uk-navbar-nav uk-margin-right pw-user-nav'>
 					<li>
 						<a id="tools-toggle" class="pw-dropdown-toggle" href="<?php echo $urls->admin; ?>profile/">
-							<?php echo $adminTheme->renderNavIcon('user') . $user->name; ?>
+							<?php echo $adminTheme->renderNavIcon('user-circle fa-lg') . $user->name; ?>
 						</a>
 						<ul class="pw-dropdown-menu" data-my="left top" data-at="left bottom" style="display: none;">
 							<?php if($config->debug && strpos($adminTheme->layout, 'sidenav') === false): ?>

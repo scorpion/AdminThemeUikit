@@ -349,45 +349,46 @@ table .InputfieldIsOffset,
 /*** InputfieldNoBorder ***************************************************/
 
 // Setup NoBorder Inputfield styles
-*:not(.InputfieldContent) > .Inputfields {
-  // Inputfields that are not nested within another non-wrapping Inputfield
-  > .InputfieldNoBorder {
-    // An inputfield that has no borders or background 
-    &:not(.InputfieldStateCollapsed):not(.InputfieldFieldset) {
-      // Inputfield with no border that is open (not collapsed)
-      outline: none;
-      > .InputfieldHeader,
-      > .InputfieldContent {
-        padding-left: 0;
-        padding-right: 0;
-        background: none;
-      }
-      > .InputfieldHeader {
-        // half bottom padding in header
-        padding-bottom: @pw-inputfield-header-padding-bottom / 2;
-      }
-    }
-    &.InputfieldStateCollapsed {
-      // collapsed NoBorder inputfield
+// .Inputfields { 
+//   *:not(.InputfieldContent) > .Inputfields {
+//     > .InputfieldNoBorder {
+// Inputfields that are not nested within another non-wrapping Inputfield
+.InputfieldNoBorder {
+  // An inputfield that has no borders or background 
+  &:not(.InputfieldStateCollapsed):not(.InputfieldFieldset) {
+    // Inputfield with no border that is open (not collapsed)
+    outline: none;
+    > .InputfieldHeader,
+    > .InputfieldContent {
       padding-left: 0;
-      > .InputfieldHeader {
-        padding-left: 0;
-      }
+      padding-right: 0;
+      background: none;
     }
-    &:not(.InputfieldColumnWidth) {
-      // reduced margin when there is no border
-      margin-bottom: 0;
-      + .InputfieldNoBorder:not(.InputfieldColumnWidth) {
-        // two no-border inputfields on top of one another: reduce the margins between them
-        margin-top: 0;
-      }
+    > .InputfieldHeader {
+      // half bottom padding in header
+      padding-bottom: @pw-inputfield-header-padding-bottom / 2;
     }
-    &.InputfieldColumnWidth:not(.InputfieldColumnWidthFirst) {
-      // horizontal space between floated columns
-      padding-left: @pw-inputfield-margin;
+  }
+  &.InputfieldStateCollapsed {
+    // collapsed NoBorder inputfield
+    padding-left: 0;
+    > .InputfieldHeader {
+      padding-left: 0;
     }
-  } // .NoBorder
-}
+  }
+  &:not(.InputfieldColumnWidth) {
+    // reduced margin when there is no border
+    margin-bottom: 0;
+    + .InputfieldNoBorder:not(.InputfieldColumnWidth) {
+      // two no-border inputfields on top of one another: reduce the margins between them
+      margin-top: 0;
+    }
+  }
+  &.InputfieldColumnWidth:not(.InputfieldColumnWidthFirst) {
+    // horizontal space between floated columns
+    padding-left: @pw-inputfield-margin;
+  }
+} // .NoBorder
 
 .InputfieldColumnWidth:not(.InputfieldNoBorder) + .InputfieldNoBorder:not(.InputfieldColumnWidth) {
   // more margin when row of columns is followed by a 100% width NoBorder column

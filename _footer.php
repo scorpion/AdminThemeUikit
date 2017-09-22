@@ -37,7 +37,7 @@ if(!defined("PROCESSWIRE")) die();
 			include($config->paths->wire . 'templates-admin/debug.inc'); ?>
 			<script>
 				$('#debug_toggle').appendTo('#pw-uk-debug-toggle');
-				$('#debug').find('table').addClass('uk-table uk-table-small uk-table-hover');
+				$('#debug').find('table').addClass('uk-table uk-table-small uk-table-hover uk-table-divider');
 			</script>
 		<?php endif; ?>
 	</div>

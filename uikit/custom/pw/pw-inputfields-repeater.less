@@ -46,7 +46,18 @@
       outline: @pw-inputfield-border;
       padding: 0;
       background: @pw-inputfield-background-none;
+      
+      .Inputfields > .InputfieldNoBorder {
+        // the global NoBorder padding 0 doesn't work when in a repeater item, so we add it back here
+        .InputfieldContent {
+          padding: @pw-inputfield-content-padding;
+        }
+        .InputfieldHeader {
+          padding: @pw-inputfield-header-padding;
+        }
+      }
     }
+    
   }
 }
 

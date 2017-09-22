@@ -66,7 +66,7 @@ $config->set('LanguageTabs', array(
 ));
 
 $config->set('MarkupAdminDataTable', array(
-	'addClass' => 'uk-table uk-table-small',
+	'addClass' => 'uk-table uk-table-divider uk-table-small',
 	'loadStyles' => false,
 	'loadScripts' => false,
 	'responsiveClass' => '',

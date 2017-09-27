@@ -22,11 +22,11 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f = $modules->get('InputfieldRadios');
 	$f->attr('name', 'layout');
 	$f->label = __('Layout');
-	$f->addOption('', __('Masthead navigation only (RECOMMENDED)'));
-	$opt = __('Masthead navigation + page tree navigation in sidebar');
+	$f->addOption('', __('Traditional with masthead navigation (RECOMMENDED)'));
+	$opt = __('Page tree navigation in sidebar');
 	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)'));
 	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)')); 
-	$f->addOption('sidenav', __('Sidebar navigation (left) + page tree navigation (right)'));
+	// $f->addOption('sidenav', __('Sidebar navigation (left) + page tree navigation (right)'));
 	$f->attr('value', $layout);
 	$f->icon = 'newspaper-o';
 	$inputfields->add($f);
@@ -138,7 +138,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f = $modules->get('InputfieldAsmSelect');
 	$f->attr('name', 'offsetTypes');
 	$f->label = __('Input types that should be vertically offset');
-	$f->description = __('You can select types individually here, or you can offset ALL types by using the field below this.');
+	// $f->description = __('You can select types individually here, or you can offset ALL types by using the field below this.');
 	$f->icon = 'arrows-v';
 	foreach($types as $className => $name) {
 		$f->addOption($className, $name);
@@ -148,6 +148,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$fieldset->add($f);
 
 	/** @var InputfieldCheckboxes $f */
+	/*
 	$f = $modules->get('InputfieldCheckbox');
 	$f->attr('name', 'useOffset');
 	$f->label = __('Vertically offset ALL input types?');
@@ -158,5 +159,6 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->icon = 'arrows-v';
 	if($adminTheme->useOffset) $f->attr('checked', 'checked');
 	$fieldset->add($f);
+	*/
 
 }

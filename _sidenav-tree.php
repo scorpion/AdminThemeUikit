@@ -14,7 +14,7 @@ if(!defined("PROCESSWIRE")) die();
 if(!isset($content)) $content = '';
 
 ?><!DOCTYPE html>
-<html class="pw" lang="<?php echo $adminTheme->_('en');
+<html class="pw pw-sidebar-frame" lang="<?php echo $adminTheme->_('en');
 	/* this intentionally on a separate line */ ?>">
 <head>
 	<?php include($config->paths->adminTemplates . '_head.php'); ?>

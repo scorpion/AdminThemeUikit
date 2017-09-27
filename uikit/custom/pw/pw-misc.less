@@ -1,11 +1,19 @@
 // Miscellaneous 
 
+html, body {
+  background: @pw-body-background;
+}
+
 // box-sizing
 *, *:before, *:after {
   // Note: Uikit overrides this in some cases
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+em {
+  color: inherit;
 }
 
 #pw-masthead {
@@ -33,14 +41,25 @@
 }
 
 // Pop-out panel for PageList, PageView, debug, etc. 
-.pw-panel-container {
-  .pw-panel-button {
-    background: @global-secondary-background;
-    padding-top: 3px;
-    padding-bottom: 3px;
+body .pw-panel-container {
+  .pw-panel-button.ui-button {
+    // background: @global-primary-background;
+    background: @pw-body-background;
+    padding: 3px 12px 3px 15px !important; 
     small.ui-button-text {
-      font-size: @global-small-font-size;
-      line-height: @global-small-font-size;
+      > span {
+        display: none;
+        // font-size: @global-small-font-size;
+        // line-height: @global-small-font-size;
+        // text-transform: uppercase;
+      }
+    }
+    i.fa {
+      transform: rotate(-90deg);
+      color: @global-link-color;
+      font-size: 20px;
+      position: relative;
+      bottom: -4px;
     }
   }
 }

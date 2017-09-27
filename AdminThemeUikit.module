@@ -20,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 11,
+			'version' => 12,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
 			'requires' => 'ProcessWire>=3.0.61'
@@ -170,9 +170,9 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		
 		$inputfield->addClass("uk-width-$ukClass@m", 'wrapClass');
 		$themeColor = '';
-		
+	
 		if($isWrapper) {
-			return; // no further settings necessary for InputfieldWrapper
+			return;
 		} else if($inputfield instanceof InputfieldTextarea) {
 			$inputfield->addClass('uk-textarea');
 		} else if($inputfield instanceof InputfieldPassword) {
@@ -265,17 +265,17 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$fieldset->label = $this->_('Uikit admin theme settings');
 		$fieldset->collapsed = Inputfield::collapsedYes;
 		$fieldset->icon = 'flask';
-		$fieldsetVisibility->add($fieldset);
+		$fieldsetVisibility->getParent()->insertAfter($fieldset, $fieldsetVisibility);
 
 		/** @var InputfieldRadios $f */
 		$f = $event->wire('modules')->get('InputfieldRadios');
 		$f->attr('name', 'themeColor');
 		$f->label = $this->_('Color');
-		$f->addOption('', $this->_x('None (default)', 'color'));
+		$f->addOption('', $this->_x('Auto/None (default)', 'color'));
 		$f->addOption('primary', $this->_x('Primary', 'color'));
 		$f->addOption('secondary', $this->_x('Secondary', 'color'));
-		$f->addOption('warning', $this->_x('Warning', 'color'));
-		$f->addOption('danger', $this->_x('Danger', 'color'));
+		// $f->addOption('warning', $this->_x('Warning', 'color'));
+		// $f->addOption('danger', $this->_x('Danger', 'color'));
 		$value = $field ? $field->get('themeColor') : '';
 		$f->attr('value', $value);
 		$fieldset->add($f);
@@ -685,7 +685,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * @return string
 	 *
 	 */
-	public function renderQuickTreeLink($icon = 'sitemap', $text = '') {
+	public function renderQuickTreeLink($icon = 'tree', $text = '') {
 		$tree = $this->_('Tree');
 		$url = $this->wire('urls')->admin . 'page/';
 		return
@@ -719,13 +719,15 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public function getUikitCSS() {
 		$config = $this->wire('config');
 		$cssURL = $this->get('cssURL');
+		$moduleInfo = self::getModuleInfo();
+		$version = $moduleInfo['version'];
 		if($cssURL) {
 			if(strpos($cssURL, '//') === false) $cssURL = $config->urls->root . ltrim($cssURL, '/');
 			return $this->wire('sanitizer')->entities($cssURL);
 		} else if(self::dev) {
-			return $config->urls->adminTemplates . 'uikit/custom/pw.css';
+			return $config->urls->adminTemplates . 'uikit/custom/pw.css?v=' . $version;
 		} else {
-			return $config->urls->adminTemplates . 'uikit/dist/css/uikit.pw.min.css';
+			return $config->urls->adminTemplates . 'uikit/dist/css/uikit.pw.min.css?v=' . $version;
 		}
 	}
 

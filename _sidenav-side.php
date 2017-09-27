@@ -21,7 +21,7 @@
 if(!defined("PROCESSWIRE")) die();
 
 ?><!DOCTYPE html>
-<html class="pw" lang="<?php echo $adminTheme->_('en');
+<html class="pw pw-sidebar-frame" lang="<?php echo $adminTheme->_('en');
 	/* this intentionally on a separate line */ ?>">
 <head>
 	<?php include($config->paths->adminTemplates . '_head.php'); ?>
@@ -41,8 +41,8 @@ if(!defined("PROCESSWIRE")) die();
 <body class='<?php echo $adminTheme->getBodyClass(); ?> uk-background-secondary pw-iframe'>
 
 	<?php if($adminTheme->isLoggedIn): ?>
-		<div id='pw-sidenav-bar' class="uk-background-secondary uk-light uk-padding-small">
-			<ul class='pw-sidebar-nav uk-nav uk-nav-primary uk-nav-parent-icon' data-uk-nav='animation: false; multiple: true;'>
+		<div id='pw-sidenav-bar' class="uk-background-secondary uk-padding-small">
+			<ul class='pw-sidebar-nav uk-nav uk-nav-parent-icon' data-uk-nav='animation: false; multiple: true;'>
 				<?php echo $adminTheme->renderSidebarNavItems(); ?>
 			</ul>	
 		</div>	

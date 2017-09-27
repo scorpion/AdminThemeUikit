@@ -8,7 +8,9 @@
 @pw-dropdown-separator-color: @global-muted-background;
 @pw-dropdown-highlight-color: @global-color;
 @pw-dropdown-highlight-background-color: @dropdown-background;
+@pw-dropdown-header-color: lighten(@dropdown-color, 20%); 
 @pw-dropdown-nav-font-size: @dropdown-nav-font-size;
+@pw-dropdown-nav-icon-color: @dropdown-color;
 @pw-dropdown-box-shadow: @dropdown-box-shadow;
 @pw-dropdown-min-width: @dropdown-min-width;
 
@@ -34,6 +36,7 @@
   .uk-nav-header {
     // when there is an item that serves as a headline for a group in the list
     padding: @pw-dropdown-item-padding-vertical @pw-dropdown-item-padding-horizontal;
+    color: @pw-dropdown-header-color;
   }
   
   .pw-has-items-icon {
@@ -68,6 +71,7 @@
 
     i.fa {
       margin-right: 2px;
+      color: @pw-dropdown-nav-icon-color;
     }
 
     a {
@@ -81,6 +85,7 @@
 
       i.fa {
         margin-left: -2px;
+        color: @pw-dropdown-nav-icon-color;
       }
 
       &.uk-active,

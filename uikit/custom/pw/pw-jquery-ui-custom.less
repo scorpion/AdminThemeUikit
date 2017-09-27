@@ -13,6 +13,7 @@
 
 // buttons
 @pw-button-font-size: @button-font-size;
+@pw-button-small-font-size: @pw-tiny-font-size; 
 @pw-button-border-radius: 4px;
 @pw-button-background: @button-primary-background;
 @pw-button-color: @button-primary-color;
@@ -240,18 +241,20 @@
   &.ui-priority-secondary {
     background: @pw-button-secondary-background;
     color: @pw-button-secondary-color;
+    opacity: 1.0;
   }
 }
 small .ui-button,
 small .ui-button.ui-state-default,
 small .ui-button.ui-state-hover {
   // smaller buttons
+  font-size: @pw-button-small-font-size;
   line-height: 30px;
   padding: 0 12px;
   text-transform: none;
   letter-spacing: 0;
-  background: @pw-button-secondary-background;
-  color: @pw-button-secondary-color;
+  // background: @pw-button-secondary-background;
+  // color: @pw-button-secondary-color;
   &:hover,
   .ui-state-hover {
     background: @pw-button-background;

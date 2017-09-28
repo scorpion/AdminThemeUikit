@@ -14,7 +14,7 @@ if(!defined("PROCESSWIRE")) die();
 /** @var Paths $urls */
 /** @var string $layout */
 
-$version = $adminTheme->version . 'c';
+$version = $adminTheme->version . 'd';
 
 $config->styles->prepend($config->urls->root . "wire/templates-admin/styles/AdminTheme.css?v=$version");
 $config->styles->prepend($adminTheme->getUikitCSS());
@@ -24,6 +24,7 @@ $ext = $config->debug ? "js" : "min.js";
 $config->scripts->append($config->urls->root . "wire/templates-admin/scripts/inputfields.$ext?v=$version");
 $config->scripts->append($config->urls->root . "wire/templates-admin/scripts/main.$ext?v=$version");
 $config->scripts->append($config->urls->adminTemplates . "uikit/dist/js/uikit.min.js?v=$version");
+$config->scripts->append($config->urls->adminTemplates . "uikit/dist/js/uikit-icons.min.js?v=$version");
 $config->scripts->append($config->urls->adminTemplates . "scripts/main.js?v=$version");
 
 ?>

@@ -1,8 +1,11 @@
-.pw-init .pw-dropdown-menu,
-.pw-init .pw-button-dropdown {
+body.pw-init .pw-dropdown-menu,
+body.pw-init .pw-button-dropdown {
   display: none;
 }
-.pw-init .WireTab {
+body.pw-init .WireTab {
+  display: none;
+}
+body.pw-init #pw-masthead > * {
   display: none;
 }
 ul.uk-navbar-nav ul {

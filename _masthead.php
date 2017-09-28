@@ -12,7 +12,7 @@ if(!defined("PROCESSWIRE")) die();
 ?>
 <header id='pw-masthead-mobile' class='pw-masthead uk-hidden uk-background-muted'>
 	<div class='pw-container uk-container uk-container-expand'>
-		<div class='uk-padding-small uk-text-center'>
+		<div class='uk-text-center'>
 			<a href='#' class='pw-logo-link'><?php echo $adminTheme->getLogo(); ?></a>
 		</div>	
 	</div>	

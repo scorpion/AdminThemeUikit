@@ -1,6 +1,6 @@
 // Initialiation and FOUC adjustments
 
-.pw-init {
+body.pw-init {
   // elements to hide before page is fully rendered
   // the pw-init class is automatically removed at document.ready, which negates these styles
   .pw-dropdown-menu,
@@ -8,6 +8,9 @@
     display: none;
   }
   .WireTab {
+    display: none;
+  }
+  #pw-masthead > * {
     display: none;
   }
 }

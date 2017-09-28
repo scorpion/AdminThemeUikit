@@ -29,7 +29,6 @@ var ProcessWireAdminTheme = {
 		this.setupSideNav();
 
 		var $body = $("body");
-		$body.removeClass("pw-init").addClass("pw-ready");
 
 		$(document).on('wiretabclick opened', function(e) {
 			$('body').addClass('pw-fake-resize');
@@ -57,7 +56,10 @@ var ProcessWireAdminTheme = {
 				resizeTimer = null;
 			}, 250);
 		});
-		this.windowResized();
+		
+		this.setupMasthead();
+		
+		$body.removeClass("pw-init").addClass("pw-ready");
 		
 		/*
 		if($('body').hasClass('pw-layout-main') && typeof window.parent.isPresent != "undefined") {
@@ -91,14 +93,30 @@ var ProcessWireAdminTheme = {
 	 * 
 	 */
 	windowResized: function() {
-		
 		if($('body').hasClass('pw-fake-resize')) return;
-		
+		this.setupMasthead();	
+	},
+
+	/**
+	 * Setup masthead for mobile or desktop
+	 * 
+	 */
+	setupMasthead: function() {
 		var $masthead = $('#pw-masthead');
 		var $mastheadMobile = $('#pw-masthead-mobile');
-		var height = $masthead.children('.pw-container').height();
-		var maxHeight = parseInt($masthead.data('pw-height'));
+		var width = $(window).width();
+		var height = 0;
+		var maxHeight = 0;
+
+		if(width > 767) {
+			maxHeight = parseInt($masthead.data('pw-height'));
+			height = $masthead.children('.pw-container').height();
+		} else {
+			// force mobile
+			height = 999;
+		}
 		
+		if($masthead.hasClass('uk-hidden')) $masthead.removeClass('uk-hidden');
 		if(height > maxHeight) {
 			// hide masthead, show mobile masthead
 			if(!$masthead.hasClass('pw-masthead-hidden')) {
@@ -630,7 +648,6 @@ var ProcessWireAdminTheme = {
 		return false;
 	}
 };
-
 $(document).ready(function() {
 	ProcessWireAdminTheme.ready();
 });

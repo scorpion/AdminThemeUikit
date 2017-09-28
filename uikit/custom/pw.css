@@ -4411,7 +4411,7 @@ ul.uk-nav-sub {
 .uk-breadcrumb > :nth-child(n+2):not(.uk-first-column)::before {
   content: "/";
   display: inline-block;
-  margin: 0 20px;
+  margin: 0 15px;
   color: #6c8dae;
 }
 /* ========================================================================
@@ -15101,6 +15101,15 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
 .pw-layout-sidenav-tree-alt .pw-notices > li:first-child {
   margin-top: 0;
 }
+body .ProDraftsNotice {
+  background: #f0f3f7;
+  margin-top: -3px !important;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid #dfe6ee;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
 .ProcessPageEditImageSelect #selected_image_settings {
   margin-top: 0;
 }
@@ -15150,8 +15159,12 @@ body {
 em {
   color: inherit;
 }
-#pw-masthead {
+#pw-masthead,
+#pw-masthead-mobile {
   height: 80px;
+}
+#pw-masthead-mobile {
+  line-height: 75px;
 }
 .pw-logo {
   max-height: 50px;
@@ -15364,11 +15377,14 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 .ProcessLogin footer {
   display: none;
 }
-.pw-init .pw-dropdown-menu,
-.pw-init .pw-button-dropdown {
+body.pw-init .pw-dropdown-menu,
+body.pw-init .pw-button-dropdown {
   display: none;
 }
-.pw-init .WireTab {
+body.pw-init .WireTab {
+  display: none;
+}
+body.pw-init #pw-masthead > * {
   display: none;
 }
 ul.uk-navbar-nav ul {

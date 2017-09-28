@@ -65,6 +65,9 @@
 @reno-form-radio-checked-background: @reno-muted-text-color;
 @reno-offcanvas-text-color: @reno-text-color;
 @reno-offcanvas-link-color: @reno-text-color;
+@reno-offcanvas-link-hover-color: @reno-link-color;
+@reno-offcanvas-link-open-color: @reno-link-color;
+@reno-offcanvas-background: @reno-secondary-background; // #E2E9F0;
 @reno-offcanvas-search-background: #fff;
 @reno-language-tab-background: transparent;
 @reno-language-tab-color: @reno-text-color;
@@ -116,7 +119,7 @@
 @pw-dropdown-highlight-background-color: @dropdown-background;
 @pw-dropdown-nav-font-size: @dropdown-nav-font-size;
 @pw-dropdown-nav-icon-color: @reno-dropdown-nav-icon-color;
-@pw-dropdown-box-shadow: 0 4px 7px rgba(0,0,0,0.175);
+@pw-dropdown-box-shadow: 0 1px 7px rgba(0,0,0,0.175);
 @pw-dropdown-min-width: @dropdown-min-width;
 @pw-dropdown-line-height: 1em;
 @pw-dropdown-list-padding-vertical: 10px;
@@ -192,9 +195,9 @@
 @offcanvas-bar-padding-horizontal-m: @offcanvas-bar-padding-horizontal;
 
 // Sidebar
-@pw-sidebar-nav-border-color: @global-secondary-background; 
-@pw-sidebar-nav-nested-border-color: darken(@global-secondary-background, 5%);
-@nav-parent-icon-color: lighten(#6c8dae, 10%); 
+@pw-sidebar-nav-border-color: darken(@reno-offcanvas-background, 4%);
+@pw-sidebar-nav-nested-border-color: @reno-offcanvas-background;
+@nav-parent-icon-color: darken(@reno-offcanvas-background, 12%); 
 
 // Dialog modal windows
 @pw-dialog-titlebar-background: @reno-masthead-background;
@@ -373,6 +376,9 @@
       background: @reno-masthead-search-background;
       border-color: @reno-masthead-search-border-color;
       border-radius: 5px;
+      &:focus {
+        color: #fff;
+      }
     }
     .uk-form-icon {
       color: @reno-masthead-search-icon-color;
@@ -416,11 +422,37 @@ ul.ui-menu {
 
 #offcanvas-nav {
   color: @reno-offcanvas-text-color;
+  .uk-offcanvas-bar {
+    background: @reno-offcanvas-background;
+    padding: 0;
+    box-shadow: 0 4px 7px rgba(0,0,0,0.175);
+    border-right: 1px solid darken(@reno-offcanvas-background, 10%); 
+  }
   #offcanvas-nav-header {
     display: none;
   }
-  .pw-sidebar-nav > li > a {
-    color: @reno-offcanvas-link-color;
+  .pw-sidebar-nav {
+    li > a {
+      padding-left: 20px;
+      padding-right: 20px;
+      color: @reno-offcanvas-link-color;
+      &:hover {
+        color: @reno-offcanvas-link-hover-color;
+      }
+    }
+    li.uk-open {
+      padding-bottom: 0;
+      background: lighten(@reno-offcanvas-background, 3%);
+      > a {
+        color: @reno-offcanvas-link-open-color;
+      }
+    }
+    li.pw-nav-spinner {
+      padding-left: 20px;
+    }
+  }
+  .pw-search-form {
+    padding: 20px 20px 5px 20px;
   }
   .pw-search-input {
     background: @reno-offcanvas-search-background;
@@ -430,7 +462,6 @@ ul.ui-menu {
     display: none;
   }
 }
-
 
 // Other ---------------------------------------------------------
 
@@ -457,7 +488,7 @@ html.pw-sidebar-frame body {
   }
 }
 
-img.pw-logo {
+img.pw-logo-native {
   // force to white for dark background
   filter: brightness(0) invert(1);
   max-height: 40px;
@@ -482,5 +513,4 @@ img.pw-logo {
   padding-top: 20px;
   border-top: @pw-inputfield-border;
 }
-
 

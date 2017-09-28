@@ -304,7 +304,7 @@ var ProcessWireAdminTheme = {
 			var $ul = $a.closest('li').find('ul');
 			var url = $(this).attr('data-json');
 			if($ul.hasClass('navJSON')) return false;
-			var $spinner = $("<li><i class='fa fa-spin fa-spinner'></i></li>"); 
+			var $spinner = $("<li class='pw-nav-spinner'><i class='fa fa-spin fa-spinner'></i></li>"); 
 			$ul.append($spinner);
 			$.getJSON(url, function(data) {
 				var $a2 = $a.clone();
@@ -346,7 +346,7 @@ var ProcessWireAdminTheme = {
 						//label = $label.html();
 					}
 					label = $label.html().replace('&nbsp;', ' ');
-					if(this.icon) icon = "<i class='ui-priority-secondary fa fa-fw fa-" + this.icon + " pw-nav-icon'></i>";
+					if(this.icon) icon = "<i class='fa fa-fw fa-" + this.icon + " pw-nav-icon'></i>";
 					var url = this.url.indexOf('/') === 0 ? this.url : data.url + this.url;
 					var $a = $("<a href='" + url + "'>" + icon + label + "</a>");
 					var $li = $("<li></li>").append($a);

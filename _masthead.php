@@ -13,9 +13,7 @@ if(!defined("PROCESSWIRE")) die();
 <header id='pw-masthead-mobile' class='pw-masthead uk-hidden uk-background-muted'>
 	<div class='pw-container uk-container uk-container-expand'>
 		<div class='uk-padding-small uk-text-center'>
-			<a href='#' class='pw-logo-link'>
-				<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire' />
-			</a>
+			<a href='#' class='pw-logo-link'><?php echo $adminTheme->getLogo(); ?></a>
 		</div>	
 	</div>	
 </header>
@@ -23,9 +21,7 @@ if(!defined("PROCESSWIRE")) die();
 	<div class='pw-container uk-container uk-container-expand'>
 		<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 			<div class="uk-navbar-left">
-				<a class="pw-logo-link uk-logo uk-margin-right" href='#'>
-					<img class='pw-logo' src='<?php echo $adminTheme->getLogoURL(); ?>' alt='ProcessWire'>
-				</a>
+				<a class="pw-logo-link uk-logo uk-margin-right" href='#'><?php echo $adminTheme->getLogo(); ?></a>
 				<?php if($adminTheme->isLoggedIn): ?>
 				<ul class='uk-navbar-nav pw-primary-nav'>
 					<?php echo $adminTheme->renderPrimaryNavItems(); ?>

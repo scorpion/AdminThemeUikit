@@ -20,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 12,
+			'version' => 13,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
 			'requires' => 'ProcessWire>=3.0.61'
@@ -695,19 +695,60 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	}
 
 	/**
+	 * Get the URL to the ProcessWire or brand logo (or <img> tag) 
+	 * 
+	 * @param array $options
+	 *  - `getURL` (bool): Return only the URL? (default=false)
+	 *  - `getNative` (bool): Return only the ProcessWire brand logo? (default=false)
+	 *  - `alt` (string): Alt attribute for <img> tag (default=auto)
+	 * @return string
+	 * 
+	 */
+	public function getLogo(array $options = array()) {
+		
+		/** @var Config $config */
+		$config = $this->wire('config');
+		/** @var Sanitizer $sanitizer */
+		$sanitizer = $this->wire('sanitizer');
+		
+		$defaults = array(
+			'getURL' => false, 
+			'getNative' => false,
+			'alt' => '',
+		);
+	
+		$options = array_merge($defaults, $options);
+		$logoURL = $this->get('logoURL');
+		
+		if(empty($logoURL) || $options['getNative'] || strpos($logoURL, '//') !== false) {
+			$native = true;
+			$logoURL = $config->urls($this->className()) . self::logo;
+		} else {
+			$logoURL = $config->urls->root . ltrim($logoURL, '/');
+			$logoURL = $sanitizer->entities($logoURL);
+			$native = false;
+		}
+		
+		if($options['getURL']) return $logoURL;
+	
+		$alt = $options['alt'];
+		if(empty($alt) && $this->wire('user')->isLoggedin()) {
+			$alt = "ProcessWire $config->version";
+		}
+		$class = 'pw-logo ' . ($native ? 'pw-logo-native' : 'pw-logo-custom');
+		$img = "<img class='$class' src='$logoURL' alt='$alt' />";
+		
+		return $img;
+	}
+
+	/**
 	 * Get the URL to the ProcessWire or brand logo
 	 * 
 	 * @return string
 	 * 
 	 */
 	public function getLogoURL() {
-		$logoURL = $this->get('logoURL');
-		if(empty($logoURL)) {
-			return $this->wire('config')->urls($this->className()) . self::logo;
-		} else if(strpos($logoURL, '//') === false) {
-			$logoURL = $this->wire('config')->urls->root . ltrim($logoURL, '/');
-		}
-		return $this->wire('sanitizer')->entities($logoURL);
+		return $this->getLogo(array('getURL' => true));
 	}
 
 	/**

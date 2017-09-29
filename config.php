@@ -66,7 +66,8 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->attr('value', $adminTheme->get('cssURL'));
 	$f->label = __('Primary CSS file');
 	$f->description = $defaultDesc;
-	$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css";
+	$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css" . "\n" . 
+		__('We do not recommend changing this unless you are an admin theme developer.'); 
 	$f->collapsed = Inputfield::collapsedBlank;
 	$f->icon = 'file-code-o';
 	$fieldset->add($f);
@@ -77,7 +78,8 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->attr('value', $adminTheme->get('logoURL'));
 	$f->label = __('Logo image file');
 	$f->description = $defaultDesc;
-	$f->notes = $defaultNote . __('File should be PNG, GIF or JPG and at least 100px in both dimensions.');
+	$f->notes = $defaultNote . 
+		__('File should be PNG, GIF, JPG or SVG, on transparent background, and at least 100px in both dimensions.');
 	$f->collapsed = Inputfield::collapsedBlank;
 	$f->icon = 'file-image-o';
 	$fieldset->add($f);
@@ -89,7 +91,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 		__('These settings affect all form fields in the admin.') . ' ' .
 		__('Any of these settings (and others) may also be specified individually for a given field.') . ' ' .
 		__('If you specify a setting here, it will override individual field settings.') . ' ' .
-		__('See: Setup > Fields > [any field] > Visibility > Theme settings.');
+		__('See: Setup > Fields > [any field] > Input (tab) > Admin Theme Settings.');
 	$fieldset->icon = 'flask';
 	$fieldset->collapsed = Inputfield::collapsedBlank;
 	$inputfields->add($fieldset);
@@ -137,14 +139,15 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	/** @var InputfieldAsmSelect $f */
 	$f = $modules->get('InputfieldAsmSelect');
 	$f->attr('name', 'offsetTypes');
-	$f->label = __('Input types that should be vertically offset');
-	// $f->description = __('You can select types individually here, or you can offset ALL types by using the field below this.');
+	$f->label = __('Input types that should be offset with a additional top/bottom margin.');
+	$f->description = __('As an example, the fields in this fieldset are using this option.'); 
+	$f->set('themeOffset', true); 
 	$f->icon = 'arrows-v';
 	foreach($types as $className => $name) {
 		$f->addOption($className, $name);
 	}
 	$f->attr('value', $adminTheme->offsetTypes);
-	$f->showIf = 'useOffset=0';
+	// $f->showIf = 'useOffset=0';
 	$fieldset->add($f);
 
 	/** @var InputfieldCheckboxes $f */

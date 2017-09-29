@@ -58,9 +58,10 @@ var ProcessWireAdminTheme = {
 		});
 		
 		this.setupMasthead();
+		this.setupWireTabs();
 		
 		$body.removeClass("pw-init").addClass("pw-ready");
-		
+
 		/*
 		if($('body').hasClass('pw-layout-main') && typeof window.parent.isPresent != "undefined") {
 			// send URL to parent window
@@ -69,6 +70,52 @@ var ProcessWireAdminTheme = {
 		}
 		*/
 	},
+
+	/**
+	 * Setup WireTabs
+	 * 
+	 */
+	setupWireTabs: function() {
+		var $tabs = $('.WireTabs');
+		if($tabs.length) {
+			$(document).on('wiretabclick', function(event, $newTabContent) {
+				ProcessWireAdminTheme.wireTabClick($newTabContent);
+			});
+			setTimeout(function() {
+				// identify active tab and trigger event on it
+				var $activeTab = $tabs.children('.uk-active');
+				if($activeTab.length) {
+					var $activeContent = $($activeTab.find('a').attr('href'));
+					if($activeContent.length) ProcessWireAdminTheme.wireTabClick($activeContent);
+				}
+			}, 500);
+		}
+	},
+
+	/**
+	 * WireTab click, hook handler
+	 * 
+	 * This primary updates the active tab to add a "pw-tab-muted" class when the background
+	 * color of the tab does not match the background color of the tab content. 
+	 * 
+	 */
+	wireTabClick: function($newTabContent) {
+		if(!$newTabContent.length) return;
+		var $header = null;
+		if($newTabContent.hasClass('InputfieldWrapper')) {
+			$header = $newTabContent.children('.Inputfields').children('.Inputfield:eq(0)').children('.InputfieldHeader');
+		} else if($newTabContent.hasClass('Inputfield')) {
+			$header = $newTabContent.children('.InputfieldHeader');
+		}
+		if(!$header|| !$header.length) return;
+		var $tab = $('#_' + $newTabContent.attr('id')).parent();
+		if(!$tab.length) return;
+		var $a = $tab.children('a');
+		var bgc = $header.css('background-color');
+		if($tab.css('background-color') != bgc && $a.css('background-color') != bgc) {
+			$tab.addClass('pw-tab-muted');
+		}
+	}, 
 
 	/**
 	 * If layout is one that requires a frame, double check that there is a frame and correct it if not

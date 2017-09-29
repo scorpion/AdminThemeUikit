@@ -1,5 +1,19 @@
+@pw-table-header-color: @global-muted-color;
+@pw-table-header-current-color: darken(@pw-table-header-color, 10%);
+@pw-table-header-hover-color: darken(@pw-table-header-color, 10%); 
+
+@table-header-cell-font-size: 13px; 
+@table-header-cell-font-weight: bold;
+@table-header-cell-color: @pw-table-header-color;
+
 // Uikit table definitions
 .uk-table {
+  th {
+    //font-weight: bold;
+    color: @pw-table-header-color;
+    outline: none; 
+    //font-size: @pw-table-header-font-size;
+  }
   > tbody > tr > th {
     vertical-align: top;
     text-transform: none;
@@ -32,3 +46,39 @@ table.AdminDataTable {
   width: 100%;
 }
 
+.uk-table-divider > tbody > tr:last-child {
+  border-bottom-style: solid;  
+  border-bottom-color: @table-divider-border;
+  border-bottom-width: @table-divider-border-width;
+}
+
+.uk-table.AdminDataTableSortable tr.tablesorter-headerRow {
+  
+  th:hover {
+    text-decoration: none;
+    color: @pw-table-header-hover-color;
+  }
+  th.tablesorter-headerDesc {
+    color: @pw-table-header-current-color;
+    .tablesorter-header-inner:after {
+      content: "\f0de";
+    }
+  }
+  th.tablesorter-headerAsc {
+    color: @pw-table-header-current-color;
+    .tablesorter-header-inner:after {
+      content: "\f0dd";
+    }
+  }
+  th.tablesorter-headerUnSorted .tablesorter-header-inner:after {
+    content: "\f0dc";
+  }
+  th .tablesorter-header-inner:after {
+    content: " ";
+    font-family: fontAwesome;
+    margin: 0 0 0 5px;
+    opacity: 0.4;
+    font-weight: normal;
+  }
+
+}

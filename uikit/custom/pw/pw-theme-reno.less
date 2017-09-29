@@ -19,7 +19,8 @@
 @reno-link-hover-color: darken(@reno-link-color, 10%);
 @reno-dark-background: #1C2836;
 @reno-muted-background: #f0f3f7;
-@reno-muted-text-color: #6c8dae;
+@reno-muted-text-color: #8d939e; 
+@reno-muted-text-color-alternate: #6c8dae; 
 @reno-primary-background: #3eb998;
 @reno-secondary-background: #e2e9ef;
 @reno-success-background: #8bccde;
@@ -35,7 +36,8 @@
 @reno-notes-background: #ffd;
 @reno-masthead-background: @reno-dark-background;
 @reno-masthead-link-color: rgba(255, 255, 255, 0.7); 
-@reno-masthead-link-hover-color: #fff;
+@reno-masthead-link-hover-color: lightblue;
+@reno-masthead-link-current-color: #fff;
 @reno-masthead-icon-color: #8d939e;
 @reno-masthead-search-text-color: #8d939e;
 @reno-masthead-search-background: #253447;
@@ -43,7 +45,8 @@
 @reno-masthead-search-icon-color: @reno-masthead-icon-color;
 @reno-button-text-color: #fff;
 @reno-button-background: @reno-primary-background;
-@reno-button-secondary-background: #364d68;
+@reno-button-hover-background: @global-link-color;
+@reno-button-secondary-background: @reno-muted-text-color-alternate; 
 @reno-dropdown-background: #fff; 
 @reno-dropdown-color: @reno-text-color;
 @reno-dropdown-hover-background: #e2e9ef;
@@ -56,18 +59,18 @@
 @reno-page-list-link-active-color: @reno-link-color;
 @reno-page-list-link-hover-color: @reno-link-hover-color;
 @reno-page-list-action-link-color: #fff;
-@reno-page-list-action-link-background-color: @reno-link-color;
+@reno-page-list-action-link-background-color: @reno-link-color; 
 @reno-page-list-action-link-hover-color: #fff;
 @reno-page-list-action-link-hover-background-color: @reno-link-hover-color;
 @reno-inputfield-border: 1px solid #d9e1ea;
 @reno-inputfield-input-background: #f0f3f7;
 @reno-inputfield-input-border-color: #b1c3d4 #cbd7e3 #cbd7e3 #cbd7e3;
-@reno-form-radio-checked-background: @reno-muted-text-color;
+@reno-form-radio-checked-background: @reno-muted-text-color-alternate;
 @reno-offcanvas-text-color: @reno-text-color;
 @reno-offcanvas-link-color: @reno-text-color;
 @reno-offcanvas-link-hover-color: @reno-link-color;
 @reno-offcanvas-link-open-color: @reno-link-color;
-@reno-offcanvas-background: @reno-secondary-background; // #E2E9F0;
+@reno-offcanvas-background: @reno-secondary-background; 
 @reno-offcanvas-search-background: #fff;
 @reno-language-tab-background: transparent;
 @reno-language-tab-color: @reno-text-color;
@@ -76,6 +79,8 @@
 @reno-language-tab-hover-background: @reno-muted-background;
 @reno-language-tab-hover-color: @reno-text-color;
 @reno-language-tab-empty-color: @reno-muted-text-color;
+@reno-table-header-color: @reno-muted-text-color-alternate;
+@reno-table-header-current-color: @reno-primary-background;
 
 /****************************************************************
  * General admin theme variables
@@ -135,9 +140,9 @@
 @button-text-transform: capitalize;
 @pw-button-background: @reno-button-background;
 @pw-button-color: @reno-button-text-color;
-@pw-button-hover-background: @global-link-color;
+@pw-button-hover-background: @reno-button-hover-background;
 @pw-button-secondary-background: @reno-button-secondary-background;
-@pw-button-secondary-hover-background: @global-link-color;
+@pw-button-secondary-hover-background: @reno-button-hover-background;
 
 // Form and inputfields
 @pw-inputfield-border: @reno-inputfield-border;
@@ -150,6 +155,10 @@
 @pw-inputfield-background-warning: #ffd;
 @pw-inputfield-background-danger: #ffd;
 @pw-inputfield-border-danger: @pw-inputfield-border;
+@pw-inputfield-header-color: @reno-text-color;
+@pw-inputfield-header-collapsed-color: @reno-muted-text-color-alternate;
+@pw-inputfield-header-hover-color: @reno-muted-text-color-alternate;
+@pw-inputfield-header-collapsed-hover-background: @reno-muted-background;
 @form-radio-checked-background: @reno-form-radio-checked-background;
 @form-radio-checked-focus-background: darken(@form-radio-checked-background, 7%);
 
@@ -164,7 +173,7 @@
 @pw-page-list-link-active-color: @global-link-color;
 @pw-page-list-link-hover-color: @global-link-hover-color;
 @pw-page-list-link-open-color: @reno-page-list-link-open-color;
-@pw-page-list-link-open-background-color: transparent; // #ffd;
+@pw-page-list-link-open-background-color: #ffd;
 @pw-page-list-icon-color: @reno-page-list-icon-color;
 @pw-page-list-status-icon-color: @pw-page-list-icon-color;
 @pw-page-list-action-link-color: @reno-page-list-action-link-color;
@@ -205,6 +214,10 @@
 
 // Breadcrumb
 @breadcrumb-divider-margin-horizontal: 15px;
+
+// Table
+@pw-table-header-color: @reno-table-header-color;
+@pw-table-header-current-color: @reno-table-header-current-color;
 
 /**********************************************************************
  * Styles
@@ -260,6 +273,13 @@
       color: @reno-language-tab-current-color;
       background: @reno-language-tab-current-background;
     }
+  }
+}
+
+.WireTabs.uk-tab > li.uk-active.pw-tab-muted {
+  background: @reno-muted-background;
+  > a {
+    border-bottom: none;
   }
 }
 
@@ -348,7 +368,7 @@
       }
       &.uk-active,
       &.uk-active > a {
-        color: @reno-masthead-link-hover-color;
+        color: @reno-masthead-link-current-color;
       }
       & > a.hover,
       & > a:hover {
@@ -477,24 +497,26 @@ html.pw-sidebar-frame body {
 }
 
 .Inputfields {
+  // background color for text fields
   input:not([type=submit]):not([type=file]):not([type=checkbox]):not([type=radio]),
   textarea {
     background: @reno-inputfield-input-background;
     border: 1px solid; 
     border-color: @reno-inputfield-input-border-color;
     -webkit-appearance: none;
-  }
-  input:focus:not([type=submit]):not([type=file]):not([type=checkbox]):not([type=radio]),
-  textarea:focus {
-    background: lighten(@reno-inputfield-input-background, 2%);
-    border-color: @reno-inputfield-input-border-color;
+    &:focus {
+      background: lighten(@reno-inputfield-input-background, 2%);
+      border-color: @reno-inputfield-input-border-color;
+    }
   }
 }
-
-img.pw-logo-native {
-  // force to white for dark background
-  filter: brightness(0) invert(1);
+img.pw-logo {
   max-height: 40px;
+}
+img.pw-logo-native {
+  &:hover {
+    filter: brightness(0) invert(1);
+  }
 }
 
 #pw-content-head {

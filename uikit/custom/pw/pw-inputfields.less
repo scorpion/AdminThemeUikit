@@ -41,14 +41,19 @@
 @pw-inputfield-fieldset-background: @global-muted-background;
 @pw-inputfield-nested-background: lighten(@pw-inputfield-background, 5%);
 
-// header padding
+// header 
 @pw-inputfield-header-padding-top: @global-margin;
 @pw-inputfield-header-padding-right: @global-small-margin;
 @pw-inputfield-header-padding-bottom: @global-margin;
 @pw-inputfield-header-padding-left: @global-margin;
 @pw-inputfield-header-padding: @pw-inputfield-header-padding-top @pw-inputfield-header-padding-right @pw-inputfield-header-padding-bottom @pw-inputfield-header-padding-left;
+@pw-inputfield-header-color: @global-color;
+@pw-inputfield-header-collapsed-color: @global-muted-color;
+@pw-inputfield-header-hover-color: @global-link-color;
+@pw-inputfield-header-collapsed-hover-color: darken(@pw-inputfield-header-collapsed-color, 10%);
+@pw-inputfield-header-collapsed-hover-background: @global-muted-background;
 
-// content padding
+// content 
 @pw-inputfield-content-padding-top: 1px;
 @pw-inputfield-content-padding-right: @global-margin;
 @pw-inputfield-content-padding-bottom: @global-margin + 3px;
@@ -196,11 +201,7 @@ table .InputfieldIsOffset,
   background: @pw-inputfield-background;
   font-weight: bold;
   font-size: @global-font-size;
-
-  &.InputfieldHeaderHidden {
-    // header is not shown
-    display: none;
-  }
+  color: @pw-inputfield-header-color;
   
   // prevent selection of this element 
   -webkit-user-select: none;
@@ -208,9 +209,14 @@ table .InputfieldIsOffset,
   -moz-user-select: none;
   -o-user-select: none;
   user-select: none; 
+
+  &.InputfieldHeaderHidden {
+    // header is not shown
+    display: none;
+  }
   
   &:hover {
-    color: @global-link-color;
+    color: @pw-inputfield-header-hover-color;
   }
   
   // toggles open and collapse of Inputfield
@@ -233,8 +239,17 @@ table .InputfieldIsOffset,
     }
   }
 }
-.InputfieldStateCollapsed > .InputfieldHeaderHidden {
-  display: block;
+.Inputfield.InputfieldStateCollapsed {
+  > .InputfieldHeader {
+    color: @pw-inputfield-header-collapsed-color;  
+    &:hover {
+      color: @pw-inputfield-header-collapsed-hover-color;
+      background: @pw-inputfield-header-collapsed-hover-background;
+    }
+  }
+  > .InputfieldHeaderHidden {
+    display: block;
+  }
 }
 .pw-init {
   .toggle-icon {
@@ -258,9 +273,12 @@ table .InputfieldIsOffset,
     }
     p {
       margin-top: @global-small-margin;
-      margin-bottom: @global-small-margin;
+      margin-bottom: @global-small-margin + 5px;
       &:first-child {
         margin-top: 0;
+      }
+      &.notes {
+        margin-top: @global-small-margin + 5px;
       }
     }
     > p:last-child,

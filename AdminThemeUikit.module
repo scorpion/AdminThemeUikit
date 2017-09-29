@@ -20,7 +20,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Uikit',
-			'version' => 13,
+			'version' => 14,
 			'summary' => 'Base Uikit v3 admin theme',
 			'autoload' => true, 
 			'requires' => 'ProcessWire>=3.0.61'
@@ -56,8 +56,8 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 	 * 
 	 */
 	public function __construct() {
-		$config = $this->wire('config');
-		$config->defaultAdminTheme = $this->className();
+		//$config = $this->wire('config');
+		//$config->defaultAdminTheme = $this->className();
 		parent::__construct();
 		$this->set('useOffset', false);
 		$this->set('cardTypes', array());
@@ -232,7 +232,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 			$inputfield->addClass('uk-card uk-card-default', 'wrapClass');
 		}
 	
-		if($themeOffset && !$this->useOffset) {
+		if($themeOffset) { // && !$this->useOffset) {
 			$inputfield->addClass('InputfieldIsOffset', 'wrapClass');
 		}
 	}
@@ -262,7 +262,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		/** @var InputfieldFieldset $fieldset */
 		$fieldset = $this->wire('modules')->get('InputfieldFieldset');
 		$fieldset->attr('name', '_adminTheme');
-		$fieldset->label = $this->_('Uikit admin theme settings');
+		$fieldset->label = $this->_('Admin theme settings') . ' (' . str_replace('AdminTheme', '', $this->className()) . ')';
 		$fieldset->collapsed = Inputfield::collapsedYes;
 		$fieldset->icon = 'flask';
 		$fieldsetVisibility->getParent()->insertAfter($fieldset, $fieldsetVisibility);

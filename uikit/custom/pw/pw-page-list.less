@@ -31,8 +31,8 @@
 @pw-page-list-action-link-margin: 0 3px 0 0;
 @pw-page-list-action-link-border-radius: 3px;
 
-@pw-page-list-toggle-closed-color: #ccc;
-@pw-page-list-toggle-open-color: #aaa;
+@pw-page-list-toggle-closed-color: #bbb;
+@pw-page-list-toggle-open-color: #999;
 
 .PageListRoot > .PageList .PageList {
   margin-left: @pw-page-list-indent;
@@ -100,17 +100,6 @@
     margin-left: -1px;
     &.PageExtras {
       opacity: 0.7;
-    }
-  }
-  
-  .PageListActionExtras {
-    a i.fa {
-      position: relative;
-      top: 1px;
-      opacity: 0.7;
-    }
-    a:hover i.fa {
-      opacity: 1.0;
     }
   }
 
@@ -250,12 +239,16 @@
 }
 
 .PageList > .uk-pagination {
-  margin: 0;
+  margin: 5px 0 0 0;
   
   li {
     font-size: @pw-page-list-action-link-font-size;
     margin: @pw-page-list-action-link-margin;
     padding: 0;
+    &.uk-disabled {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
   }
   
   a {
@@ -321,13 +314,14 @@ body:not(.pw-narrow-width) {
     &.PageListItemOpen.PageListHasChildren > a.PageListPage:before {
       //content: "–";
       //top: -2px;
-      //content: "\f107";
-      content: "\f0dd";
+      content: "\f107";
+      //content: "\f0dd";
       font-family: fontAwesome;
       position: relative;
       color: @pw-page-list-toggle-open-color;
-      top: -3px;
+      //top: -3px;
       left: 2px;
+      left: 1px;
       font-size: 14px;
       line-height: 12px;
       width: 10px;
@@ -337,13 +331,14 @@ body:not(.pw-narrow-width) {
     &.PageListHasChildren:not(.PageListItemOpen) > a.PageListPage:before {
       //content: '+';
       //top: -2px;
-      //content: "\f105";
-      content: "\f0da";
+      content: "\f105";
+      //content: "\f0da";
       font-family: fontAwesome;
       color: @pw-page-list-toggle-closed-color;
       line-height: 12px;
       position: relative;
       left: 3px;
+      top: -1px;
       font-size: 14px;
       width: 10px;
       display: inline-block;

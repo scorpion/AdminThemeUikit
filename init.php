@@ -89,7 +89,7 @@ $config->set('ProcessPageList', array(
 	'paginationLinkCurrentClass' => 'pw-link-active',
 	'paginationHoverClass' => 'pw-link-hover',
 	'paginationDisabledClass' => 'uk-disabled',
-	'extrasLabel' => "<i class='fa fa-caret-right'></i>", 
+	// 'extrasLabel' => "<i class='fa fa-caret-right'></i>", 
 ));
 
 $config->set('ProcessList', array(

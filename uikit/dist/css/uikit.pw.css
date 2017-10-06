@@ -14222,14 +14222,6 @@ a.tooltip:hover {
 .PageList .PageListerActions a.PageExtras {
   opacity: 0.7;
 }
-.PageList .PageListActionExtras a i.fa {
-  position: relative;
-  top: 1px;
-  opacity: 0.7;
-}
-.PageList .PageListActionExtras a:hover i.fa {
-  opacity: 1.0;
-}
 .PageList .PageListActions a:hover,
 .PageList .PageListerActions a:hover,
 .PageList .PageListMoveNote a:hover {
@@ -14336,12 +14328,16 @@ a.tooltip:hover {
   list-style: none;
 }
 .PageList > .uk-pagination {
-  margin: 0;
+  margin: 5px 0 0 0;
 }
 .PageList > .uk-pagination li {
   font-size: 12px;
   margin: 0 3px 0 0;
   padding: 0;
+}
+.PageList > .uk-pagination li.uk-disabled {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .PageList > .uk-pagination a {
   padding: 2px 6px;
@@ -14375,6 +14371,7 @@ body.pw-narrow-width .PageListItem {
 }
 body:not(.pw-narrow-width) {
   /*
+  // angle icon that appears before PageListActions
   .PageList {
     .PageListActions,
     .PageListerActions {
@@ -14390,24 +14387,25 @@ body:not(.pw-narrow-width) {
   */
 }
 body:not(.pw-narrow-width) .PageList .PageListItem.PageListItemOpen.PageListHasChildren > a.PageListPage:before {
-  content: "\f0dd";
+  content: "\f107";
   font-family: fontAwesome;
   position: relative;
-  color: #aaa;
-  top: -3px;
+  color: #999;
   left: 2px;
+  left: 1px;
   font-size: 14px;
   line-height: 12px;
   width: 10px;
   display: inline-block;
 }
 body:not(.pw-narrow-width) .PageList .PageListItem.PageListHasChildren:not(.PageListItemOpen) > a.PageListPage:before {
-  content: "\f0da";
+  content: "\f105";
   font-family: fontAwesome;
-  color: #ccc;
+  color: #bbb;
   line-height: 12px;
   position: relative;
   left: 3px;
+  top: -1px;
   font-size: 14px;
   width: 10px;
   display: inline-block;

@@ -6,13 +6,20 @@
 @pw-page-list-link-hover-color: @global-link-hover-color;
 @pw-page-list-link-open-color: @global-link-color;
 @pw-page-list-link-open-background-color: none;
+@pw-page-list-link-open-text-decoration: none;
 
 @pw-page-list-icon-color: lighten(@pw-page-list-link-color, 10%);
 @pw-page-list-status-icon-color: @pw-page-list-muted-text-color;
 
 @pw-page-list-line-height: 1.5em;
-@pw-page-list-indent: 2em;
-@pw-page-list-indent-small: 1em;
+@pw-page-list-indent: 1.5em;
+@pw-page-list-indent-small: 0.75em;
+
+@pw-page-list-item-border: 1px solid lighten(#eee, 2%);
+@pw-page-list-item-hover-border-color: #eee;
+@pw-page-list-item-hover-background: inherit;
+@pw-page-list-item-open-border-color: lighten(#ddd, 3%);
+@pw-page-list-item-open-background: lighten(@background-muted-background, 3%); // #ffe;
 
 @pw-page-list-action-link-color: @global-inverse-color;
 @pw-page-list-action-link-background-color: @global-link-color;
@@ -24,11 +31,17 @@
 @pw-page-list-action-link-margin: 0 3px 0 0;
 @pw-page-list-action-link-border-radius: 3px;
 
+@pw-page-list-toggle-closed-color: #ccc;
+@pw-page-list-toggle-open-color: #aaa;
+
+.PageListRoot > .PageList .PageList {
+  margin-left: @pw-page-list-indent;
+}
+.PageListRoot > .PageListRootHidden > .PageList {
+  margin-left: 0;
+}
+
 .PageList {
-  
-  .PageList {
-    margin-left: @pw-page-list-indent;
-  }
   
   /**
    * Actions: like the "|edit|view|new" in the PageList
@@ -66,15 +79,8 @@
       //padding: 0 1px;
       margin: @pw-page-list-action-link-margin;
     }
-
-    > li:first-child:before,
-    &.PageListerActions:before {
-      content: "\203A";
-      margin-right: 3px;
-      margin-left: -1px;
-      color: @pw-page-list-muted-text-color;
-    }
   }
+
 
   .PageListActions a,
   .PageListerActions a,
@@ -94,6 +100,17 @@
     margin-left: -1px;
     &.PageExtras {
       opacity: 0.7;
+    }
+  }
+  
+  .PageListActionExtras {
+    a i.fa {
+      position: relative;
+      top: 1px;
+      opacity: 0.7;
+    }
+    a:hover i.fa {
+      opacity: 1.0;
     }
   }
 
@@ -129,6 +146,23 @@
 
   .PageListItem {
 
+    padding-left: 3px;
+    border-bottom: @pw-page-list-item-border;
+    
+    &:hover {
+      border-color: @pw-page-list-item-hover-border-color;
+      background: @pw-page-list-item-hover-background;
+    }
+    
+    &.PageListItemOpen {
+      border-color: @pw-page-list-item-open-border-color;
+      background: @pw-page-list-item-open-background;
+    }
+    
+    &.PageListSortItem {
+      background: #ffd;
+    }
+    
     > a.PageListPage {
       line-height: @pw-page-list-line-height;
       color: @pw-page-list-link-color;
@@ -137,7 +171,14 @@
       &:active {
         color: @pw-page-list-link-active-color;
       }
-
+      
+      &:before {
+        content: " ";
+        font-family: fontAwesome;
+        color: #ccc;
+        margin-right: 4px;
+      }
+      
       i {
         /* icon */
         padding: 0 0.25em 0 0;
@@ -169,6 +210,7 @@
     }
 
   }
+  
 
   .PageListItemOpen,
   .PageListItemOpen.PageListItemHover {
@@ -176,6 +218,7 @@
     > a.PageListPage:hover {
       color: @pw-page-list-link-open-color;
       background-color: @pw-page-list-link-open-background-color;
+      text-decoration: @pw-page-list-link-open-text-decoration;
     }
   }
 
@@ -231,8 +274,11 @@
   padding-left: 4px;
 }
 
-body.pw-narrow-width .PageList .PageList {
+body.pw-narrow-width .PageListRoot > .PageList .PageList {
   margin-left: @pw-page-list-indent-small;
+}
+body.pw-narrow-width .PageListItem {
+  padding-left: 5px;
 }
 
 // tree menus
@@ -248,5 +294,69 @@ body.pw-narrow-width .PageList .PageList {
 
   .PageListStatusNotEditable {
     cursor: not-allowed;
+  }
+}
+
+body:not(.pw-narrow-width) {
+ 
+  /*
+  // angle icon that appears before PageListActions
+  .PageList {
+    .PageListActions,
+    .PageListerActions {
+      > li:first-child:before,
+      &.PageListerActions:before {
+        content: "\203A";
+        margin-right: 3px;
+        margin-left: -1px;
+        color: @pw-page-list-muted-text-color;
+      }
+    }
+  }
+  */
+
+  // page list open/close icons
+  .PageList .PageListItem {
+
+    &.PageListItemOpen.PageListHasChildren > a.PageListPage:before {
+      //content: "–";
+      //top: -2px;
+      //content: "\f107";
+      content: "\f0dd";
+      font-family: fontAwesome;
+      position: relative;
+      color: @pw-page-list-toggle-open-color;
+      top: -3px;
+      left: 2px;
+      font-size: 14px;
+      line-height: 12px;
+      width: 10px;
+      display: inline-block;
+    }
+
+    &.PageListHasChildren:not(.PageListItemOpen) > a.PageListPage:before {
+      //content: '+';
+      //top: -2px;
+      //content: "\f105";
+      content: "\f0da";
+      font-family: fontAwesome;
+      color: @pw-page-list-toggle-closed-color;
+      line-height: 12px;
+      position: relative;
+      left: 3px;
+      font-size: 14px;
+      width: 10px;
+      display: inline-block;
+    }
+
+    &.PageListNoChildren > a.PageListPage:before {
+      font-family: fontAwesome;
+      content: " ";
+      font-size: 14px;
+      line-height: 12px;
+      width: 10px;
+      overflow: hidden;
+      display: inline-block;
+    }
   }
 }

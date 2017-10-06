@@ -3,18 +3,22 @@
 @pw-inputfield-repeater-background-none: @pw-inputfield-background-none;
 
 .Inputfields .InputfieldRepeater {
-  background: @pw-inputfield-repeater-background;
   
-  > .InputfieldHeader, 
-  > .InputfieldContent {
+  &:not(.InputfieldIsColor):not(.InputfieldNoBorder) {
     background: @pw-inputfield-repeater-background;
+
+    > .InputfieldHeader,
+    > .InputfieldContent {
+      background: @pw-inputfield-repeater-background;
+    }
+    > .InputfieldContent {
+      > .Inputfields {
+        background: @pw-inputfield-repeater-background;
+      }
+    }
   }
 
   .InputfieldContent {
-    > .Inputfields {
-      background: @pw-inputfield-repeater-background;
-    }
-    
     .InputfieldRepeaterItem {
       margin: 4px 0;
 

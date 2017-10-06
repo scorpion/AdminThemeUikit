@@ -24,11 +24,13 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->label = __('Layout');
 	$f->addOption('', __('Traditional with masthead navigation (RECOMMENDED)'));
 	$opt = __('Page tree navigation in sidebar');
-	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)'));
-	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)')); 
+	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)') . '*');
+	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)') . '*'); 
 	// $f->addOption('sidenav', __('Sidebar navigation (left) + page tree navigation (right)'));
 	$f->attr('value', $layout);
 	$f->icon = 'newspaper-o';
+	$f->notes = __('*Sidebar layouts not compatible with SystemNotifications module and may have issues with other modules.');
+	if(!$layout) $f->collapsed = Inputfield::collapsedYes; 
 	$inputfields->add($f);
 
 	$lastLayout = $session->getFor($adminTheme, 'lastLayout');
@@ -93,7 +95,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 		__('If you specify a setting here, it will override individual field settings.') . ' ' .
 		__('See: Setup > Fields > [any field] > Input (tab) > Admin Theme Settings.');
 	$fieldset->icon = 'flask';
-	$fieldset->collapsed = Inputfield::collapsedBlank;
+	$fieldset->collapsed = Inputfield::collapsedYes;
 	$inputfields->add($fieldset);
 
 	$types = $modules->findByPrefix('Inputfield');
@@ -122,6 +124,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$fieldset->add($f);
 
 	/** @var InputfieldAsmSelect $f */
+	/*
 	$f = $modules->get('InputfieldAsmSelect');
 	$f->attr('name', 'cardTypes');
 	$f->label = __('Input types that should use the “Card” style');
@@ -135,6 +138,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	}
 	$f->attr('value', $adminTheme->cardTypes);
 	$fieldset->add($f);
+	*/
 
 	/** @var InputfieldAsmSelect $f */
 	$f = $modules->get('InputfieldAsmSelect');

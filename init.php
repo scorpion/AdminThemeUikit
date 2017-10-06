@@ -20,18 +20,18 @@ if(!defined("PROCESSWIRE")) die();
 
 // uk class => width %
 $ukGridWidths = array(
-	'4-5' => 80,
-	'3-4' => 70,
-	'2-3' => 66,
-	'4-6' => 64,
-	'3-5' => 60,
-	'1-2' => 50,
-	'2-5' => 40,
-	'1-3' => 33,
-	'2-6' => 32,
-	'1-4' => 25,
-	'1-5' => 20,
-	'1-6' => 16,
+	'80%' => '4-5',
+	'70%' => '3-4',
+	'64%' => '2-3',
+	'60%' => '3-5',
+	'50%' => '1-2',
+	'40%' => '2-5',
+	'34%' => '1-3', 
+	'33%' => '1-3',
+	'32%' => '2-6',
+	'25%' => '1-4',
+	'20%' => '1-5',
+	'16%' => '1-6',
 );
 
 $config->set('inputfieldColumnWidthSpacing', 0); 
@@ -89,6 +89,7 @@ $config->set('ProcessPageList', array(
 	'paginationLinkCurrentClass' => 'pw-link-active',
 	'paginationHoverClass' => 'pw-link-hover',
 	'paginationDisabledClass' => 'uk-disabled',
+	'extrasLabel' => "<i class='fa fa-caret-right'></i>", 
 ));
 
 $config->set('ProcessList', array(
@@ -101,12 +102,27 @@ $config->set('ProcessList', array(
 ));
 
 $config->set('InputfieldImage', array(
-	'buttonClass' => "uk-button uk-button-text uk-margin-right",
+	'buttonClass' => "uk-button uk-button-small uk-button-text uk-margin-small-right",
 	'buttonText' => "{out}",
 ));
 
 $config->set('InputfieldFile', array(
 	'error' => "<span class='ui-state-error-text'>{out}</span>",
+));
+
+$config->set('InputfieldSelector', array(
+	'selectClass' => 'uk-select',
+	'inputClass' => 'uk-input', 
+	'checkboxClass' => 'uk-checkbox'
+));
+
+$config->set('SystemNotifications', array(
+	'classCommon' => 'uk-alert', 
+	'classMessage' => 'NoticeMessage uk-alert-primary',
+	'classWarning' => 'NoticeWarning uk-alert-warning',
+	'classError' => 'NoticeError uk-alert-danger',
+	'classContainer' => 'pw-container uk-container uk-container-expand',
+	'iconRemove' => 'times',
 ));
 
 /**
@@ -116,14 +132,14 @@ $config->set('InputfieldFile', array(
 
 $classes = InputfieldWrapper::getClasses();
 $classes['form'] = 'InputfieldFormNoWidths InputfieldFormVertical uk-form-vertical';
-$classes['list'] = 'Inputfields uk-grid-collapse';
+$classes['list'] = 'Inputfields uk-grid-collapse uk-grid-match';
 $classes['item_column_width_first'] = 'InputfieldColumnWidthFirst uk-first-column';
 $classes['item'] = 'Inputfield {class} Inputfield_{name}'; // . ($adminTheme->get('useOffset') ? ' InputfieldIsOffset' : '');
 $classes['item_error'] = "InputfieldStateError uk-alert-danger";
 InputfieldWrapper::setClasses($classes);
 
 $markup = InputfieldWrapper::getMarkup();
-$markup['list'] = "<ul {attrs} uk-grid>{out}</ul>";
+$markup['list'] = "<ul {attrs} uk-grid uk-height-match='target: > .Inputfield:not(.InputfieldStateCollapsed) > .InputfieldContent'>{out}</ul>";
 $markup['item_label'] = "<label class='InputfieldHeader uk-form-label' for='{for}'>{out}</label>";
 $markup['item_label_hidden'] = "<label class='InputfieldHeader InputfieldHeaderHidden'><span>{out}</span></label>";
 $markup['item_content'] = "<div class='InputfieldContent uk-form-controls'>{out}</div>";

@@ -6,6 +6,8 @@
 @pw-inputfield-border-color: darken(@global-muted-background, 4%);
 @pw-inputfield-border: 1px solid @pw-inputfield-border-color;
 @pw-inputfield-margin: @global-margin;
+@pw-inputfield-margin-small: @global-small-margin;
+@pw-inputfield-margin-large: @global-large-margin;
 @pw-inputfield-button-margin: @global-small-margin;
 
 // general nested
@@ -27,6 +29,11 @@
 @pw-inputfield-border-success: 1px solid lighten(@text-success-color, 10%);
 @pw-inputfield-color-success: @text-success-color;
 
+// highlight 
+@pw-inputfield-background-highlight: #ffd;
+@pw-inputfield-border-highlight: @pw-inputfield-border;
+@pw-inputfield-color-highlight: inherit;
+
 // warning
 @pw-inputfield-background-warning: lighten(tint(@global-warning-background, 45%), 15%);
 @pw-inputfield-border-warning: 1px solid lighten(@text-warning-color, 10%);
@@ -36,6 +43,9 @@
 @pw-inputfield-background-danger: lighten(tint(@global-danger-background, 40%), 20%);
 @pw-inputfield-border-danger: 1px solid lighten(@text-danger-color, 10%);
 @pw-inputfield-color-danger: @text-danger-color;
+
+// background when dragging in a file
+@pw-inputfield-drag-in-file-background: @pw-inputfield-background-primary;
 
 // fieldset
 @pw-inputfield-fieldset-background: @global-muted-background;
@@ -74,6 +84,7 @@
 @pw-inputfield-content-cards-padding-left: @global-margin;
 @pw-inputfield-content-cards-padding: @pw-inputfield-content-cards-padding-top @pw-inputfield-content-cards-padding-right @pw-inputfield-content-cards-padding-bottom @pw-inputfield-content-cards-padding-left;
 
+
 // GENERAL INPUTFIELD ALL --------------------------------------------
 
 .InputfieldForm {
@@ -88,6 +99,7 @@
 /*** Inputfield *************************************************************/
 
 .Inputfield {
+  display: block;
   color: @global-color;
   // background: @pw-inputfield-background;
   border: none;
@@ -99,6 +111,12 @@
   &.InputfieldWrapper,
   &.InputfieldRepeaterItem {
     outline: none;
+  }
+  
+  &.InputfieldHideBorder {
+    //outline-color: transparent;
+    outline: none;
+    margin-top: 1px;
   }
   
   &:not(.InputfieldColumnWidth) {
@@ -126,6 +144,9 @@
       width: 100%;
     }
   }
+  .InputfieldDatetime input.InputfieldDatetimeDatepicker {
+    width: auto;
+  }
   
   .InputfieldMaxWidth {
     width: 100%;
@@ -147,7 +168,7 @@
 }
 
 // Inputfield offsets
-.InputfieldIsOffset {
+.Inputfields .InputfieldIsOffset:not(.InputfieldColumnWidth) {
   // Inputfield that is vertically offset from others via a margin
   // By default, Inputfield elements have no margins, so this adds one
   margin-top: @pw-inputfield-margin;
@@ -156,6 +177,24 @@
   &.InputfieldNoBorder {
     // to prevent it from being overridden when no-border active
     margin-top: @pw-inputfield-margin;
+  }
+
+  &.InputfieldIsOffsetSm {
+    // small offset option
+    margin-top: @pw-inputfield-margin-small;
+    margin-bottom: @pw-inputfield-margin-small;
+    &.InputfieldNoBorder {
+      margin-top: @pw-inputfield-margin-small;
+    }
+  }
+  
+  &.InputfieldIsOffsetLg {
+    // large offset option
+    margin-top: @pw-inputfield-margin-large;
+    margin-bottom: @pw-inputfield-margin-large;
+    &.InputfieldNoBorder {
+      margin-top: @pw-inputfield-margin-large;
+    }
   }
   
   &.InputfieldRowFirst:not(.WireTab) {
@@ -172,6 +211,10 @@
   &.InputfieldButton.InputfieldIsOffset {
     // offsets don't apply to buttons
     margin-top: 0 !important;
+  }
+  
+  + .InputfieldIsOffset {
+    margin-top: 0;
   }
   
 }
@@ -250,6 +293,12 @@ table .InputfieldIsOffset,
   > .InputfieldHeaderHidden {
     display: block;
   }
+  &.InputfieldNoBorder {
+    > .InputfieldHeader:hover {
+      // background color doesn't look good when no-border mode is used
+      background: transparent;
+    }
+  }
 }
 .pw-init {
   .toggle-icon {
@@ -291,7 +340,7 @@ table .InputfieldIsOffset,
   .InputfieldHeaderHidden + .InputfieldContent {
     // when header not visible, make top padding in content consistent with other headers
     // Example: checkbox fields lacking a description or Markup fields with no label
-    padding-top: @pw-inputfield-header-padding-top;
+    padding-top: @pw-inputfield-header-padding-top + 3px;
   }
 
 /*** Inputfield states: collapsed & required *********************************************/
@@ -338,6 +387,7 @@ table .InputfieldIsOffset,
   }
   
   &.WireTab {
+    // fieldsets that are tabs do not have a background or border/outline
     outline: none;
     > .InputfieldContent {
       background: none;
@@ -367,11 +417,6 @@ table .InputfieldIsOffset,
 
 /*** InputfieldNoBorder ***************************************************/
 
-// Setup NoBorder Inputfield styles
-// .Inputfields { 
-//   *:not(.InputfieldContent) > .Inputfields {
-//     > .InputfieldNoBorder {
-// Inputfields that are not nested within another non-wrapping Inputfield
 .InputfieldNoBorder {
   // An inputfield that has no borders or background 
   &:not(.InputfieldStateCollapsed):not(.InputfieldFieldset) {

@@ -55,8 +55,8 @@
 @reno-dropdown-nav-icon-color: #97aab4;
 @reno-page-list-link-color: #7a002b;
 @reno-page-list-link-open-color: #bb153e;
-@reno-page-list-icon-color: #a9adb5;
-@reno-page-list-link-active-color: @reno-link-color;
+@reno-page-list-icon-color: @reno-link-color; // #a9adb5;
+@reno-page-list-link-active-color: @reno-link-hover-color;
 @reno-page-list-link-hover-color: @reno-link-hover-color;
 @reno-page-list-action-link-color: #fff;
 @reno-page-list-action-link-background-color: @reno-link-color; 
@@ -138,6 +138,8 @@
 // Buttons
 @button-font-size: 16px; 
 @button-text-transform: capitalize;
+@button-text-color: @global-link-color; // text-only button
+@button-text-hover-color: @global-link-hover-color; // text-only button
 @pw-button-background: @reno-button-background;
 @pw-button-color: @reno-button-text-color;
 @pw-button-hover-background: @reno-button-hover-background;
@@ -151,10 +153,9 @@
 @pw-inputfield-color-primary: @reno-primary-headline-color;
 @pw-inputfield-background-primary: lighten(@reno-primary-headline-color, 70%);
 @pw-inputfield-border-primary: 1px solid @pw-inputfield-background-primary;
-@pw-inputfield-color-warning: @reno-text-color;
-@pw-inputfield-background-warning: #ffd;
-@pw-inputfield-background-danger: #ffd;
-@pw-inputfield-border-danger: @pw-inputfield-border;
+@pw-inputfield-color-warning: @reno-warning-color;
+@pw-inputfield-background-warning: lighten(@reno-warning-background, 20%);
+@pw-inputfield-background-danger: lighten(@reno-danger-background, 50%);
 @pw-inputfield-header-color: @reno-text-color;
 @pw-inputfield-header-collapsed-color: @reno-muted-text-color-alternate;
 @pw-inputfield-header-hover-color: @reno-muted-text-color-alternate;
@@ -173,9 +174,9 @@
 @pw-page-list-link-active-color: @global-link-color;
 @pw-page-list-link-hover-color: @global-link-hover-color;
 @pw-page-list-link-open-color: @reno-page-list-link-open-color;
-@pw-page-list-link-open-background-color: #ffd;
+@pw-page-list-link-open-background-color: inherit;
 @pw-page-list-icon-color: @reno-page-list-icon-color;
-@pw-page-list-status-icon-color: @pw-page-list-icon-color;
+@pw-page-list-status-icon-color: #a9adb5;
 @pw-page-list-action-link-color: @reno-page-list-action-link-color;
 @pw-page-list-action-link-background-color: @reno-page-list-action-link-background-color;
 @pw-page-list-action-link-hover-color: @reno-page-list-action-link-hover-color;

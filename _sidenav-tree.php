@@ -28,7 +28,7 @@ if(!isset($content)) $content = '';
 	</script>
 </head>
 <body class='<?php echo $adminTheme->getBodyClass(); ?> pw-narrow-width pw-iframe'>
-	<main id='main' class='pw-container uk-container uk-container-expand uk-margin-small-top uk-margin-small-left uk-margin-large-bottom'>
+	<main id='main' class='pw-container uk-container uk-container-expand uk-margin-small-top uk-margin-remove-left uk-margin-large-bottom'>
 		<div class='pw-content' id='content'>
 			<div id='pw-content-body'>
 				<?php echo $content; ?>

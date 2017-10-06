@@ -20,7 +20,8 @@
 /** @var string $layout */
 
 if(!defined("PROCESSWIRE")) die();
-	
+
+$adminTheme->renderExtraMarkup('x'); // forces it to cache
 if(!isset($content)) $content = '';
 
 ?><!DOCTYPE html>
@@ -60,7 +61,7 @@ if(!isset($content)) $content = '';
 				
 				<?php if($layout != 'sidenav' && $layout != 'modal') echo $adminTheme->renderBreadcrumbs(); ?>
 
-				<div id='pw-content-head-buttons' class='uk-float-right uk-margin-small-top uk-visible@s'>
+				<div id='pw-content-head-buttons' class='uk-float-right uk-visible@s'>
 					<?php echo $adminTheme->renderAddNewButton(); ?>
 				</div>
 

@@ -102,12 +102,30 @@ var ProcessWireAdminTheme = {
 	wireTabClick: function($newTabContent) {
 		if(!$newTabContent.length) return;
 		var $header = null;
+		var $inputfield = null;
 		if($newTabContent.hasClass('InputfieldWrapper')) {
-			$header = $newTabContent.children('.Inputfields').children('.Inputfield:eq(0)').children('.InputfieldHeader');
+			$inputfield = $newTabContent.children('.Inputfields').children('.Inputfield:eq(0)')
+			$header = $inputfield.children('.InputfieldHeader');
 		} else if($newTabContent.hasClass('Inputfield')) {
+			$inputfield = $newTabContent;
 			$header = $newTabContent.children('.InputfieldHeader');
 		}
 		if(!$header|| !$header.length) return;
+		var skip = false;
+		var skipClasses = [
+			'InputfieldIsPrimary', 
+			'InputfieldIsWarning', 
+			'InputfieldIsError', 
+			'InputfieldIsHighlight',
+			'InputfieldIsSuccess'
+		];
+		for(var n = 0; n < skipClasses.length; n++) {
+			if($inputfield.hasClass(skipClasses[n])) {
+				skip = true;
+				break;
+			}
+		}
+		if(skip) return;
 		var $tab = $('#_' + $newTabContent.attr('id')).parent();
 		if(!$tab.length) return;
 		var $a = $tab.children('a');
@@ -512,8 +530,9 @@ var ProcessWireAdminTheme = {
 		function ukGridClass(width) {
 			var ukGridClass = 'uk-width-1-1';
 			if(!width || width >= 100) return ukGridClass;
-			for(var cn in ProcessWire.config.ukGridWidths) {
-				var pct = ProcessWire.config.ukGridWidths[cn];
+			for(var pct in ProcessWire.config.ukGridWidths) {
+				var cn = ProcessWire.config.ukGridWidths[pct];
+				pct = parseInt(pct);
 				if(width >= pct) {
 					ukGridClass = 'uk-width-' + cn + '@m';
 					break;

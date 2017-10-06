@@ -32,6 +32,36 @@
   }
 }
 
+// SystemNotifications module
+#NotificationList {
+  > li {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .NoticeMessage {
+    border-color: #ddd;
+  }
+  > li > div > p {
+    position: relative;
+    margin: 0;
+  }
+  .NotificationRemove {
+    top: 3px;
+  }
+  .NotificationText > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#NotificationBug {
+  &.NoticeError {
+    background: @global-danger-background;
+  }
+  &.NoticeWarning {
+    background: darken(@global-warning-background, 20%);
+  }
+}
+
 body .ProDraftsNotice {
   background: @background-muted-background;
   margin-top: -3px !important; // consistent with ".pw-notices li" above

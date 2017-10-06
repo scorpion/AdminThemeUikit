@@ -14,7 +14,7 @@ if(!defined("PROCESSWIRE")) die();
 /** @var Paths $urls */
 /** @var string $layout */
 
-$version = $adminTheme->version . 'd';
+$version = $adminTheme->version . 'e';
 
 $config->styles->prepend($config->urls->root . "wire/templates-admin/styles/AdminTheme.css?v=$version");
 $config->styles->prepend($adminTheme->getUikitCSS());

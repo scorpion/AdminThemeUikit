@@ -314,7 +314,9 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		$fieldset = $this->wire('modules')->get('InputfieldFieldset');
 		$fieldset->attr('id+name', '_adminTheme');
 		$fieldset->label = $this->_('Admin theme settings') . ' (' . str_replace('AdminTheme', '', $this->className()) . ')';
-		$fieldset->collapsed = !$field->get('themeColor') && !$field->get('themeBorder') && !$field->get('themeOffset');
+		if($field) {
+			$fieldset->collapsed = !$field->get('themeColor') && !$field->get('themeBorder') && !$field->get('themeOffset');
+		}
 		$fieldset->icon = 'flask';
 		$fieldset->description = 
 			$this->_('These settings affect how this field appears when used with the Uikit admin theme.') . ' ' . 

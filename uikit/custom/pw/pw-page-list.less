@@ -12,6 +12,8 @@
 @pw-page-list-status-icon-color: @pw-page-list-muted-text-color;
 
 @pw-page-list-line-height: 1.5em;
+@pw-page-list-padding: 4px 3px 4px 3px;
+@pw-page-list-padding-small: 2px 3px 2px 5px;
 @pw-page-list-indent: 1.5em;
 @pw-page-list-indent-small: 0.75em;
 
@@ -135,7 +137,7 @@
 
   .PageListItem {
 
-    padding-left: 3px;
+    padding: @pw-page-list-padding;
     border-bottom: @pw-page-list-item-border;
     
     &:hover {
@@ -177,7 +179,6 @@
           color: @pw-page-list-status-icon-color;
         }
       }
-      
     }
     
     .PageListNumChildren {
@@ -197,10 +198,8 @@
     .PageListLoading {
       top: 5px;
     }
-
   }
   
-
   .PageListItemOpen,
   .PageListItemOpen.PageListItemHover {
     > a.PageListPage,
@@ -231,13 +230,9 @@
   .PageListPagination {
     .uk-pagination();
   }
-
 }
 
-.PageListUseHoverActions .PageList .PageListItemOpen {
-  // border-bottom: 1px solid lighten(@pw-subtle-border, 2%);
-}
-
+// pagination in page lists
 .PageList > .uk-pagination {
   margin: 5px 0 0 0;
   
@@ -267,11 +262,14 @@
   padding-left: 4px;
 }
 
-body.pw-narrow-width .PageListRoot > .PageList .PageList {
-  margin-left: @pw-page-list-indent-small;
-}
-body.pw-narrow-width .PageListItem {
-  padding-left: 5px;
+// smaller version of page list for narrow widths
+body.pw-narrow-width {
+  .PageListRoot > .PageList .PageList {
+    margin-left: @pw-page-list-indent-small;
+  }
+  .PageList .PageListItem {
+    padding: @pw-page-list-padding-small;
+  }
 }
 
 // tree menus
@@ -290,24 +288,9 @@ body.pw-narrow-width .PageListItem {
   }
 }
 
+// applies only to normal (non-narrow) versions of page list
 body:not(.pw-narrow-width) {
  
-  /*
-  // angle icon that appears before PageListActions
-  .PageList {
-    .PageListActions,
-    .PageListerActions {
-      > li:first-child:before,
-      &.PageListerActions:before {
-        content: "\203A";
-        margin-right: 3px;
-        margin-left: -1px;
-        color: @pw-page-list-muted-text-color;
-      }
-    }
-  }
-  */
-
   // page list open/close icons
   .PageList .PageListItem {
 
@@ -354,4 +337,21 @@ body:not(.pw-narrow-width) {
       display: inline-block;
     }
   }
+  
+  /*
+  // angle icon that appears before PageListActions
+  .PageList {
+    .PageListActions,
+    .PageListerActions {
+      > li:first-child:before,
+      &.PageListerActions:before {
+        content: "\203A";
+        margin-right: 3px;
+        margin-left: -1px;
+        color: @pw-page-list-muted-text-color;
+      }
+    }
+  }
+  */
+
 }

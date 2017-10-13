@@ -269,16 +269,19 @@ h2,
 .uk-h2 {
   font-size: 1.5rem;
   line-height: 1.4;
+  color: #50739b;
 }
 h3,
 .uk-h3 {
   font-size: 1.25rem;
   line-height: 1.4;
+  color: #50739b;
 }
 h4,
 .uk-h4 {
   font-size: 16px;
   line-height: 1.4;
+  color: #50739b;
 }
 h5,
 .uk-h5 {
@@ -3991,7 +3994,7 @@ ul.uk-nav-sub {
   align-items: center;
   /* 2 */
   box-sizing: border-box;
-  height: 80px;
+  height: 73px;
   padding: 0 15px;
   /* 3 */
   font-size: 16px;
@@ -14243,7 +14246,7 @@ a.tooltip:hover {
   margin-right: 0.25em;
 }
 .PageList .PageListItem {
-  padding-left: 3px;
+  padding: 4px 3px 4px 3px;
   border-bottom: 1px solid #f3f3f3;
 }
 .PageList .PageListItem:hover {
@@ -14354,8 +14357,8 @@ a.tooltip:hover {
 body.pw-narrow-width .PageListRoot > .PageList .PageList {
   margin-left: 0.75em;
 }
-body.pw-narrow-width .PageListItem {
-  padding-left: 5px;
+body.pw-narrow-width .PageList .PageListItem {
+  padding: 2px 3px 2px 5px;
 }
 .uk-nav a .PageListStatusUnpublished,
 .pw-dropdown-menu a .PageListStatusUnpublished {
@@ -14995,6 +14998,7 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
 /*** Misc **********************************************************/
 .InputfieldMarkup.InputfieldHeaderHidden {
   outline: none !important;
+  margin-top: 20px;
 }
 .InputfieldMarkup.InputfieldHeaderHidden > .InputfieldContent {
   padding-left: 0;
@@ -15271,10 +15275,10 @@ em {
 }
 #pw-masthead,
 #pw-masthead-mobile {
-  height: 80px;
+  height: 73px;
 }
 #pw-masthead-mobile {
-  line-height: 75px;
+  line-height: 71px;
 }
 .pw-logo {
   max-height: 50px;
@@ -15529,6 +15533,11 @@ ul.uk-navbar-nav ul {
  * the look and feel of AdminThemeReno. 
  *
  */
+.hook-base-h2,
+.hook-base-h3,
+.hook-base-h4 {
+  color: #50739b;
+}
 .hook-tab-item {
   border: 1px solid transparent;
   margin-left: -1px;
@@ -15618,6 +15627,11 @@ ul.uk-navbar-nav ul {
 }
 #pw-masthead .uk-navbar-nav > li {
   position: relative;
+  /*
+      &.uk-active > a:not(.hover):not(:hover):after {
+        border-color: transparent transparent rgba(255,255,255,0.5) transparent;
+      }
+      */
 }
 #pw-masthead .uk-navbar-nav > li,
 #pw-masthead .uk-navbar-nav > li > a {
@@ -15639,6 +15653,7 @@ ul.uk-navbar-nav ul {
 #pw-masthead .uk-navbar-nav > li > a:hover i {
   color: lightblue;
 }
+#pw-masthead .uk-navbar-nav > li.uk-active > a:after,
 #pw-masthead .uk-navbar-nav > li > a.hover:after,
 #pw-masthead .uk-navbar-nav > li > a:hover:after {
   content: " ";
@@ -15654,12 +15669,14 @@ ul.uk-navbar-nav ul {
 }
 #pw-masthead .pw-search-form .pw-search-input {
   color: #8d939e;
-  background: #253447;
-  border-color: #253447;
+  background: transparent;
+  border-color: #364d69;
   border-radius: 5px;
 }
 #pw-masthead .pw-search-form .pw-search-input:focus {
   color: #fff;
+  border-color: #2e4058;
+  background: #2e4058;
 }
 #pw-masthead .pw-search-form .uk-form-icon {
   color: #8d939e;

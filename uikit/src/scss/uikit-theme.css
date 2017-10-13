@@ -4,17 +4,6 @@ Error: Undefined variable: "$global-muted-background".
         from line 3 of theme/_import.scss
         from line 5 of uikit-theme.scss
 
-11: @import "components/iconnav.scss";
-12: @import "components/notification.scss";
-13: @import "components/tooltip.scss";
-14: @import "components/placeholder.scss";
-15: @import "components/progress.scss";
-16: @import "components/sortable.scss";
-17: @import "components/countdown.scss";
-18: 
-19: // Utilities
-20: @import "components/_import.utilities.scss";
-
 Backtrace:
 theme/base.scss:16
 theme/_import.scss:3
@@ -85,4 +74,4 @@ uikit-theme.scss:5
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$global-muted-background\".\A         on line 16 of theme/base.scss\A         from line 3 of theme/_import.scss\A         from line 5 of uikit-theme.scss\A \A 11: @import \"components/iconnav.scss\";\A 12: @import \"components/notification.scss\";\A 13: @import \"components/tooltip.scss\";\A 14: @import \"components/placeholder.scss\";\A 15: @import \"components/progress.scss\";\A 16: @import \"components/sortable.scss\";\A 17: @import \"components/countdown.scss\";\A 18: \A 19: // Utilities\A 20: @import \"components/_import.utilities.scss\";"; }
+  content: "Error: Undefined variable: \"$global-muted-background\".\A         on line 16 of theme/base.scss\A         from line 3 of theme/_import.scss\A         from line 5 of uikit-theme.scss"; }

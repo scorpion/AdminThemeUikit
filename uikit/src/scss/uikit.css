@@ -1,13 +1,13 @@
 /*
 Error: Undefined variable: "$inverse-global-color".
-        on line 616 of components/base.scss
-        from line 4 of components/_import.components.scss
-        from line 6 of uikit.scss
+        on line 619 of components/base.scss
+        from line 4 of components/_import.scss
+        from line 5 of uikit.scss
 
 Backtrace:
-components/base.scss:616
-components/_import.components.scss:4
-uikit.scss:6
+components/base.scss:619
+components/_import.scss:4
+uikit.scss:5
 /Library/Ruby/Gems/2.0.0/gems/sass-3.4.22/lib/sass/script/tree/variable.rb:49:in `_perform'
 /Library/Ruby/Gems/2.0.0/gems/sass-3.4.22/lib/sass/script/tree/node.rb:58:in `perform'
 /Library/Ruby/Gems/2.0.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:471:in `visit_variable'
@@ -74,4 +74,4 @@ uikit.scss:6
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$inverse-global-color\".\A         on line 616 of components/base.scss\A         from line 4 of components/_import.components.scss\A         from line 6 of uikit.scss"; }
+  content: "Error: Undefined variable: \"$inverse-global-color\".\A         on line 619 of components/base.scss\A         from line 4 of components/_import.scss\A         from line 5 of uikit.scss"; }

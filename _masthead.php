@@ -18,7 +18,7 @@ if(!defined("PROCESSWIRE")) die();
 			</div>	
 		</div>	
 	</header>
-	<header id='pw-masthead' class='pw-masthead uk-background-muted' data-pw-height='80'>
+	<header id='pw-masthead' class='pw-masthead uk-background-muted' data-pw-height='73'>
 		<div class='pw-container uk-container uk-container-expand'>
 			<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 				<div class="uk-navbar-left">

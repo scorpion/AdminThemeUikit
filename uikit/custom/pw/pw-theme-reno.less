@@ -32,6 +32,7 @@
 @reno-alert-background: #ffd;
 @reno-alert-color: @reno-text-color;
 @reno-primary-headline-color: #1C2836;
+@reno-secondary-headline-color: lighten(@reno-primary-headline-color, 30%);
 @reno-notes-text-color: @reno-muted-text-color;
 @reno-notes-background: #ffd;
 @reno-masthead-background: @reno-dark-background;
@@ -40,8 +41,11 @@
 @reno-masthead-link-current-color: #fff;
 @reno-masthead-icon-color: #8d939e;
 @reno-masthead-search-text-color: #8d939e;
-@reno-masthead-search-background: #253447;
-@reno-masthead-search-border-color: #253447;
+@reno-masthead-search-background: transparent;
+@reno-masthead-search-border-color: lighten(#253447, 10%);
+@reno-masthead-search-focus-background: lighten(#253447, 5%);
+@reno-masthead-search-focus-text-color: #fff;
+@reno-masthead-search-focus-border-color: @reno-masthead-search-focus-background;
 @reno-masthead-search-icon-color: @reno-masthead-icon-color;
 @reno-button-text-color: #fff;
 @reno-button-background: @reno-primary-background;
@@ -114,6 +118,7 @@
 
 // Dropdowns and primary navigation
 @dropdown-padding: 15px;
+@pw-masthead-height: 73px; // note: must also be updated in _masthead.php "data-pw-height" attribute 
 @pw-dropdown-color: @reno-dropdown-color;
 @pw-dropdown-background: @reno-dropdown-background;
 @pw-dropdown-nav-item-color: @reno-dropdown-color;
@@ -227,6 +232,12 @@
  * the look and feel of AdminThemeReno. 
  *
  */
+
+.hook-base-h2,
+.hook-base-h3,
+.hook-base-h4 {
+  color: @reno-secondary-headline-color;
+}
 
 // Tabs ---------------------------------------------------------------
 
@@ -377,6 +388,10 @@
         i {
           color: @reno-masthead-link-hover-color;
         }
+      }
+      &.uk-active > a,
+      & > a.hover,
+      & > a:hover {
         &:after {
           // white triangle
           content: " ";
@@ -391,6 +406,11 @@
           z-index: 999;
         }
       }
+      /*
+      &.uk-active > a:not(.hover):not(:hover):after {
+        border-color: transparent transparent rgba(255,255,255,0.5) transparent;
+      }
+      */
     }
   }
   
@@ -401,7 +421,9 @@
       border-color: @reno-masthead-search-border-color;
       border-radius: 5px;
       &:focus {
-        color: #fff;
+        color: @reno-masthead-search-focus-text-color;
+        border-color: @reno-masthead-search-focus-border-color;
+        background: @reno-masthead-search-focus-background;
       }
     }
     .uk-form-icon {

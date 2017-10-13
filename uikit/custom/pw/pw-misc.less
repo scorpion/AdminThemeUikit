@@ -12,6 +12,9 @@
 @base-code-padding-vertical: 0;
 @base-code-background: none;
 
+@pw-masthead-height: 80px; // note: must also be updated in _masthead.php "data-pw-height" attribute 
+@navbar-nav-item-height: @pw-masthead-height;
+
 html, body {
   background: @pw-body-background;
 }
@@ -33,10 +36,10 @@ em {
 }
 #pw-masthead,
 #pw-masthead-mobile {
-  height: 80px;
+  height: @pw-masthead-height;
 }
 #pw-masthead-mobile {
-  line-height: 75px;
+  line-height: @pw-masthead-height - 2px;
 }
 .pw-logo {
   max-height: 50px; 

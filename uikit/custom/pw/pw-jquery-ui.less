@@ -877,7 +877,12 @@ body .ui-tooltip {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-  border: 1px solid #fcefa1;
+  &:not(:input) {
+    border: 1px solid #fcefa1;
+  }
+  &:input {
+    border-color: #fcefa1;
+  }
   background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
   color: #363636;
 }
@@ -889,7 +894,12 @@ body .ui-tooltip {
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-  border: 1px solid #cd0a0a;
+  &:not(:input) {
+    border: 1px solid #cd0a0a;
+  }
+  &:input {
+    border-color: #cd0a0a;
+  }
   background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
   color: #cd0a0a;
 }

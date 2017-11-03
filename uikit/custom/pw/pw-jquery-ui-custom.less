@@ -163,14 +163,18 @@
 .ui-widget-header .ui-state-highlight {
   color: @alert-primary-color;
   background: @alert-primary-background;
-  border: none;
+  &:not(:input) {
+    border: none;
+  }
 }
 
 .ui-state-error,
 .ui-widget-content .ui-state-error {
   background: @alert-danger-background;
   color: @alert-danger-color;
-  border: none;
+  &:not(:input) {
+    border: none;
+  }
 }
 
 /****************************************************************

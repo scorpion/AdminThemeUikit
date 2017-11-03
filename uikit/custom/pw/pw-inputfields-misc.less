@@ -48,7 +48,8 @@
 
 /*** Misc **********************************************************/
 
-.InputfieldMarkup {
+:not(.InputfieldFieldset) > .InputfieldContent > .Inputfields > .InputfieldMarkup, 
+.InputfieldForm > .Inputfields > .InputfieldMarkup {
   &.InputfieldHeaderHidden {
     outline: none !important;
     margin-top: @pw-inputfield-margin;

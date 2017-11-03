@@ -104,6 +104,8 @@ strong {
   white-space: nowrap;
   padding: 0 0;
   background: none;
+  overflow: auto;
+  display: block;
 }
 /*
  * Emphasize
@@ -12871,9 +12873,18 @@ body .ui-tooltip {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-  border: 1px solid #fcefa1;
   background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
   color: #363636;
+}
+.ui-state-highlight:not(:input),
+.ui-widget-content .ui-state-highlight:not(:input),
+.ui-widget-header .ui-state-highlight:not(:input) {
+  border: 1px solid #fcefa1;
+}
+.ui-state-highlight:input,
+.ui-widget-content .ui-state-highlight:input,
+.ui-widget-header .ui-state-highlight:input {
+  border-color: #fcefa1;
 }
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
@@ -12883,9 +12894,18 @@ body .ui-tooltip {
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-  border: 1px solid #cd0a0a;
   background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x;
   color: #cd0a0a;
+}
+.ui-state-error:not(:input),
+.ui-widget-content .ui-state-error:not(:input),
+.ui-widget-header .ui-state-error:not(:input) {
+  border: 1px solid #cd0a0a;
+}
+.ui-state-error:input,
+.ui-widget-content .ui-state-error:input,
+.ui-widget-header .ui-state-error:input {
+  border-color: #cd0a0a;
 }
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
@@ -13610,12 +13630,19 @@ body .ui-tooltip {
 .ui-widget-header .ui-state-highlight {
   color: #354b60;
   background: #ffd;
+}
+.ui-state-highlight:not(:input),
+.ui-widget-content .ui-state-highlight:not(:input),
+.ui-widget-header .ui-state-highlight:not(:input) {
   border: none;
 }
 .ui-state-error,
 .ui-widget-content .ui-state-error {
   background: #bc283d;
   color: #fff;
+}
+.ui-state-error:not(:input),
+.ui-widget-content .ui-state-error:not(:input) {
   border: none;
 }
 /****************************************************************
@@ -14672,6 +14699,7 @@ table .InputfieldIsOffset,
 .LanguageSupport > ul:last-child {
   margin-bottom: 0;
 }
+.InputfieldHeaderHidden > .InputfieldContent,
 .InputfieldHeaderHidden + .InputfieldContent {
   padding-top: 23px;
 }
@@ -14996,11 +15024,13 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
   display: none;
 }
 /*** Misc **********************************************************/
-.InputfieldMarkup.InputfieldHeaderHidden {
+:not(.InputfieldFieldset) > .InputfieldContent > .Inputfields > .InputfieldMarkup.InputfieldHeaderHidden,
+.InputfieldForm > .Inputfields > .InputfieldMarkup.InputfieldHeaderHidden {
   outline: none !important;
   margin-top: 20px;
 }
-.InputfieldMarkup.InputfieldHeaderHidden > .InputfieldContent {
+:not(.InputfieldFieldset) > .InputfieldContent > .Inputfields > .InputfieldMarkup.InputfieldHeaderHidden > .InputfieldContent,
+.InputfieldForm > .Inputfields > .InputfieldMarkup.InputfieldHeaderHidden > .InputfieldContent {
   padding-left: 0;
   padding-right: 0;
 }
@@ -15242,6 +15272,14 @@ body .ProDraftsNotice {
 .ProcessPageEditImageSelect #selected_image_settings #action_icons span:hover {
   background: #3eb998;
 }
+.ProcessPageEditImageSelect #ProcessPageEditImageSelect > form {
+  margin-top: 1px;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+.ProcessPageEditImageSelect #wrap_info {
+  margin-top: 0;
+}
 .ProcessModule .modules_section > h2 {
   margin-top: 40px;
   margin-bottom: 0;
@@ -15386,9 +15424,6 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 }
 .pw-sidebar-nav > li > ul {
   padding-left: 0;
-}
-.pw-sidebar-nav > li a {
-  white-space: nowrap;
 }
 .pw-sidebar-nav > li .uk-open > a {
   color: #333;

@@ -337,7 +337,8 @@ table .InputfieldIsOffset,
     }
   }
 
-  .InputfieldHeaderHidden + .InputfieldContent {
+  .InputfieldHeaderHidden > .InputfieldContent, // applied to .Inputfield
+  .InputfieldHeaderHidden + .InputfieldContent { // applied to .InputfieldHeader
     // when header not visible, make top padding in content consistent with other headers
     // Example: checkbox fields lacking a description or Markup fields with no label
     padding-top: @pw-inputfield-header-padding-top + 3px;

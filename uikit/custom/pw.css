@@ -12781,7 +12781,7 @@ button.ui-button::-moz-focus-inner {
   cursor: text;
 }
 .ui-tabs .ui-tabs-nav li a,
-.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
+.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
   cursor: pointer;
 }
 .ui-tabs .ui-tabs-panel {
@@ -15577,15 +15577,18 @@ ul.uk-navbar-nav ul {
   border: 1px solid transparent;
   margin-left: -1px;
 }
+.langTabs .ui-tabs-nav > li,
 .langTabs .uk-tab > li {
   background: transparent;
   border: none;
   margin: 3px 0 3px 0;
   padding: 0 !important;
 }
+.langTabs .ui-tabs-nav > li.langTabEmpty > a,
 .langTabs .uk-tab > li.langTabEmpty > a {
   color: #8d939e;
 }
+.langTabs .ui-tabs-nav > li > a,
 .langTabs .uk-tab > li > a {
   margin: 0 1px 0 0;
   display: inline-block;
@@ -15597,10 +15600,12 @@ ul.uk-navbar-nav ul {
   font-size: 12px;
   text-transform: uppercase;
 }
+.langTabs .ui-tabs-nav > li > a:hover,
 .langTabs .uk-tab > li > a:hover {
   color: #354b60;
   background: #f0f3f7;
 }
+.langTabs .ui-tabs-nav > li.uk-active > a,
 .langTabs .uk-tab > li.uk-active > a {
   color: #1C2836;
   background: #d2dce6;

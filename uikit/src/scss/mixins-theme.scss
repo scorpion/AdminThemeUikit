@@ -28,6 +28,37 @@
     .uk-open > .uk-accordion-title::after { @include svg-fill($internal-accordion-open-image, "#000", $inverse-global-color); }
 
 }
+@mixin hook-align-misc(){}
+@mixin hook-animation-misc(){}
+@mixin hook-article(){}
+@mixin hook-article-adjacent(){}
+@mixin hook-article-title(){}
+@mixin hook-article-meta(){
+
+    a { color: $article-meta-link-color; }
+
+    a:hover {
+        color: $article-meta-link-hover-color;
+        text-decoration: none;
+    }
+
+}
+@mixin hook-article-misc(){}
+@mixin hook-inverse-article-title(){}
+@mixin hook-inverse-article-meta(){}
+@mixin hook-inverse-component-article(){
+
+    .uk-article-title  {
+        @if(mixin-exists(hook-inverse-article-title)) {@include hook-inverse-article-title();}
+    }
+
+    .uk-article-meta  {
+        color: $inverse-article-meta-color;
+        @if(mixin-exists(hook-inverse-article-meta)) {@include hook-inverse-article-meta();}
+    }
+
+}
+@mixin hook-background-misc(){}
 @mixin hook-alert(){}
 @mixin hook-alert-close(){
     color: inherit;
@@ -65,37 +96,6 @@
     }
 
 }
-@mixin hook-align-misc(){}
-@mixin hook-animation-misc(){}
-@mixin hook-article(){}
-@mixin hook-article-adjacent(){}
-@mixin hook-article-title(){}
-@mixin hook-article-meta(){
-
-    a { color: $article-meta-link-color; }
-
-    a:hover {
-        color: $article-meta-link-hover-color;
-        text-decoration: none;
-    }
-
-}
-@mixin hook-article-misc(){}
-@mixin hook-inverse-article-title(){}
-@mixin hook-inverse-article-meta(){}
-@mixin hook-inverse-component-article(){
-
-    .uk-article-title  {
-        @if(mixin-exists(hook-inverse-article-title)) {@include hook-inverse-article-title();}
-    }
-
-    .uk-article-meta  {
-        color: $inverse-article-meta-color;
-        @if(mixin-exists(hook-inverse-article-meta)) {@include hook-inverse-article-meta();}
-    }
-
-}
-@mixin hook-background-misc(){}
 @mixin hook-badge(){}
 @mixin hook-badge-hover(){}
 @mixin hook-badge-misc(){}
@@ -257,7 +257,7 @@
     // Horizontal rules
     //
 
-    hr {
+    hr, .uk-hr {
         border-top-color: $inverse-base-hr-border;
         @if(mixin-exists(hook-inverse-base-hr)) {@include hook-inverse-base-hr();}
     }
@@ -511,30 +511,6 @@
 
 
 }
-@mixin hook-close(){
-    -webkit-transition: 0.1s ease-in-out;
-    transition: 0.1s ease-in-out;
-    -webkit-transition-property: color, opacity;
-    transition-property: color, opacity;
-}
-@mixin hook-close-hover(){}
-@mixin hook-close-misc(){}
-@mixin hook-inverse-close(){}
-@mixin hook-inverse-close-hover(){}
-@mixin hook-inverse-component-close(){
-
-    .uk-close {
-        color: $inverse-close-color;
-        @if(mixin-exists(hook-inverse-close)) {@include hook-inverse-close();}
-    }
-
-    .uk-close:hover,
-    .uk-close:focus {
-        color: $inverse-close-hover-color;
-        @if(mixin-exists(hook-inverse-close-hover)) {@include hook-inverse-close-hover();}
-    }
-
-}
 @mixin hook-card(){
     -webkit-transition: box-shadow 0.1s ease-in-out;
     transition: box-shadow 0.1s ease-in-out;
@@ -623,6 +599,30 @@
         .uk-card-large .uk-nav-default { margin: (-$card-large-body-padding-vertical-l + 15px) (-$card-large-body-padding-horizontal-l); }
         .uk-card-large .uk-card-title + .uk-nav-default { margin-top: 0; }
 
+    }
+
+}
+@mixin hook-close(){
+    -webkit-transition: 0.1s ease-in-out;
+    transition: 0.1s ease-in-out;
+    -webkit-transition-property: color, opacity;
+    transition-property: color, opacity;
+}
+@mixin hook-close-hover(){}
+@mixin hook-close-misc(){}
+@mixin hook-inverse-close(){}
+@mixin hook-inverse-close-hover(){}
+@mixin hook-inverse-component-close(){
+
+    .uk-close {
+        color: $inverse-close-color;
+        @if(mixin-exists(hook-inverse-close)) {@include hook-inverse-close();}
+    }
+
+    .uk-close:hover,
+    .uk-close:focus {
+        color: $inverse-close-hover-color;
+        @if(mixin-exists(hook-inverse-close-hover)) {@include hook-inverse-close-hover();}
     }
 
 }
@@ -730,17 +730,20 @@
 }
 @mixin hook-dotnav(){}
 @mixin hook-dotnav-item(){
-    -webkit-transition: background-color 0.2s ease-in-out;
-    transition: background-color 0.2s ease-in-out;
+    border: $dotnav-item-border-width solid $dotnav-item-border;
+    -webkit-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+    -webkit-transition-property: background-color, border-color;
+    transition-property: background-color, border-color;
 }
-@mixin hook-dotnav-item-hover(){}
-@mixin hook-dotnav-item-onclick(){}
-@mixin hook-dotnav-item-active(){}
+@mixin hook-dotnav-item-hover(){ border-color: $dotnav-item-hover-border; }
+@mixin hook-dotnav-item-onclick(){ border-color: $dotnav-item-onclick-border; }
+@mixin hook-dotnav-item-active(){ border-color: $dotnav-item-active-border; }
 @mixin hook-dotnav-misc(){}
-@mixin hook-inverse-dotnav-item(){}
-@mixin hook-inverse-dotnav-item-hover(){}
-@mixin hook-inverse-dotnav-item-onclick(){}
-@mixin hook-inverse-dotnav-item-active(){}
+@mixin hook-inverse-dotnav-item(){ border-color: rgba($inverse-global-color, 0.9); }
+@mixin hook-inverse-dotnav-item-hover(){ border-color: transparent; }
+@mixin hook-inverse-dotnav-item-onclick(){ border-color: transparent; }
+@mixin hook-inverse-dotnav-item-active(){ border-color: transparent; }
 @mixin hook-inverse-component-dotnav(){
 
     .uk-dotnav > * > * {
@@ -1726,9 +1729,9 @@
 @mixin hook-inverse-pagination-item-hover(){}
 @mixin hook-inverse-pagination-item-active(){}
 @mixin hook-inverse-pagination-item-disabled(){}
-@mixin hook-position-misc(){}
 @mixin hook-placeholder(){ border: $placeholder-border-width dashed $placeholder-border; }
 @mixin hook-placeholder-misc(){}
+@mixin hook-position-misc(){}
 @mixin hook-print(){}
 @mixin hook-progress(){
     border-radius: $progress-border-radius;
@@ -1755,7 +1758,6 @@
 @mixin hook-section-muted(){}
 @mixin hook-section-primary(){}
 @mixin hook-section-secondary(){}
-@mixin hook-section-media(){}
 @mixin hook-section-overlap(){}
 @mixin hook-section-misc(){}
 @mixin hook-slidenav(){
@@ -1766,11 +1768,14 @@
 @mixin hook-slidenav-active(){}
 @mixin hook-slidenav-previous(){}
 @mixin hook-slidenav-next(){}
+@mixin hook-slidenav-large(){}
 @mixin hook-slidenav-container(){}
 @mixin hook-slidenav-misc(){}
 @mixin hook-inverse-slidenav(){}
 @mixin hook-inverse-slidenav-hover(){}
 @mixin hook-inverse-slidenav-active(){}
+@mixin hook-slideshow(){}
+@mixin hook-slideshow-misc(){}
 @mixin hook-sortable(){}
 @mixin hook-sortable-drag(){}
 @mixin hook-sortable-placeholder(){}
@@ -1974,6 +1979,50 @@
 @mixin hook-text-misc(){}
 @mixin hook-inverse-text-lead(){}
 @mixin hook-inverse-text-meta(){}
+@mixin hook-thumbnav(){}
+@mixin hook-thumbnav-item(){
+
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: $thumbnav-item-background;
+        -webkit-transition: background-color 0.1s ease-in-out;
+        transition: background-color 0.1s ease-in-out;
+    }
+
+}
+@mixin hook-thumbnav-item-hover(){
+    &::after { background-color: $thumbnav-item-hover-background; }
+}
+@mixin hook-thumbnav-item-active(){
+    &::after { background-color: $thumbnav-item-active-background; }
+}
+@mixin hook-thumbnav-misc(){}
+@mixin hook-inverse-thumbnav-item(){}
+@mixin hook-inverse-thumbnav-item-hover(){}
+@mixin hook-inverse-thumbnav-item-active(){}
+@mixin hook-inverse-component-thumbnav(){
+
+    .uk-thumbnav > * > * {
+        @if(mixin-exists(hook-inverse-thumbnav-item)) {@include hook-inverse-thumbnav-item();}
+    }
+
+    .uk-thumbnav > * > :hover,
+    .uk-thumbnav > * > :focus {
+        @if(mixin-exists(hook-inverse-thumbnav-item-hover)) {@include hook-inverse-thumbnav-item-hover();}
+    }
+
+    .uk-thumbnav > .uk-active > * {
+        @if(mixin-exists(hook-inverse-thumbnav-item-active)) {@include hook-inverse-thumbnav-item-active();}
+    }
+
+}
 @mixin hook-tile(){}
 @mixin hook-tile-default(){}
 @mixin hook-tile-muted(){}

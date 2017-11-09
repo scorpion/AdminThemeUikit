@@ -1,57 +1,46 @@
 import { Class } from '../mixin/index';
-import { Dimensions, Player } from '../util/index';
+import { css, Dimensions, isVisible } from '../util/index';
 
 export default function (UIkit) {
 
     UIkit.component('cover', {
 
-        mixins: [Class],
+        mixins: [Class, UIkit.components.video.options],
 
         props: {
             width: Number,
             height: Number
         },
 
-        computed: {
-
-            el() {
-                return this.$el[0];
-            },
-
-            parent() {
-                return this.el.parentNode;
-            }
-
-        },
-
-        ready() {
-
-            if (this.$el.is('iframe')) {
-                this.$el.css('pointerEvents', 'none');
-            }
-
-            var player = new Player(this.$el);
-
-            if (player.isVideo()) {
-                player.mute();
-            }
-
+        defaults: {
+            automute: true
         },
 
         update: {
 
             write() {
 
-                if (this.el.offsetHeight === 0) {
+                var el = this.$el;
+
+                if (!isVisible(el)) {
                     return;
                 }
 
-                this.$el
-                    .css({width: '', height: ''})
-                    .css(Dimensions.cover(
-                        {width: this.width || this.el.clientWidth, height: this.height || this.el.clientHeight},
-                        {width: this.parent.offsetWidth, height: this.parent.offsetHeight}
-                    ));
+                var {offsetHeight: height, offsetWidth: width} = el.parentNode;
+
+                css(
+                    css(el, {width: '', height: ''}),
+                    Dimensions.cover(
+                        {
+                            width: this.width || el.clientWidth,
+                            height: this.height || el.clientHeight
+                        },
+                        {
+                            width: width + (width % 2 ? 1 : 0),
+                            height: height + (height % 2 ? 1 : 0)
+                        }
+                    )
+                );
 
             },
 

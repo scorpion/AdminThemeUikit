@@ -9,7 +9,7 @@ if(!defined("PROCESSWIRE")) die();
 ?>
 
 <!-- OFFCANVAS NAV TOGGLE -->
-<a id='offcanvas-toggle' class='uk-hidden' href="#offcanvas-nav" uk-toggle>
+<a id='offcanvas-toggle' class='uk-hidden' href='#offcanvas-nav' uk-toggle='target: #offcanvas-nav'>
 	<?php echo $adminTheme->renderIcon('bars fa-lg'); ?>
 </a>
 

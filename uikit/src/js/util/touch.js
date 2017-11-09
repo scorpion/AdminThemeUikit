@@ -4,7 +4,7 @@
     http://zeptojs.com/
 */
 
-import { isWithin, on, pointerDown, pointerMove, pointerUp, ready, trigger } from './index';
+import { doc, on, pointerDown, pointerMove, pointerUp, ready, trigger, win, within } from './index';
 
 var touch = {}, clickTimeout, swipeTimeout, tapTimeout, clicked;
 
@@ -22,19 +22,20 @@ function cancelAll() {
 
 ready(function () {
 
-    on(document, 'click', () => clicked = true, true);
+    on(doc, 'click', () => clicked = true, true);
 
-    on(document, pointerDown, function (e) {
+    on(doc, pointerDown, function (e) {
 
-        var {target, pageX, pageY} = e.touches ? e.touches[0] : e,
+        var target = e.target,
+            {x, y} = getPos(e),
             now = Date.now();
 
         touch.el = 'tagName' in target ? target : target.parentNode;
 
         clickTimeout && clearTimeout(clickTimeout);
 
-        touch.x1 = pageX;
-        touch.y1 = pageY;
+        touch.x1 = x;
+        touch.y1 = y;
 
         if (touch.last && now - touch.last <= 250) {
             touch = {};
@@ -46,15 +47,15 @@ ready(function () {
 
     });
 
-    on(document, pointerMove, function (e) {
+    on(doc, pointerMove, function (e) {
 
-        var {pageX, pageY} = e.touches ? e.touches[0] : e;
+        var {x, y} = getPos(e);
 
-        touch.x2 = pageX;
-        touch.y2 = pageY;
+        touch.x2 = x;
+        touch.y2 = y;
     });
 
-    on(document, pointerUp, function ({target}) {
+    on(doc, pointerUp, function ({target}) {
 
         // swipe
         if (touch.x2 && Math.abs(touch.x1 - touch.x2) > 30 || touch.y2 && Math.abs(touch.y1 - touch.y2) > 30) {
@@ -73,7 +74,7 @@ ready(function () {
             tapTimeout = setTimeout(() => touch.el && trigger(touch.el, 'tap'));
 
             // trigger single click after 350ms of inactivity
-            if (touch.el && isWithin(target, touch.el)) {
+            if (touch.el && within(target, touch.el)) {
                 clickTimeout = setTimeout(function () {
                     clickTimeout = null;
                     if (touch.el && !clicked) {
@@ -88,15 +89,21 @@ ready(function () {
         }
     });
 
-    on(document, 'touchcancel', cancelAll);
-    on(window, 'scroll', cancelAll);
+    on(doc, 'touchcancel', cancelAll);
+    on(win, 'scroll', cancelAll);
 });
 
 var touching = false;
-on(document, 'touchstart', () => touching = true, true);
-on(document, 'click', () => {touching = false});
-on(document, 'touchcancel', () => touching = false, true);
+on(doc, 'touchstart', () => touching = true, true);
+on(doc, 'click', () => {touching = false});
+on(doc, 'touchcancel', () => touching = false, true);
 
 export function isTouch(e) {
-    return touching || (e.originalEvent || e).pointerType === 'touch';
+    return touching || e.pointerType === 'touch';
+}
+
+export function getPos(e) {
+    var {touches, changedTouches} = e,
+        {pageX: x, pageY: y} = touches && touches[0] || changedTouches && changedTouches[0] || e;
+    return {x, y};
 }

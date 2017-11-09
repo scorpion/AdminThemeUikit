@@ -13,6 +13,8 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 
 	$defaultNote = __('When blank, the default file used.') . ' ';
 	$defaultDesc = __('Enter path relative to homepage URL.');
+	$recommendedLabel = __('(RECOMMENDED)'); 
+	$experimentalLabel = __('(EXPERIMENTAL)'); 
 
 	$modules = $adminTheme->wire('modules');
 	$session = $adminTheme->wire('session');
@@ -22,10 +24,13 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f = $modules->get('InputfieldRadios');
 	$f->attr('name', 'layout');
 	$f->label = __('Layout');
-	$f->addOption('', __('Traditional with masthead navigation (RECOMMENDED)'));
+	$f->addOption('', __('Traditional with masthead navigation') . 
+		' [span.detail] ' . $recommendedLabel . ' [/span]');
 	$opt = __('Page tree navigation in sidebar');
-	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)') . '*');
-	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)') . '*'); 
+	$f->addOption('sidenav-tree', $opt . ' ' . __('(left)') . 
+		'* [span.detail] ' . $experimentalLabel . ' [/span]');
+	$f->addOption('sidenav-tree-alt', $opt . ' ' . __('(right)') . 
+		'* [span.detail] ' . $experimentalLabel . ' [/span]'); 
 	// $f->addOption('sidenav', __('Sidebar navigation (left) + page tree navigation (right)'));
 	$f->attr('value', $layout);
 	$f->icon = 'newspaper-o';
@@ -67,9 +72,9 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->attr('name', 'cssURL');
 	$f->attr('value', $adminTheme->get('cssURL'));
 	$f->label = __('Primary CSS file');
-	$f->description = $defaultDesc;
-	$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css" . "\n" . 
+	$f->description = $defaultDesc . ' ' . 
 		__('We do not recommend changing this unless you are an admin theme developer.'); 
+	$f->notes = $defaultNote . "\nsite/modules/AdminThemeUikit/uikit/dist/css/uikit.pw.css";
 	$f->collapsed = Inputfield::collapsedBlank;
 	$f->icon = 'file-code-o';
 	$fieldset->add($f);
@@ -167,5 +172,20 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	if($adminTheme->useOffset) $f->attr('checked', 'checked');
 	$fieldset->add($f);
 	*/
+
+	/** @var InputfieldFieldset $fieldset */
+	$fieldset = $modules->get('InputfieldFieldset');
+	$fieldset->label = __('Navigation');
+	$fieldset->collapsed = Inputfield::collapsedYes;
+	$inputfields->add($fieldset); 
+
+	/** @var InputfieldRadios $f */
+	$f = $modules->get('InputfieldRadios');
+	$f->attr('name', 'logoAction');
+	$f->label = __('Masthead logo click action');
+	$f->addOption(0, __('Admin root page list'));
+	$f->addOption(1, __('Open offcanvas navigation'));
+	$f->attr('value', (int) $adminTheme->logoAction);
+	$fieldset->add($f); 
 
 }

@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.30 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -13,7 +13,12 @@ function plugin(UIkit) {
     }
 
     var ref = UIkit.util;
+    var $$ = ref.$$;
+    var addClass = ref.addClass;
+    var css = ref.css;
     var scrolledOver = ref.scrolledOver;
+    var toFloat = ref.toFloat;
+    var toNodes = ref.toNodes;
 
     UIkit.component('grid-parallax', UIkit.components.grid.extend({
 
@@ -27,25 +32,29 @@ function plugin(UIkit) {
             translate: 150
         },
 
+        computed: {
+
+            translate: function translate(ref) {
+                var translate = ref.translate;
+
+                return Math.abs(translate);
+            },
+
+            items: function items(ref, $el) {
+                var target = ref.target;
+
+                return target ? $$(target, $el) : toNodes($el.children);
+            }
+
+        },
+
         init: function init() {
-            this.$addClass('uk-grid');
+            addClass(this.$el, 'uk-grid');
         },
 
         disconnected: function disconnected() {
             this.reset();
-            this.$el.css('margin-bottom', '');
-        },
-
-        computed: {
-
-            translate: function translate() {
-                return Math.abs(this.$props.translate);
-            },
-
-            items: function items() {
-                return (this.target ? this.$el.find(this.target) : this.$el.children()).toArray();
-            }
-
+            css(this.$el, 'marginBottom', '');
         },
 
         update: [
@@ -58,9 +67,9 @@ function plugin(UIkit) {
                 },
 
                 write: function write() {
-                    this.$el
-                        .css('margin-bottom', '')
-                        .css('margin-bottom', this.columns > 1 ? this.translate + parseFloat(this.$el.css('margin-bottom')) : '');
+                    css(this.$el, 'marginBottom', this.columns > 1
+                        ? this.translate + toFloat(css(css(this.$el, 'marginBottom', ''), 'marginBottom'))
+                        : '');
                 },
 
                 events: ['load', 'resize']
@@ -82,7 +91,7 @@ function plugin(UIkit) {
                         return this.reset();
                     }
 
-                    this.rows.forEach(function (row) { return row.forEach(function (el, i) { return el.style.transform = "translateY(" + (i % 2 ? this$1.scrolled : this$1.scrolled / 8) + "px)"; }
+                    this.rows.forEach(function (row) { return row.forEach(function (el, i) { return css(el, 'transform', ("translateY(" + (i % 2 ? this$1.scrolled : this$1.scrolled / 8) + "px)")); }
                         ); }
                     );
 
@@ -95,7 +104,7 @@ function plugin(UIkit) {
         methods: {
 
             reset: function reset() {
-                this.items.forEach(function (item) { return item.style.transform = ''; });
+                css(this.items, 'transform', '');
             }
 
         }
@@ -113,7 +122,7 @@ function plugin(UIkit) {
     });
 
     function sortBy(collection, prop) {
-        return collection.sort(function (a,b) { return a[prop] > b[prop]
+        return collection.sort(function (a, b) { return a[prop] > b[prop]
                 ? 1
                 : b[prop] > a[prop]
                     ? -1
@@ -122,8 +131,6 @@ function plugin(UIkit) {
     }
 
 }
-
-
 
 if (!false && typeof window !== 'undefined' && window.UIkit) {
     window.UIkit.use(plugin);

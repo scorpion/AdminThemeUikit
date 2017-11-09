@@ -190,6 +190,7 @@ var ProcessWireAdminTheme = {
 					top: '-9999px'
 				});
 				$mastheadMobile.removeClass('uk-hidden');
+				$("#offcanvas-toggle").removeClass('uk-hidden');
 			}
 		} else {
 			// show masthead, hide mobile masthead
@@ -199,6 +200,7 @@ var ProcessWireAdminTheme = {
 					position: 'relative',
 					top: 0
 				});
+				$("#offcanvas-toggle").addClass('uk-hidden');
 			}
 		}
 	}, 
@@ -318,6 +320,11 @@ var ProcessWireAdminTheme = {
 				position.my = 'left top';
 				position.at = 'left bottom';
 			}
+			
+			$input.click(function(event) {
+				// for offcanvas search input, prevents closure of sidebar
+				event.stopPropagation();
+			});
 
 			$input.adminsearchautocomplete({
 				minLength: 2,
@@ -382,8 +389,13 @@ var ProcessWireAdminTheme = {
 	 * 
 	 */
 	setupSideNav: function() {
-		$(".pw-sidebar-nav").on('click', 'a.pw-has-ajax-items', function() {
+		$('.pw-sidebar-nav').on('click', 'a', function(event) {
 			var $a = $(this);
+			if(!$a.hasClass('pw-has-ajax-items')) {
+				// as of Uikit beta 34, clicking nav items closes the offcanvas unless the following line is here
+				event.stopPropagation();
+				return;
+			}
 			var $ul = $a.closest('li').find('ul');
 			var url = $(this).attr('data-json');
 			if($ul.hasClass('navJSON')) return false;
@@ -413,6 +425,10 @@ var ProcessWireAdminTheme = {
 				}
 				// populate the retrieved items
 				$.each(data.list, function(n) {
+					if(this.label.indexOf('<span') > -1) {
+						// Uikit beta 34 does not like span elements in the label for some reason
+						this.label = this.label.replace(/<\/?span[^>]*>/g, '');
+					}
 					var icon = '';
 					var $label = $("<div>" + this.label + "</div>");
 					var label = $label.text();
@@ -705,11 +721,13 @@ var ProcessWireAdminTheme = {
 			} else {
 				// show offcanvas nav
 				// $('#pw-admin-main')[0].contentWindow.jQuery('#offcanvas-toggle').click();
-				$('#offcanvas-toggle').click();
+				UIkit.toggle('#offcanvas-nav').toggle();
 			}
-		} else {
+		} else if(ProcessWire.config.adminTheme.logoAction == 1) {
 			// show offcanvas nav
-			$('#offcanvas-toggle').click();
+			UIkit.toggle('#offcanvas-nav').toggle();
+		} else {
+			return true;
 		}
 		return false;
 	}

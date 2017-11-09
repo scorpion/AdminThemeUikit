@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.30 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
@@ -10,7 +10,19 @@ var storage = window.sessionStorage;
 var key = '_uikit_style';
 var keyinverse = '_uikit_inverse';
 var themes = {};
-var $html = $('html');
+var docEl = document.documentElement;
+
+var ref = UIkit.util;
+var addClass = ref.addClass;
+var assign = ref.assign;
+var attr = ref.attr;
+var append = ref.append;
+var css = ref.css;
+var on = ref.on;
+var prepend = ref.prepend;
+var removeClass = ref.removeClass;
+var trigger = ref.trigger;
+var ucfirst = ref.ucfirst;
 
 // try to load themes.json
 var request = new XMLHttpRequest();
@@ -21,7 +33,7 @@ if (request.status === 200) {
     themes = JSON.parse(request.responseText);
 }
 
-var styles = $.extend({
+var styles = assign({
         core: {css: '../dist/css/uikit-core.css'},
         theme: {css: '../dist/css/uikit.css'}
     }, themes);
@@ -37,7 +49,7 @@ storage[keyinverse] = storage[keyinverse] || 'default';
 var dir = storage._uikit_dir || 'ltr';
 
 // set dir
-$html.attr('dir', dir);
+attr(docEl, 'dir', dir);
 
 var style = styles[storage[key]] || styles.theme;
 
@@ -45,17 +57,16 @@ var style = styles[storage[key]] || styles.theme;
 document.writeln(("<link rel=\"stylesheet\" href=\"" + (dir !== 'rtl' ? style.css : style.css.replace('.css', '').concat('-rtl.css')) + "\">"));
 
 // add javascript
-document.writeln("<script src=\"../dist/js/uikit.js\"></script>");
 document.writeln(("<script src=\"" + (style.icons ? style.icons : '../dist/js/uikit-icons.js') + "\"></script>"));
 
-jQuery(function ($) {
+window.addEventListener('load', function () { return setTimeout(function () {
 
-    var $body = $('body');
-    var $container = $('<div class="uk-container"></div>').prependTo('body');
-    var $tests = $('<select class="uk-select uk-form-width-small"></select>').css('margin', '20px 20px 20px 0').prependTo($container);
-    var $styles = $('<select class="uk-select uk-form-width-small"></select>').css('margin', '20px').appendTo($container);
-    var $inverse = $('<select class="uk-select uk-form-width-small"></select>').css('margin', '20px').appendTo($container);
-    var $label = $('<label></label>').css('margin', '20px').appendTo($container);
+    var $body = document.body;
+    var $container = prepend($body, '<div class="uk-container"></div>');
+    var $tests = css(append($container, '<select class="uk-select uk-form-width-small"></select>'), 'margin', '20px 20px 20px 0');
+    var $styles = css(append($container, '<select class="uk-select uk-form-width-small"></select>'), 'margin', '20px');
+    var $inverse = css(append($container, '<select class="uk-select uk-form-width-small"></select>'), 'margin', '20px');
+    var $rtl = css(append($container, '<label></label>'), 'margin', '20px');
 
     // Tests
     // ------------------------------
@@ -115,6 +126,7 @@ jQuery(function ($) {
         'search',
         'section',
         'slidenav',
+        'slideshow',
         'sortable',
         'spinner',
         'sticky',
@@ -124,6 +136,7 @@ jQuery(function ($) {
         'tab',
         'table',
         'text',
+        'thumbnav',
         'tile',
         'toggle',
         'tooltip',
@@ -133,26 +146,28 @@ jQuery(function ($) {
         'upload',
         'visibility',
         'width'
-    ].sort().forEach(function (name) { return $(("<option value=\"" + name + ".html\">" + (name.split('-').map(ucfirst).join(' ')) + "</option>")).appendTo($tests); });
+    ].sort().forEach(function (name) { return append($tests, ("<option value=\"" + name + ".html\">" + (name.split('-').map(ucfirst).join(' ')) + "</option>")); });
 
-    $tests.on('change', function () {
-        if ($tests.val()) {
-            var style = styles.custom ? ("?style=" + (getParam('style'))) : '';
-            location.href = "../" + ($html.find('script[src*="test.js"]').attr('src').replace('js/test.js', '')) + "tests/" + ($tests.val()) + style;
+    on($tests, 'change', function () {
+        if ($tests.value) {
+            location.href = "" + ($tests.value) + (styles.custom ? ("?style=" + (getParam('style'))) : '');
         }
-    }).val(component && (component + ".html"));
+    });
 
-    $tests.prepend("<option value=\"index.html\">Overview</option>");
+    $tests.value = component && (component + ".html");
+
+    prepend($tests, "<option value=\"index.html\">Overview</option>");
 
     // Styles
     // ------------------------------
 
-    Object.keys(styles).forEach(function (style) { return $styles.append(("<option value=\"" + style + "\">" + (ucfirst(style)) + "</option>")); });
+    Object.keys(styles).forEach(function (style) { return append($styles, ("<option value=\"" + style + "\">" + (ucfirst(style)) + "</option>")); });
 
-    $styles.on('change', function () {
-        storage[key] = $styles.val();
+    on($styles, 'change', function () {
+        storage[key] = $styles.value;
         location.reload();
-    }).val(storage[key]);
+    });
+    $styles.value = storage[key];
 
     // Variations
     // ------------------------------
@@ -163,54 +178,54 @@ jQuery(function ($) {
         'dark': 'Light'
     };
 
-    Object.keys(variations).forEach(function (name) { return $(("<option value=\"" + name + "\">" + (variations[name]) + "</option>")).appendTo($inverse); });
+    Object.keys(variations).forEach(function (name) { return append($inverse, ("<option value=\"" + name + "\">" + (variations[name]) + "</option>")); });
 
-    $inverse.on('change', function () {
+    on($inverse, 'change', function () {
 
-        $body.removeClass('uk-dark uk-light');
+        removeClass($body, 'uk-dark uk-light');
 
-        switch ($inverse.val()) {
+        switch ($inverse.value) {
             case 'dark':
-                $html.css('background', '#fff');
-                $body.addClass('uk-dark');
+                css(docEl, 'background', '#fff');
+                addClass($body, 'uk-dark');
                 break;
 
             case 'light':
-                $html.css('background', '#222');
-                $body.addClass('uk-light');
+                css(docEl, 'background', '#222');
+                addClass($body, 'uk-light');
                 break;
 
             default:
-                $html.css('background', '');
+                css(docEl, 'background', '');
         }
 
-        storage[keyinverse] = $inverse.val();
+        storage[keyinverse] = $inverse.value;
 
-    }).val(storage[keyinverse]).trigger('change');
+    });
+    $inverse.value = storage[keyinverse];
+    trigger($inverse, 'change');
 
     // RTL
     // ------------------------------
 
-    var $rtl = $('<input type="checkbox" class="uk-checkbox" />').on('change', function () {
-        storage._uikit_dir = $rtl.prop('checked') ? 'rtl' : 'ltr';
+    append($rtl, '<input type="checkbox" class="uk-checkbox" />');
+    append($rtl, '<span style="margin:5px;">RTL</span>');
+    on($rtl, 'change', function (ref) {
+        var target = ref.target;
+
+        storage._uikit_dir = target.checked ? 'rtl' : 'ltr';
         location.reload();
-    }).appendTo($label).after('<span style="margin:5px;">RTL</span>');
+    });
 
-    if (dir == 'rtl') {
-        $rtl.prop('checked', true);
-    }
+    $rtl.firstElementChild.checked = dir === 'rtl';
 
-    $html.css('padding-top', '');
-});
+    css(docEl, 'padding-top', '');
+}, 100); });
 
-$html.css('padding-top', '80px');
-
-function ucfirst(str) {
-    return str.length ? str.charAt(0).toUpperCase() + str.slice(1) : '';
-}
+css(docEl, 'padding-top', '80px');
 
 function getParam(name) {
-    var match = RegExp(("[?&]" + name + "=([^&]*)")).exec(window.location.search);
+    var match = new RegExp(("[?&]" + name + "=([^&]*)")).exec(window.location.search);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 

@@ -13,16 +13,18 @@ if(!defined("PROCESSWIRE")) die();
 <div id='pw-mastheads'>
 	<header id='pw-masthead-mobile' class='pw-masthead uk-hidden uk-background-muted'>
 		<div class='pw-container uk-container uk-container-expand'>
-			<div class='uk-text-center'>
-				<a href='#' class='pw-logo-link'><?php echo $adminTheme->getLogo(); ?></a>
-			</div>	
+				<a href='<?php echo $config->urls->admin; ?>' class='pw-logo-link'>
+					<?php echo $adminTheme->getLogo(); ?>
+				</a>
 		</div>	
 	</header>
 	<header id='pw-masthead' class='pw-masthead uk-background-muted' data-pw-height='73'>
 		<div class='pw-container uk-container uk-container-expand'>
 			<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 				<div class="uk-navbar-left">
-					<a class="pw-logo-link uk-logo uk-margin-right" href='#'><?php echo $adminTheme->getLogo(); ?></a>
+					<a class="pw-logo-link uk-logo uk-margin-right" href='<?php echo $config->urls->admin; ?>'>
+						<?php echo $adminTheme->getLogo(); ?>
+					</a>
 					<?php if($adminTheme->isLoggedIn): ?>
 					<ul class='uk-navbar-nav pw-primary-nav'>
 						<?php echo $adminTheme->renderPrimaryNavItems(); ?>

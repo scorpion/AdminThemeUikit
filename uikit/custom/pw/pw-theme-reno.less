@@ -6,6 +6,7 @@
  *  
  */
 
+
 /**************************************************************
  * Primary variables
  *
@@ -466,6 +467,16 @@ ul.ui-menu {
 }
 
 // Offcanvas -------------------------------------------------
+
+#offcanvas-toggle {
+  cursor: pointer;
+  > i {
+    color: @reno-masthead-icon-color;
+  }
+  &:hover > i {
+    color: @reno-masthead-link-color;
+  }
+}
 
 #offcanvas-nav {
   color: @reno-offcanvas-text-color;

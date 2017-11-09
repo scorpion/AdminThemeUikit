@@ -1,10 +1,59 @@
-/*! UIkit 3.0.0-beta.30 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define('uikitlightbox', factory) :
 	(global.UIkitLightbox = factory());
 }(this, (function () { 'use strict';
+
+var Animations = function (UIkit) {
+
+    var ref = UIkit.util;
+    var css = ref.css;
+
+    var Animations = {
+
+        slide: {
+
+            show: function show(dir) {
+                return [
+                    {transform: translate(dir * -100)},
+                    {transform: translate()}
+                ];
+            },
+
+            percent: function percent(current) {
+                return Animations.translated(current);
+            },
+
+            translate: function translate$1(percent, dir) {
+                return [
+                    {transform: translate(dir * -100 * percent)},
+                    {transform: translate(dir * 100 * (1 - percent))}
+                ];
+            }
+
+        },
+
+        translated: function translated(el) {
+            return Math.abs(css(el, 'transform').split(',')[4] / el.offsetWidth)
+        }
+
+    };
+
+    return Animations;
+
+};
+
+function translate(value) {
+    if ( value === void 0 ) value = 0;
+
+    return ("translate(" + value + (value ? '%' : '') + ", 0)"); // currently not translate3d to support IE, translate3d within translate3d does not work while transitioning
+}
+
+function scale3d(value) {
+    return ("scale3d(" + value + ", " + value + ", 1)");
+}
 
 function plugin$2(UIkit) {
 
@@ -13,52 +62,91 @@ function plugin$2(UIkit) {
     }
 
     var ref = UIkit.util;
+    var $$ = ref.$$;
     var $ = ref.$;
+    var addClass = ref.addClass;
+    var assign = ref.assign;
+    var createEvent = ref.createEvent;
+    var css = ref.css;
+    var data = ref.data;
     var doc = ref.doc;
+    var endsWith = ref.endsWith;
     var fastdom = ref.fastdom;
     var getIndex = ref.getIndex;
+    var getPos = ref.getPos;
+    var hasClass = ref.hasClass;
+    var index = ref.index;
+    var isTouch = ref.isTouch;
     var noop = ref.noop;
-    var on = ref.on;
     var off = ref.off;
+    var on = ref.on;
     var pointerDown = ref.pointerDown;
     var pointerMove = ref.pointerMove;
     var pointerUp = ref.pointerUp;
     var preventClick = ref.preventClick;
-    var promise = ref.promise;
-    var requestAnimationFrame = ref.requestAnimationFrame;
+    var Promise = ref.Promise;
+    var removeClass = ref.removeClass;
+    var toggleClass = ref.toggleClass;
+    var toNodes = ref.toNodes;
     var Transition = ref.Transition;
+    var trigger = ref.trigger;
+    var win = ref.win;
+
+    var abs = Math.abs;
 
     UIkit.mixin.slideshow = {
 
         attrs: true,
 
         props: {
-            autoplay: Number,
+            autoplay: Boolean,
+            autoplayInterval: Number,
+            pauseOnHover: Boolean,
             animation: String,
-            transition: String,
-            duration: Number
+            easing: String,
+            velocity: Number
         },
 
         defaults: {
-            autoplay: 0,
+            autoplay: false,
+            autoplayInterval: 7000,
+            pauseOnHover: true,
             animation: 'slide',
-            transition: 'linear',
-            duration: 400,
+            easing: 'ease',
+            velocity: 1,
             index: 0,
             stack: [],
             threshold: 10,
             percent: 0,
-            clsActive: 'uk-active'
+            clsActive: 'uk-active',
+            clsActivated: 'uk-transition-active',
+            initialAnimation: false,
+            Animations: Animations(UIkit)
         },
 
         computed: {
 
-            slides: function slides() {
-                return this.list.children(("." + (this.clsItem)));
+            list: function list(ref, $el) {
+                var selList = ref.selList;
+
+                return $(selList, $el);
             },
 
-            forwardDuration: function forwardDuration() {
-                return this.duration / 4;
+            slides: function slides() {
+                return toNodes(this.list.children);
+            },
+
+            animation: function animation(ref) {
+                var animation = ref.animation;
+                var Animations$$1 = ref.Animations;
+
+                return assign(animation in Animations$$1 ? Animations$$1[animation] : Animations$$1.slide, {name: animation});
+            },
+
+            duration: function duration(ref, $el) {
+                var velocity = ref.velocity;
+
+                return speedUp($el.offsetWidth / velocity);
             }
 
         },
@@ -70,10 +158,10 @@ function plugin$2(UIkit) {
                 var fn = this$1[key];
                 this$1[key] = function (e) {
 
-                    e = e.originalEvent || e;
+                    var pos = getPos(e).x;
 
-                    this$1.prevPos = this$1.pos;
-                    this$1.pos = (e.touches && e.touches[0] || e).pageX;
+                    this$1.prevPos = pos !== this$1.pos ? this$1.pos : this$1.prevPos;
+                    this$1.pos = pos;
 
                     fn(e);
                 };
@@ -84,6 +172,24 @@ function plugin$2(UIkit) {
             this.startAutoplay();
         },
 
+        disconnected: function disconnected() {
+            this.stopAutoplay();
+        },
+
+        update: [
+
+            {
+
+                read: function read() {
+                    delete this._computeds.duration;
+                },
+
+                events: ['load', 'resize']
+
+            }
+
+        ],
+
         events: [
 
             {
@@ -91,12 +197,13 @@ function plugin$2(UIkit) {
                 name: 'click',
 
                 delegate: function delegate() {
-                    return ("[" + (this.attrItem) + "]");
+                    return ("[" + (this.attrItem) + "],[data-" + (this.attrItem) + "]");
                 },
 
                 handler: function handler(e) {
                     e.preventDefault();
-                    this.show($(e.currentTarget).blur().attr(this.attrItem));
+                    e.current.blur();
+                    this.show(data(e.current, this.attrItem));
                 }
 
             },
@@ -106,19 +213,42 @@ function plugin$2(UIkit) {
                 name: pointerDown,
 
                 delegate: function delegate() {
-                    return ("." + (this.clsItem));
+                    return ((this.selList) + " > *");
                 },
 
-                handler: 'start'
+                handler: function handler(e) {
+                    if (isTouch(e) || !hasTextNodesOnly(e.target)) {
+                        this.start(e);
+                    }
+                }
+
+            },
+
+            {
+
+                name: 'visibilitychange',
+
+                el: doc,
+
+                handler: function handler() {
+                    if (doc.hidden) {
+                        this.stopAutoplay();
+                    } else  {
+                        this.startAutoplay();
+                    }
+                }
+
             },
 
             {
 
                 name: pointerDown,
                 handler: 'stopAutoplay'
+
             },
 
             {
+
                 name: 'mouseenter',
 
                 filter: function filter() {
@@ -128,9 +258,11 @@ function plugin$2(UIkit) {
                 handler: function handler() {
                     this.isHovering = true;
                 }
+
             },
 
             {
+
                 name: 'mouseleave',
 
                 filter: function filter() {
@@ -140,7 +272,110 @@ function plugin$2(UIkit) {
                 handler: function handler() {
                     this.isHovering = false;
                 }
-            } ],
+
+            },
+
+            {
+
+                name: 'beforeitemshow',
+
+                self: true,
+
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
+                    var target = ref.target;
+
+                    addClass(target, this.clsActive);
+                }
+
+            },
+
+            {
+
+                name: 'itemshown',
+
+                self: true,
+
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
+                    var target = ref.target;
+
+                    addClass(target, this.clsActivated);
+                }
+
+            },
+
+            {
+
+                name: 'itemshow itemhide',
+
+                self: true,
+
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
+                    var type = ref.type;
+                    var target = ref.target;
+
+                    toggleClass($$(("[" + (this.attrItem) + "=\"" + (index(target)) + "\"],[data-" + (this.attrItem) + "=\"" + (index(target)) + "\"]"), this.$el), this.clsActive, endsWith(type, 'show'));
+                }
+
+            },
+
+            {
+
+                name: 'itemhidden',
+
+                self: true,
+
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
+                    var target = ref.target;
+
+                    removeClass(target, this.clsActive);
+                    removeClass(target, this.clsActivated);
+                }
+
+            },
+
+            {
+
+                name: 'itemshow itemhide itemshown itemhidden',
+
+                self: true,
+
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
+                    var target = ref.target;
+
+                    UIkit.update(null, target);
+                }
+
+            },
+
+            {
+                name: 'dragstart',
+
+                handler: function handler(e) {
+                    e.preventDefault();
+                }
+            }
+
+        ],
 
         methods: {
 
@@ -150,34 +385,38 @@ function plugin$2(UIkit) {
                     return;
                 }
 
-                e.preventDefault();
+                if (this._animation && this._animation.animation !== this.animation) {
+                    return;
+                }
 
                 var percent = 0;
                 if (this.stack.length) {
 
-                    this.percent = this._animation.percent();
+                    var ref = this._animation;
+                    var dir = ref.dir;
+                    var getPercent = ref.percent;
+                    var cancel = ref.cancel;
+                    var translate$$1 = ref.translate;
 
-                    var dir = this._animation.dir;
-                    percent = this.percent * dir;
+                    percent = getPercent() * dir;
+
+                    this.percent = abs(percent) * -dir;
 
                     this.stack.splice(0, this.stack.length);
 
-                    this._animation.cancel();
-                    this._animation.translate(Math.abs(percent));
+                    cancel();
+                    translate$$1(abs(percent));
 
                     this.index = this.getIndex(this.index - dir);
-                    this.touching = true;
+                    this.dragging = true;
+
                 }
 
-                on(doc, pointerMove, this.move, true);
+                this.unbindMove = on(doc, pointerMove, this.move, {capture: true, passive: false});
+                on(win, 'scroll', this.unbindMove);
                 on(doc, pointerUp, this.end, true);
 
-                var el = this.slides.eq(this.index);
-
-                this.touch = {
-                    el: el,
-                    start: this.pos + (percent ? el.outerWidth() * percent : 0)
-                };
+                this.drag = this.pos + this.$el.offsetWidth * percent;
 
             },
 
@@ -185,39 +424,40 @@ function plugin$2(UIkit) {
                 var this$1 = this;
 
 
-                e.preventDefault();
+                var distance = this.pos - this.drag;
 
-                var ref = this.touch;
-                var start = ref.start;
-                var el = ref.el;
-
-                if (this.pos === this.prevPos || (!this.touching && Math.abs(start - this.pos) < this.threshold)) {
+                if (this.prevPos === this.pos || !this.dragging && abs(distance) < this.threshold) {
                     return;
                 }
 
-                this.touching = true;
+                e.cancelable && e.preventDefault();
 
-                var percent = (this.pos - start) / el.outerWidth();
+                this.dragging = true;
+
+                var percent = distance / this.$el.offsetWidth;
 
                 if (this.percent === percent) {
                     return;
                 }
 
-                var changed = trunc(this.percent) !== trunc(percent),
+                var prevIndex = this.getIndex(this.index - trunc(this.percent)),
                     index = this.getIndex(this.index - trunc(percent)),
-                    current = this.slides.eq(index),
+                    current = this.slides[index],
                     dir = percent < 0 ? 1 : -1,
                     nextIndex = getIndex(percent < 0 ? 'next' : 'previous', this.slides, index),
-                    next = this.slides.eq(nextIndex);
+                    next = this.slides[nextIndex];
 
-                this.slides.each(function (i, el) { return this$1.$toggleClass(el, this$1.clsActive, i === index || i === nextIndex); });
+                this.slides.forEach(function (el, i) { return toggleClass(el, this$1.clsActive, i === index || i === nextIndex); });
 
-                if (changed && this._animation) {
-                    this._animation.reset();
+                this._animation && this._animation.reset();
+
+                if (index !== prevIndex) {
+                    trigger(this.slides[prevIndex], 'itemhide', [this]);
+                    trigger(current, 'itemshow', [this]);
                 }
 
-                this._animation = new Transitioner(this.animation, this.transition, current, next, dir, noop);
-                this._animation.translate(Math.abs(percent % 1));
+                this._animation = new Transitioner(this.animation, this.easing, current, next, dir, noop);
+                this._animation.translate(abs(percent % 1));
 
                 this.percent = percent;
 
@@ -225,36 +465,34 @@ function plugin$2(UIkit) {
                 UIkit.update(null, next);
             },
 
-            end: function end(e) {
+            end: function end() {
 
-                e.preventDefault();
-
-                off(doc, pointerMove, this.move, true);
+                off(win, 'scroll', this.unbindMove);
+                this.unbindMove();
                 off(doc, pointerUp, this.end, true);
 
-                if (this.touching) {
+                if (this.dragging) {
 
                     var percent = this.percent;
 
-                    this.percent = Math.abs(this.percent) % 1;
+                    this.percent = abs(this.percent) % 1;
                     this.index = this.getIndex(this.index - trunc(percent));
 
-                    if (this.percent < 0.2) {
+                    if (this.percent < .1 || percent < 0 === this.pos > this.prevPos) {
                         this.index = this.getIndex(percent > 0 ? 'previous' : 'next');
                         this.percent = 1 - this.percent;
                         percent *= -1;
                     }
 
-                    this.show(percent > 0 ? 'previous': 'next', true);
+                    this._animation && this._animation.reset();
+                    this.show(percent > 0 ? 'previous' : 'next', true);
 
                     preventClick();
 
                 }
 
-                this.pos
-                    = this.prevPos
-                    = this.touch
-                    = this.touching
+                this.drag
+                    = this.dragging
                     = this.percent
                     = null;
 
@@ -265,7 +503,7 @@ function plugin$2(UIkit) {
                 if ( force === void 0 ) force = false;
 
 
-                if (!force && this.touch) {
+                if (!force && this.drag) {
                     return;
                 }
 
@@ -274,70 +512,88 @@ function plugin$2(UIkit) {
                 if (!force && this.stack.length > 1) {
 
                     if (this.stack.length === 2) {
-                        this._animation.forward(this.forwardDuration);
+                        this._animation.forward(250);
                     }
 
                     return;
                 }
 
-                var hasPrev = this.slides.hasClass('uk-active'),
-                    dir = index === 'next'
-                            ? 1
-                            : index === 'previous'
-                                ? -1
-                                : index < this.index
-                                    ? -1
-                                    : 1;
+                var prevIndex = this.index,
+                    nextIndex = this.getIndex(index),
+                    prev = hasClass(this.slides, 'uk-active') && this.slides[prevIndex],
+                    next = this.slides[nextIndex];
 
-                index = this.getIndex(index);
-
-                if (hasPrev && index === this.index) {
+                if (prev === next) {
                     this.stack[force ? 'shift' : 'pop']();
                     return;
                 }
 
-                var prev = hasPrev && this.slides.eq(this.index),
-                    next = this.slides.eq(index);
+                prev && trigger(prev, 'beforeitemhide', [this]);
+                trigger(next, 'beforeitemshow', [this]);
 
-                this.$el.trigger('beforeitemshow', [this, next]);
-                prev && this.$el.trigger('beforeitemhide', [this, prev]);
+                this.index = nextIndex;
 
-                this.index = index;
+                var done = function () {
 
-                this.$addClass(next, this.clsActive);
+                    prev && trigger(prev, 'itemhidden', [this$1]);
+                    trigger(next, 'itemshown', [this$1]);
 
-                this._animation = new Transitioner(!prev ? 'scale' : this.animation, this.transition, prev || next, next, dir, function () {
+                    fastdom.mutate(function () {
+                        this$1.stack.shift();
+                        if (this$1.stack.length) {
+                            this$1.show(this$1.stack.shift(), true);
+                        } else {
+                            this$1._animation = null;
+                        }
+                    });
+                };
 
-                    prev && this$1.$removeClass(prev, this$1.clsActive);
+                if (prev || this.initialAnimation) {
 
-                    this$1.stack.shift();
-                    if (this$1.stack.length) {
-                        requestAnimationFrame(function () { return this$1.show(this$1.stack.shift(), true); });
-                    } else {
-                        this$1._animation = null;
-                    }
+                    this._show(
+                        !prev ? this.Animations[this.initialAnimation] : this.animation,
+                        force ? 'cubic-bezier(0.165, 0.840, 0.440, 1.000)' : this.easing,
+                        prev,
+                        next,
+                        getDirection(index, prevIndex),
+                        this.stack.length > 1,
+                        done
+                    );
 
-                    this$1.$el.trigger('itemshown', [this$1, next]);
-                    UIkit.update(null, next);
-
-                    if (prev) {
-                        this$1.$el.trigger('itemhidden', [this$1, prev]);
-                        UIkit.update(null, prev);
-                    }
-
-                });
-
-                this._animation.show(this.stack.length > 1 ? this.forwardDuration : this.duration, this.percent);
-
-                this.$el.trigger('itemshow', [this, next]);
-
-                if (prev) {
-                    this.$el.trigger('itemhide', [this, prev]);
-                    UIkit.update(null, prev);
                 }
 
-                UIkit.update(null, next);
-                fastdom.flush(); // iOS 10+ will honor the video.play only if called from a gesture handler
+                prev && trigger(prev, 'itemhide', [this]);
+                trigger(next, 'itemshow', [this]);
+
+                if (!prev && !this.initialAnimation) {
+                    done();
+                }
+
+                prev && fastdom.flush(); // iOS 10+ will honor the video.play only if called from a gesture handler
+
+            },
+
+            _show: function _show(animation, easing, prev, next, dir, forward, done) {
+
+                this._animation = new Transitioner(
+                    animation,
+                    easing,
+                    prev,
+                    next,
+                    dir,
+                    done
+                );
+
+                this._animation.show(
+                    prev === next
+                        ? 300
+                        : forward
+                            ? 150
+                            : this.duration,
+                    this.percent,
+                    forward
+                );
+
             },
 
             getIndex: function getIndex$1(index) {
@@ -353,7 +609,11 @@ function plugin$2(UIkit) {
                 this.stopAutoplay();
 
                 if (this.autoplay) {
-                    this.interval = setInterval(function () {!this$1.isHovering && this$1.show('next');}, this.autoplay);
+                    this.interval = setInterval(function () {
+                        if (!(this$1.isHovering && this$1.pauseOnHover) && !this$1.stack.length) {
+                            this$1.show('next');
+                        }
+                    }, this.autoplayInterval);
                 }
 
             },
@@ -368,8 +628,118 @@ function plugin$2(UIkit) {
 
     };
 
-    var diff = 0.2;
-    var Animations = {
+    function Transitioner(animation, easing, current, next, dir, cb) {
+
+        var percent = animation.percent;
+        var translate$$1 = animation.translate;
+        var show = animation.show;
+        var props = show(dir);
+
+        return {
+
+            animation: animation,
+            dir: dir,
+            current: current,
+            next: next,
+
+            show: function show(duration, percent, linear) {
+                var this$1 = this;
+                if ( percent === void 0 ) percent = 0;
+
+
+                var ease = linear ? 'linear' : easing;
+                duration -= Math.round(duration * percent);
+
+                this.translate(percent);
+
+                triggerUpdate(next, 'itemin', {percent: percent, duration: duration, ease: ease, dir: dir});
+                current && triggerUpdate(current, 'itemout', {percent: 1 - percent, duration: duration, ease: ease, dir: dir});
+
+                return Promise.all([
+                    Transition.start(next, props[1], duration, ease),
+                    current && Transition.start(current, props[0], duration, ease)
+                ]).then(function () {
+                    this$1.reset();
+                    cb();
+                }, noop);
+            },
+
+            stop: function stop() {
+                return Transition.stop([next, current]);
+            },
+
+            cancel: function cancel() {
+                Transition.cancel([next, current]);
+            },
+
+            reset: function reset() {
+                for (var prop in props[0]) {
+                    css([next, current], prop, '');
+                }
+            },
+
+            forward: function forward(duration) {
+
+                var percent = this.percent();
+                Transition.cancel([next, current]);
+                this.show(duration, percent, true);
+
+            },
+
+            translate: function translate$1(percent) {
+
+                var props = translate$$1(percent, dir);
+                css(next, props[1]);
+                current && css(current, props[0]);
+                triggerUpdate(next, 'itemtranslatein', {percent: percent, dir: dir});
+                current && triggerUpdate(current, 'itemtranslateout', {percent: 1 - percent, dir: dir});
+            },
+
+            percent: function percent$1() {
+                return percent(current, next, dir);
+            }
+
+        }
+
+    }
+
+    function triggerUpdate(el, type, data) {
+        trigger(el, createEvent(type, false, false, data));
+    }
+
+    // polyfill for Math.trunc (IE)
+    function trunc(x) {
+        return ~~x;
+    }
+
+    function getDirection(index, prevIndex) {
+        return index === 'next'
+            ? 1
+            : index === 'previous'
+                ? -1
+                : index < prevIndex
+                    ? -1
+                    : 1;
+    }
+
+    function speedUp(x) {
+        return .5 * x + 300; // parabola through (400,500; 600,600; 1800,1200)
+    }
+
+    function hasTextNodesOnly(el) {
+        return !el.children.length && el.childNodes.length;
+    }
+
+}
+
+var Animations$1 = function (UIkit) {
+
+    var mixin = UIkit.mixin;
+    var ref = UIkit.util;
+    var assign = ref.assign;
+    var css = ref.css;
+
+    return assign({}, mixin.slideshow.defaults.Animations, {
 
         fade: {
 
@@ -381,35 +751,13 @@ function plugin$2(UIkit) {
             },
 
             percent: function percent(current) {
-                return 1 - current.css('opacity');
+                return 1 - css(current, 'opacity');
             },
 
-            translate: function translate(percent) {
+            translate: function translate$$1(percent) {
                 return [
                     {opacity: 1 - percent},
                     {opacity: percent}
-                ];
-            }
-
-        },
-
-        slide: {
-
-            show: function show(dir) {
-                return [
-                    {transform: ("translate3d(" + (dir * -100) + "%, 0, 0)")},
-                    {transform: 'translate3d(0, 0, 0)'}
-                ];
-            },
-
-            percent: function percent(current) {
-                return Math.abs(current.css('transform').split(',')[4] / current.outerWidth());
-            },
-
-            translate: function translate(percent, dir) {
-                return [
-                    {transform: ("translate3d(" + (dir * -100 * percent) + "%, 0, 0)")},
-                    {transform: ("translate3d(" + (dir * 100 * (1 - percent)) + "%, 0, 0)")}
                 ];
             }
 
@@ -419,160 +767,27 @@ function plugin$2(UIkit) {
 
             show: function show() {
                 return [
-                    {opacity: 0, transform: ("scale3d(" + (1 - diff) + ", " + (1 - diff) + ", 1)")},
-                    {opacity: 1, transform: 'scale3d(1, 1, 1)'}
+                    {opacity: 0, transform: scale3d(1 - .2)},
+                    {opacity: 1, transform: scale3d(1)}
                 ];
             },
 
             percent: function percent(current) {
-                return 1 - current.css('opacity');
+                return 1 - css(current, 'opacity');
             },
 
-            translate: function translate(percent) {
-                var scale1 = 1 - diff * percent,
-                    scale2 = 1 - diff + diff * percent;
-
+            translate: function translate$$1(percent) {
                 return [
-                    {opacity: 1 - percent, transform: ("scale3d(" + scale1 + ", " + scale1 + ", 1)")},
-                    {opacity: percent, transform: ("scale3d(" + scale2 + ", " + scale2 + ", 1)")}
+                    {opacity: 1 - percent, transform: scale3d(1 - .2 * percent)},
+                    {opacity: percent, transform: scale3d(1 - .2 + .2 * percent)}
                 ];
-            }
-
-        },
-
-        swipe: {
-
-            show: function show(dir) {
-
-                if (dir < 0) {
-                    return [
-                        {opacity: 1, transform: "translate3d(100%, 0, 0)", zIndex: 0},
-                        {opacity: 1, transform: "scale3d(1, 1, 1) translate3d(0, 0, 0)", zIndex: -1} ];
-                } else {
-                    return [
-                        {opacity: 0.3, transform: ("scale3d(" + (1 - diff) + ", " + (1 - diff) + ", 1) translate3d(-20%, 0, 0)"), zIndex: -1},
-                        {opacity: 1, transform: 'translate3d(0, 0, 0)', zIndex: 0}
-                    ];
-                }
-
-
-            },
-
-            percent: function percent(current, next, dir) {
-
-                var el = dir < 0 ? current : next,
-                    percent = Math.abs(el.css('transform').split(',')[4] / el.outerWidth());
-
-                return dir < 0 ? percent : 1 - percent;
-            },
-
-            translate: function translate(percent, dir) {
-                var scale;
-
-                if (dir < 0) {
-                    scale = 1 - diff * (1 - percent);
-                    return [
-                        {opacity: 1, transform: ("translate3d(" + (100 * percent) + "%, 0, 0)"), zIndex: 0},
-                        {opacity: 0.3 + 0.7 * percent, transform: ("scale3d(" + scale + ", " + scale + ", 1) translate3d(" + (-20 * (1 - percent)) + "%, 0, 0)"), zIndex: -1} ];
-                } else {
-                    scale = 1 - diff * percent;
-                    return [
-                        {opacity: 1 - 0.7 * percent, transform: ("scale3d(" + scale + ", " + scale + ", 1) translate3d(" + (-20 * percent) + "%, 0, 0)"), zIndex: -1},
-                        {opacity: 1, transform: ("translate3d(" + (100 * (1 - percent)) + "%, 0, 0)"), zIndex: 0}
-                    ];
-                }
-
-            }
-
-        },
-
-    };
-
-    function Transitioner (animation, transition, current, next, dir, cb) {
-
-        animation = animation in Animations ? Animations[animation] : Animations.slide;
-
-        var props = animation.show(dir);
-
-        return {
-
-            dir: dir,
-            current: current,
-            next: next,
-
-            show: function show(duration, percent) {
-                var this$1 = this;
-                if ( percent === void 0 ) percent = 0;
-
-
-                duration -= Math.round(duration * percent);
-
-                this.translate(percent);
-
-                return promise.all([
-                    Transition.start(current, props[0], duration, transition),
-                    Transition.start(next, props[1], duration, transition)
-                ]).then(function () {
-                    this$1.reset();
-                    cb();
-                }, noop);
-            },
-
-            stop: function stop() {
-                return promise.all([
-                    Transition.stop(next),
-                    Transition.stop(current)
-                ]);
-            },
-
-            cancel: function cancel() {
-                return promise.all([
-                    Transition.cancel(next),
-                    Transition.cancel(current)
-                ]);
-            },
-
-            reset: function reset() {
-                for (var prop in props[0]) {
-                    $([next[0], current[0]]).css(prop, '');
-                }
-            },
-
-            forward: function forward(duration) {
-                var this$1 = this;
-
-
-                var percent = this.percent();
-
-                return promise.all([
-                    Transition.cancel(next),
-                    Transition.cancel(current)
-                ]).then(function () { return this$1.show(duration, percent); });
-
-            },
-
-            translate: function translate(percent) {
-
-                var props = animation.translate(percent, dir);
-                current.css(props[0]);
-                next.css(props[1]);
-
-            },
-
-            percent: function percent() {
-                return animation.percent(current, next, dir);
             }
 
         }
 
-    }
+    });
 
-    // polyfill for Math.trunc (IE)
-    function trunc(x) {
-        return ~~x;
-    }
-
-}
+};
 
 function plugin(UIkit) {
 
@@ -585,17 +800,25 @@ function plugin(UIkit) {
     var mixin = UIkit.mixin;
     var util = UIkit.util;
     var $ = util.$;
-    var $trigger = util.$trigger;
-    var Animation = util.Animation;
+    var $$ = util.$$;
+    var addClass = util.addClass;
     var ajax = util.ajax;
+    var append = util.append;
     var assign = util.assign;
+    var attr = util.attr;
+    var css = util.css;
     var doc = util.doc;
-    var docElement = util.docElement;
-    var getData = util.getData;
+    var docEl = util.docEl;
+    var data = util.data;
     var getImage = util.getImage;
+    var html = util.html;
+    var index = util.index;
+    var on = util.on;
     var pointerDown = util.pointerDown;
     var pointerMove = util.pointerMove;
+    var removeClass = util.removeClass;
     var Transition = util.Transition;
+    var trigger = util.trigger;
 
     UIkit.component('lightbox', {
 
@@ -603,24 +826,30 @@ function plugin(UIkit) {
 
         props: {
             animation: String,
-            toggle: String
+            toggle: String,
+            autoplay: Boolean,
+            autoplayInterval: Number,
+            videoAutoplay: Boolean
         },
 
         defaults: {
             animation: undefined,
-            toggle: 'a'
+            toggle: 'a',
+            autoplay: 0,
+            videoAutoplay: false
         },
 
         computed: {
 
-            toggles: function toggles() {
+            toggles: function toggles(ref, $el) {
                 var this$1 = this;
+                var toggle = ref.toggle;
 
-                var toggles = $(this.toggle, this.$el);
+                var toggles = $$(toggle, $el);
 
                 this._changed = !this._toggles
                     || toggles.length !== this._toggles.length
-                    || toggles.toArray().some(function (el, i) { return el !== this$1._toggles.get(i); });
+                    || toggles.some(function (el, i) { return el !== this$1._toggles[i]; });
 
                 return this._toggles = toggles;
             }
@@ -648,7 +877,8 @@ function plugin(UIkit) {
 
                 handler: function handler(e) {
                     e.preventDefault();
-                    this.show(this.toggles.index($(e.currentTarget).blur()));
+                    e.current.blur();
+                    this.show(index(this.toggles, e.current));
                 }
 
             }
@@ -674,16 +904,15 @@ function plugin(UIkit) {
         methods: {
 
             _init: function _init() {
-                return this.panel = this.panel || UIkit.lightboxPanel({
-                        animation: this.animation,
-                        items: this.toggles.toArray().reduce(function (items, el) {
-                            items.push(['href', 'caption', 'type'].reduce(function (obj, attr) {
-                                obj[attr === 'href' ? 'source' : attr] = getData(el, attr);
-                                return obj;
-                            }, {}));
-                            return items;
-                        }, [])
-                    });
+                return this.panel = this.panel || UIkit.lightboxPanel(assign({}, this.$props, {
+                    items: this.toggles.reduce(function (items, el) {
+                        items.push(['href', 'caption', 'type', 'poster'].reduce(function (obj, attr) {
+                            obj[attr === 'href' ? 'source' : attr] = data(el, attr);
+                            return obj;
+                        }, {}));
+                        return items;
+                    }, [])
+                }));
             },
 
             show: function show(index) {
@@ -708,41 +937,35 @@ function plugin(UIkit) {
 
     UIkit.component('lightbox-panel', {
 
-        mixins: [mixin.togglable, mixin.slideshow],
+        mixins: [mixin.container, mixin.togglable, mixin.slideshow],
 
         functional: true,
 
         defaults: {
             preload: 1,
+            videoAutoplay: false,
             delayControls: 3000,
             items: [],
             cls: 'uk-open',
             clsPage: 'uk-lightbox-page',
-            clsItem: 'uk-lightbox-item',
+            selList: '.uk-lightbox-items',
             attrItem: 'uk-lightbox-item',
-            template: " <div class=\"uk-lightbox uk-overflow-hidden\"> <ul class=\"uk-lightbox-items\"></ul> <div class=\"uk-lightbox-toolbar uk-position-top uk-text-right\"> <button class=\"uk-lightbox-toolbar-icon uk-close-large\" type=\"button\" uk-close uk-toggle=\"!.uk-lightbox\"></button> </div> <a class=\"uk-lightbox-button uk-position-center-left uk-position-medium\" href=\"#\" uk-slidenav-previous uk-lightbox-item=\"previous\"></a> <a class=\"uk-lightbox-button uk-position-center-right uk-position-medium\" href=\"#\" uk-slidenav-next uk-lightbox-item=\"next\"></a> <div class=\"uk-lightbox-toolbar uk-lightbox-caption uk-position-bottom uk-text-center\"></div> </div>"
-        },
-
-        computed: {
-
-            container: function container() {
-                return $(this.$props.container === true && UIkit.container || this.$props.container || UIkit.container);
-            }
-
+            initialAnimation: 'scale',
+            pauseOnHover: false,
+            velocity: 2,
+            Animations: Animations$1(UIkit),
+            template: "<div class=\"uk-lightbox uk-overflow-hidden\"> <ul class=\"uk-lightbox-items\"></ul> <div class=\"uk-lightbox-toolbar uk-position-top uk-text-right uk-transition-slide-top uk-transition-opaque\"> <button class=\"uk-lightbox-toolbar-icon uk-close-large\" type=\"button\" uk-close uk-toggle=\"!.uk-lightbox\"></button> </div> <a class=\"uk-lightbox-button uk-position-center-left uk-position-medium uk-transition-fade\" href=\"#\" uk-slidenav-previous uk-lightbox-item=\"previous\"></a> <a class=\"uk-lightbox-button uk-position-center-right uk-position-medium uk-transition-fade\" href=\"#\" uk-slidenav-next uk-lightbox-item=\"next\"></a> <div class=\"uk-lightbox-toolbar uk-lightbox-caption uk-position-bottom uk-text-center uk-transition-slide-bottom uk-transition-opaque\"></div> </div>"
         },
 
         created: function created() {
             var this$1 = this;
 
 
-            this.$mount($(this.template).appendTo(this.container)[0]);
+            this.$mount(append(this.container, this.template));
 
-            this.list = this.$el.find('.uk-lightbox-items');
-            this.toolbars = this.$el.find('.uk-lightbox-toolbar');
-            this.nav = this.$el.find('a[uk-lightbox-item]');
-            this.caption = this.$el.find('.uk-lightbox-caption');
+            this.caption = $('.uk-lightbox-caption', this.$el);
 
-            this.items.forEach(function (el, i) { return this$1.list.append(("<li class=\"" + (this$1.clsItem) + " item-" + i + "\"></li>")); });
+            this.items.forEach(function (el, i) { return append(this$1.list, "<li></li>"); });
 
         },
 
@@ -762,21 +985,8 @@ function plugin(UIkit) {
 
                 self: true,
 
-                handler: function handler(e) {
-                    e.preventDefault();
-                    this.hide();
-                }
-
-            },
-
-            {
-
-                name: 'click',
-
-                self: true,
-
                 delegate: function delegate() {
-                    return ("." + (this.clsItem));
+                    return ((this.selList) + " > *");
                 },
 
                 handler: function handler(e) {
@@ -793,9 +1003,7 @@ function plugin(UIkit) {
                 self: true,
 
                 handler: function handler() {
-
-                    this.$addClass(docElement, this.clsPage);
-
+                    addClass(docEl, this.clsPage);
                 }
             },
 
@@ -805,14 +1013,7 @@ function plugin(UIkit) {
 
                 self: true,
 
-                handler: function handler() {
-
-                    this.$addClass(this.caption, 'uk-animation-slide-bottom');
-                    this.toolbars.attr('hidden', true);
-                    this.nav.attr('hidden', true);
-                    this.showControls();
-
-                }
+                handler: 'showControls'
             },
 
             {
@@ -821,13 +1022,7 @@ function plugin(UIkit) {
 
                 self: true,
 
-                handler: function handler() {
-
-                    this.$removeClass(this.caption, 'uk-animation-slide-bottom');
-                    this.toolbars.attr('hidden', true);
-                    this.nav.attr('hidden', true);
-
-                }
+                handler: 'hideControls'
             },
 
             {
@@ -837,15 +1032,13 @@ function plugin(UIkit) {
                 self: true,
 
                 handler: function handler() {
-
-                    this.$removeClass(docElement, this.clsPage);
-
+                    removeClass(docEl, this.clsPage);
                 }
             },
 
             {
 
-                name: 'keydown',
+                name: 'keyup',
 
                 el: function el() {
                     return doc;
@@ -888,6 +1081,10 @@ function plugin(UIkit) {
 
                 self: true,
 
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
                 handler: function handler() {
                     if (!this.isToggled()) {
                         this.toggleNow(this.$el, true);
@@ -902,16 +1099,23 @@ function plugin(UIkit) {
 
                 self: true,
 
-                handler: function handler() {
+                delegate: function delegate() {
+                    return ((this.selList) + " > *");
+                },
+
+                handler: function handler(ref) {
                     var this$1 = this;
+                    var target = ref.target;
 
 
-                    var caption = this.getItem().caption;
-                    this.caption.toggle(!!caption).html(caption);
+                    var i = index(target),
+                        caption = this.getItem(i).caption;
+                        css(this.caption, 'display', caption ? '' : 'none');
+                        html(this.caption, caption);
 
-                    for (var i = 0; i <= this.preload; i++) {
-                        this$1.loadItem(this$1.getIndex(this$1.index + i));
-                        this$1.loadItem(this$1.getIndex(this$1.index - i));
+                    for (var j = 0; j <= this.preload; j++) {
+                        this$1.loadItem(this$1.getIndex(i + j));
+                        this$1.loadItem(this$1.getIndex(i - j));
                     }
 
                 }
@@ -947,10 +1151,14 @@ function plugin(UIkit) {
                     // Video
                     } else if (type === 'video' || source.match(/\.(mp4|webm|ogv)$/i)) {
 
-                        var video = $('<video controls playsinline uk-video></video>')
-                            .on('loadedmetadata', function () { return this$1.setItem(item, video.attr({width: video[0].videoWidth, height: video[0].videoHeight})); })
-                            .on('error', function () { return this$1.setError(item); })
-                            .attr('src', source);
+                        var video = $(("<video controls playsinline" + (item.poster ? (" poster=\"" + (item.poster) + "\"") : '') + " uk-video=\"autoplay: " + (this.videoAutoplay) + "\"></video>"));
+                        attr(video, 'src', source);
+
+                        on(video, 'error', function () { return this$1.setError(item); });
+                        on(video, 'loadedmetadata', function () {
+                            attr(video, {width: video.videoWidth, height: video.videoHeight});
+                            this$1.setItem(item, video);
+                        });
 
                     // Iframe
                     } else if (type === 'iframe') {
@@ -965,19 +1173,27 @@ function plugin(UIkit) {
                                 if ( width === void 0 ) width = 640;
                                 if ( height === void 0 ) height = 450;
 
-                                return this$1.setItem(item, getIframe(("//www.youtube.com/embed/" + id), width, height));
+                                return this$1.setItem(item, getIframe(("//www.youtube.com/embed/" + id), width, height, this$1.videoAutoplay));
                         };
 
                         getImage(("//img.youtube.com/vi/" + id + "/maxresdefault.jpg")).then(
-                            function (img) {
+                            function (ref) {
+                                var width = ref.width;
+                                var height = ref.height;
+
                                 //youtube default 404 thumb, fall back to lowres
-                                if (img.width === 120 && img.height === 90) {
+                                if (width === 120 && height === 90) {
                                     getImage(("//img.youtube.com/vi/" + id + "/0.jpg")).then(
-                                        function (img) { return setIframe(img.width, img.height); },
+                                        function (ref) {
+                                            var width = ref.width;
+                                            var height = ref.height;
+
+                                            return setIframe(width, height);
+                                    },
                                         setIframe
                                     );
                                 } else {
-                                    setIframe(img.width, img.height);
+                                    setIframe(width, height);
                                 }
                             },
                             setIframe
@@ -986,21 +1202,17 @@ function plugin(UIkit) {
                     // Vimeo
                     } else if (matches = source.match(/(\/\/.*?)vimeo\.[a-z]+\/([0-9]+).*?/)) {
 
-                        ajax({type: 'GET', url: ("//vimeo.com/api/oembed.json?url=" + (encodeURI(source))), jsonp: 'callback', dataType: 'jsonp'})
+                        ajax(("//vimeo.com/api/oembed.json?maxwidth=1920&url=" + (encodeURI(source))), {responseType: 'json'})
                             .then(function (ref) {
-                                var height = ref.height;
-                                var width = ref.width;
+                                    var ref_response = ref.response;
+                                    var height = ref_response.height;
+                                    var width = ref_response.width;
 
-                                return this$1.setItem(item, getIframe(("//player.vimeo.com/video/" + (matches[2])), width, height));
-                        });
-
-                    } else {
-
-                        return;
+                                    return this$1.setItem(item, getIframe(("//player.vimeo.com/video/" + (matches[2])), width, height, this$1.videoAutoplay));
+                        }
+                            );
 
                     }
-
-                    return true;
 
                 }
 
@@ -1020,9 +1232,8 @@ function plugin(UIkit) {
                     this.toggleNow(this.$el, false);
                 }
 
-                this.slides
-                    .removeClass(this.clsActive)
-                    .each(function (_, el) { return Transition.stop(el); });
+                removeClass(this.slides, this.clsActive);
+                Transition.stop(this.slides);
 
                 delete this.index;
                 delete this.percent;
@@ -1040,9 +1251,7 @@ function plugin(UIkit) {
                     return;
                 }
 
-                if (!$trigger(this.$el, 'itemload', [item], true).result) {
-                    this.setError(item);
-                }
+                trigger(this.$el, 'itemload', [item]);
             },
 
             getItem: function getItem(index) {
@@ -1053,8 +1262,8 @@ function plugin(UIkit) {
 
             setItem: function setItem(item, content) {
                 assign(item, {content: content});
-                var el = this.slides.eq(this.items.indexOf(item)).html(content);
-                this.$el.trigger('itemloaded', [this, el]);
+                var el = html(this.slides[this.items.indexOf(item)], content);
+                trigger(this.$el, 'itemloaded', [this, el]);
                 UIkit.update(null, el);
             },
 
@@ -1067,48 +1276,22 @@ function plugin(UIkit) {
                 clearTimeout(this.controlsTimer);
                 this.controlsTimer = setTimeout(this.hideControls, this.delayControls);
 
-                if (!this.toolbars.attr('hidden')) {
-                    return;
-                }
+                attr($$(("[" + (this.attrItem) + "],[data-" + (this.attrItem) + "]"), this.$el), 'hidden', this.items.length < 2 ? '' : null);
 
-                animate(this.toolbars.eq(0), 'uk-animation-slide-top');
-                animate(this.toolbars.eq(1), 'uk-animation-slide-bottom');
-
-                this.nav.attr('hidden', this.items.length <= 1);
-
-                if (this.items.length > 1) {
-                    animate(this.nav, 'uk-animation-fade');
-                }
+                addClass(this.$el, 'uk-active uk-transition-active');
 
             },
 
             hideControls: function hideControls() {
-
-                if (this.toolbars.attr('hidden')) {
-                    return;
-                }
-
-                animate(this.toolbars.eq(0), 'uk-animation-slide-top', 'out');
-                animate(this.toolbars.eq(1), 'uk-animation-slide-bottom', 'out');
-
-                if (this.items.length > 1) {
-                    animate(this.nav, 'uk-animation-fade', 'out');
-                }
-
+                removeClass(this.$el, 'uk-active uk-transition-active');
             }
 
         }
 
     });
 
-    function animate(el, animation, dir) {
-        if ( dir === void 0 ) dir = 'in';
-
-        el.each(function (i) { return Animation[dir](el.eq(i).attr('hidden', false), animation).then(function () { dir === 'out' && el.eq(i).attr('hidden', true);}); });
-    }
-
-    function getIframe(src, width, height) {
-        return ("<iframe src=\"" + src + "\" width=\"" + width + "\" height=\"" + height + "\" style=\"max-width: 100%; box-sizing: border-box;\" uk-video uk-responsive></iframe>");
+    function getIframe(src, width, height, autoplay) {
+        return ("<iframe src=\"" + src + "\" width=\"" + width + "\" height=\"" + height + "\" style=\"max-width: 100%; box-sizing: border-box;\" frameborder=\"0\" allowfullscreen uk-video=\"autoplay: " + autoplay + "\" uk-responsive></iframe>");
     }
 
 }

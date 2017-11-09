@@ -9,8 +9,9 @@
 .uk-transition-fade,
 [class*='uk-transition-scale'],
 [class*='uk-transition-slide'] {
-  transition-duration: 0.3s;
-  transition-timing-function: ease-out;
+  -webkit-transition: 0.3s ease-out;
+  transition: 0.3s ease-out;
+  -webkit-transition-property: opacity, transform, filter;
   transition-property: opacity, transform, filter;
 }
 /*
@@ -20,7 +21,8 @@
   opacity: 0;
 }
 .uk-transition-toggle:hover [class*='uk-transition-fade'],
-.uk-transition-toggle.uk-hover [class*='uk-transition-fade'] {
+.uk-transition-toggle.uk-hover [class*='uk-transition-fade'],
+.uk-transition-active.uk-active [class*='uk-transition-fade'] {
   opacity: 1;
 }
 /*
@@ -34,18 +36,20 @@
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
 }
-.uk-transition-toggle:hover .uk-transition-scale-up,
-.uk-transition-toggle.uk-hover .uk-transition-scale-up {
-  opacity: 1;
-  -webkit-transform: scale3d(1.1, 1.1, 1);
-  transform: scale3d(1.1, 1.1, 1);
-}
 .uk-transition-scale-down {
   -webkit-transform: scale3d(1.1, 1.1, 1);
   transform: scale3d(1.1, 1.1, 1);
 }
+.uk-transition-toggle:hover .uk-transition-scale-up,
+.uk-transition-toggle.uk-hover .uk-transition-scale-up,
+.uk-transition-active.uk-active .uk-transition-scale-up {
+  opacity: 1;
+  -webkit-transform: scale3d(1.1, 1.1, 1);
+  transform: scale3d(1.1, 1.1, 1);
+}
 .uk-transition-toggle:hover .uk-transition-scale-down,
-.uk-transition-toggle.uk-hover .uk-transition-scale-down {
+.uk-transition-toggle.uk-hover .uk-transition-scale-down,
+.uk-transition-active.uk-active .uk-transition-scale-down {
   opacity: 1;
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
@@ -106,7 +110,8 @@
 }
 /* Hover */
 .uk-transition-toggle:hover [class*='uk-transition-slide'],
-.uk-transition-toggle.uk-hover [class*='uk-transition-slide'] {
+.uk-transition-toggle.uk-hover [class*='uk-transition-slide'],
+.uk-transition-active.uk-active [class*='uk-transition-slide'] {
   opacity: 1;
   -webkit-transform: translateX(0) translateY(0);
   transform: translateX(0) translateY(0);

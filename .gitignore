@@ -1,6 +1,7 @@
 /.styles
 /bak
 .DS_Store
+/COPY.sh
 /.idea
 /DEVELOP.txt
 /uikit/node_modules

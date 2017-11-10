@@ -12,8 +12,8 @@ if(!defined("PROCESSWIRE")) die();
 ?>
 <div id='pw-mastheads'>
 	<header id='pw-masthead-mobile' class='pw-masthead uk-hidden uk-background-muted'>
-		<div class='pw-container uk-container uk-container-expand'>
-				<a href='<?php echo $config->urls->admin; ?>' class='pw-logo-link'>
+		<div class='pw-container uk-container uk-container-expand<?php if(!$adminTheme->isLoggedIn) echo ' uk-text-center'; ?>'>
+				<a href='<?php echo $adminTheme->isLoggedIn ? $config->urls->admin : $config->urls->root; ?>' class='pw-logo-link'>
 					<?php echo $adminTheme->getLogo(); ?>
 				</a>
 		</div>	
@@ -22,7 +22,7 @@ if(!defined("PROCESSWIRE")) die();
 		<div class='pw-container uk-container uk-container-expand'>
 			<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
 				<div class="uk-navbar-left">
-					<a class="pw-logo-link uk-logo uk-margin-right" href='<?php echo $config->urls->admin; ?>'>
+					<a class="pw-logo-link uk-logo uk-margin-right" href='<?php echo $adminTheme->isLoggedIn ? $config->urls->admin : $config->urls->root; ?>'>
 						<?php echo $adminTheme->getLogo(); ?>
 					</a>
 					<?php if($adminTheme->isLoggedIn): ?>
@@ -46,13 +46,6 @@ if(!defined("PROCESSWIRE")) die();
 									</a>
 								</li>
 								<?php endif; ?>
-								<!--
-								<li>	
-									<a target='_top' href='<?php echo $urls->admin; ?>?admin_layout=sidenav'>
-										<?php echo $adminTheme->renderNavIcon('indent') . __('Enable sidebars'); ?>
-									</a>
-								</li>
-								-->
 								<?php echo $adminTheme->renderUserNavItems(); ?>
 							</ul>
 						</li>

@@ -15335,7 +15335,7 @@ table.AdminDataTable .Inputfields .Inputfield .InputfieldContent {
 .InputfieldImage:not(.InputfieldStateCollapsed).InputfieldImageEditAll .InputfieldContent .gridImage--delete .ImageData .InputfieldImageEdit__name {
   margin: 5px 0 0 0;
 }
-.InputfieldImage:not(.InputfieldStateCollapsed) .InputfieldImageEdit__core label:not(.pw-hidden) {
+.InputfieldImage:not(.InputfieldStateCollapsed) .InputfieldImageEdit__core label:not(.pw-hidden):not(.LanguageSupportLabel) {
   display: block;
 }
 .InputfieldImage:not(.InputfieldStateCollapsed) .InputfieldImageEdit__core input {

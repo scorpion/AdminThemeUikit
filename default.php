@@ -37,7 +37,7 @@ if($layout === 'sidenav-init' || $layout === 'sidenav-tree-init') {
 	$adminTheme->addBodyClass("pw-layout-sidenav-side");
 	include($config->paths->adminTemplates . "_sidenav-side.php");
 
-} else if($layout == 'sidenav-tree') {
+} else if($layout === 'sidenav-tree') {
 	// sidenav tree pane
 	$adminTheme->addBodyClass("pw-layout-sidenav-tree");
 	include($config->paths->adminTemplates . "_sidenav-tree.php");

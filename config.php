@@ -176,6 +176,7 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	/** @var InputfieldFieldset $fieldset */
 	$fieldset = $modules->get('InputfieldFieldset');
 	$fieldset->label = __('Navigation');
+	$fieldset->icon = 'navicon';
 	$fieldset->collapsed = Inputfield::collapsedYes;
 	$inputfields->add($fieldset); 
 

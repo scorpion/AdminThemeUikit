@@ -7,18 +7,37 @@
     padding-left: 0;
     margin: 3px 0;
   }
+  .pw-notice-remove,
   .notice-remove {
     float: right;
     color: @global-color;
+    margin-left: 10px;
   }
-  .uk-alert-primary .notice-remove {
-    color: @text-primary-color;
+  .uk-alert-primary {
+    .notice-remove {
+      color: @text-primary-color;
+    }
   }
-  .uk-alert-warning .notice-remove {
-    color: @text-warning-color;
+  .uk-alert-warning {
+    .notice-remove {
+      color: @text-warning-color;
+    }
   }
-  .uk-alert-danger .notice-remove {
-    color: @text-danger-color;
+  .uk-alert-danger {
+    .notice-remove {
+      color: @text-danger-color;
+    }
+    a {
+      color: @inverse-global-color;
+    }
+  }
+  .pw-notice-group-toggle {
+    font-size: @global-small-font-size;
+    text-transform: uppercase;
+    font-weight: bold;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

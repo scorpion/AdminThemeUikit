@@ -101,7 +101,7 @@
 .Inputfield {
   display: block;
   color: @global-color;
-  // background: @pw-inputfield-background;
+  background: @pw-inputfield-background; // required to avoid doubled outlines on columnWidth fields
   border: none;
   outline: @pw-inputfield-border;
   
@@ -143,6 +143,9 @@
     &.InputfieldMaxWidth {
       width: 100%;
     }
+    &[size] {
+      width: auto;
+    }
   }
   .InputfieldDatetime input.InputfieldDatetimeDatepicker {
     width: auto;
@@ -164,7 +167,10 @@
   textarea:not(.uk-textarea) {
     .uk-textarea();
   }
- 
+  
+  input[size] {
+    width: auto;
+  }
 }
 
 // Inputfield offsets

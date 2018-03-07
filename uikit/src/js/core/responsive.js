@@ -1,4 +1,4 @@
-import { addClass, Dimensions, height, isVisible, width } from '../util/index';
+import {addClass, Dimensions, height, isVisible, width} from '../util/index';
 
 export default function (UIkit) {
 
@@ -13,19 +13,13 @@ export default function (UIkit) {
         update: {
 
             read() {
-
-                this.dim = isVisible(this.$el) && this.width && this.height
+                return isVisible(this.$el) && this.width && this.height
                     ? {width: width(this.$el.parentNode), height: this.height}
                     : false;
-
             },
 
-            write() {
-
-                if (this.dim) {
-                    height(this.$el, Dimensions.contain({height: this.height, width: this.width}, this.dim).height);
-                }
-
+            write(dim) {
+                height(this.$el, Dimensions.contain({height: this.height, width: this.width}, dim).height);
             },
 
             events: ['load', 'resize']

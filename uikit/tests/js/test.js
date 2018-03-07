@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
@@ -6,23 +6,12 @@
 	(factory());
 }(this, (function () { 'use strict';
 
-var storage = window.sessionStorage;
-var key = '_uikit_style';
-var keyinverse = '_uikit_inverse';
-var themes = {};
-var docEl = document.documentElement;
-
-var ref = UIkit.util;
-var addClass = ref.addClass;
-var assign = ref.assign;
-var attr = ref.attr;
-var append = ref.append;
-var css = ref.css;
-var on = ref.on;
-var prepend = ref.prepend;
-var removeClass = ref.removeClass;
-var trigger = ref.trigger;
-var ucfirst = ref.ucfirst;
+/* global UIkit */
+var storage = window.sessionStorage,
+    key = '_uikit_style',
+    keyinverse = '_uikit_inverse',
+    themes = {},
+    docEl = document.documentElement;
 
 // try to load themes.json
 var request = new XMLHttpRequest();
@@ -33,23 +22,27 @@ if (request.status === 200) {
     themes = JSON.parse(request.responseText);
 }
 
-var styles = assign({
+var styles = {
         core: {css: '../dist/css/uikit-core.css'},
         theme: {css: '../dist/css/uikit.css'}
-    }, themes);
-var component = location.pathname.split('/').pop().replace(/.html$/, '');
+    },
+    component = location.pathname.split('/').pop().replace(/.html$/, '');
+
+for (var theme in themes) {
+    styles[theme] = themes[theme];
+}
 
 if (getParam('style') && getParam('style').match(/\.(json|css)$/)) {
     styles.custom = getParam('style');
 }
 
 storage[key] = storage[key] || 'core';
-storage[keyinverse] = storage[keyinverse] || 'default';
+storage[keyinverse] = storage[keyinverse] || '';
 
 var dir = storage._uikit_dir || 'ltr';
 
 // set dir
-attr(docEl, 'dir', dir);
+docEl.setAttribute('dir', dir);
 
 var style = styles[storage[key]] || styles.theme;
 
@@ -57,9 +50,19 @@ var style = styles[storage[key]] || styles.theme;
 document.writeln(("<link rel=\"stylesheet\" href=\"" + (dir !== 'rtl' ? style.css : style.css.replace('.css', '').concat('-rtl.css')) + "\">"));
 
 // add javascript
+document.writeln('<script src="../dist/js/uikit.js"></script>');
 document.writeln(("<script src=\"" + (style.icons ? style.icons : '../dist/js/uikit-icons.js') + "\"></script>"));
 
 window.addEventListener('load', function () { return setTimeout(function () {
+
+    var ref = UIkit.util;
+    var addClass = ref.addClass;
+    var append = ref.append;
+    var css = ref.css;
+    var on = ref.on;
+    var prepend = ref.prepend;
+    var removeClass = ref.removeClass;
+    var ucfirst = ref.ucfirst;
 
     var $body = document.body;
     var $container = prepend($body, '<div class="uk-container"></div>');
@@ -126,6 +129,7 @@ window.addEventListener('load', function () { return setTimeout(function () {
         'search',
         'section',
         'slidenav',
+        'slider',
         'slideshow',
         'sortable',
         'spinner',
@@ -156,7 +160,7 @@ window.addEventListener('load', function () { return setTimeout(function () {
 
     $tests.value = component && (component + ".html");
 
-    prepend($tests, "<option value=\"index.html\">Overview</option>");
+    prepend($tests, '<option value="index.html">Overview</option>');
 
     // Styles
     // ------------------------------
@@ -173,37 +177,44 @@ window.addEventListener('load', function () { return setTimeout(function () {
     // ------------------------------
 
     var variations = {
-        'default': 'Default',
+        '': 'Default',
         'light': 'Dark',
         'dark': 'Light'
     };
 
     Object.keys(variations).forEach(function (name) { return append($inverse, ("<option value=\"" + name + "\">" + (variations[name]) + "</option>")); });
 
-    on($inverse, 'change', function () {
-
-        removeClass($body, 'uk-dark uk-light');
-
-        switch ($inverse.value) {
-            case 'dark':
-                css(docEl, 'background', '#fff');
-                addClass($body, 'uk-dark');
-                break;
-
-            case 'light':
-                css(docEl, 'background', '#222');
-                addClass($body, 'uk-light');
-                break;
-
-            default:
-                css(docEl, 'background', '');
-        }
-
-        storage[keyinverse] = $inverse.value;
-
-    });
     $inverse.value = storage[keyinverse];
-    trigger($inverse, 'change');
+
+    if ($inverse.value) {
+
+        removeClass(document.querySelectorAll('*'), [
+            'uk-navbar-container',
+            'uk-card-default',
+            'uk-card-muted',
+            'uk-card-primary',
+            'uk-card-secondary',
+            'uk-tile-default',
+            'uk-tile-muted',
+            'uk-tile-primary',
+            'uk-tile-secondary',
+            'uk-section-default',
+            'uk-section-muted',
+            'uk-section-primary',
+            'uk-section-secondary',
+            'uk-overlay-default',
+            'uk-overlay-primary'
+        ]);
+
+        css(docEl, 'background', $inverse.value === 'dark' ? '#fff' : '#222');
+        addClass($body, ("uk-" + ($inverse.value)));
+
+    }
+
+    on($inverse, 'change', function () {
+        storage[keyinverse] = $inverse.value;
+        location.reload();
+    });
 
     // RTL
     // ------------------------------
@@ -219,10 +230,10 @@ window.addEventListener('load', function () { return setTimeout(function () {
 
     $rtl.firstElementChild.checked = dir === 'rtl';
 
-    css(docEl, 'padding-top', '');
+    css(docEl, 'paddingTop', '');
 }, 100); });
 
-css(docEl, 'padding-top', '80px');
+docEl.style.paddingTop = '80px';
 
 function getParam(name) {
     var match = new RegExp(("[?&]" + name + "=([^&]*)")).exec(window.location.search);

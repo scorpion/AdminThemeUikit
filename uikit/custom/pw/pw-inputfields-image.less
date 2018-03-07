@@ -60,3 +60,9 @@
   }
 }
 
+@-moz-document url-prefix() {
+  // Firefox only: avoids random outlines elsewhere in the layout when in grid modes
+  .InputfieldImage > .InputfieldContent {
+    overflow: hidden;
+  }
+}

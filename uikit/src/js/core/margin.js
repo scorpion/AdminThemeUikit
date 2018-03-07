@@ -1,4 +1,4 @@
-import { isRtl, isVisible, toggleClass } from '../util/index';
+import {isRtl, isVisible, toggleClass} from '../util/index';
 
 export default function (UIkit) {
 
@@ -16,38 +16,37 @@ export default function (UIkit) {
 
         update: {
 
-            read() {
+            read(data) {
 
-                var items = this.$el.children;
+                const items = this.$el.children;
 
                 if (!items.length || !isVisible(this.$el)) {
-                    this.rows = false;
-                    return;
+                    return data.rows = false;
                 }
 
-                this.stacks = true;
+                data.stacks = true;
 
-                var rows = [[]];
+                const rows = [[]];
 
-                for (var i = 0; i < items.length; i++) {
+                for (let i = 0; i < items.length; i++) {
 
-                    var el = items[i],
-                        dim = el.getBoundingClientRect();
+                    const el = items[i];
+                    const dim = el.getBoundingClientRect();
 
                     if (!dim.height) {
                         continue;
                     }
 
-                    for (var j = rows.length - 1; j >= 0; j--) {
+                    for (let j = rows.length - 1; j >= 0; j--) {
 
-                        var row = rows[j];
+                        const row = rows[j];
 
                         if (!row[0]) {
                             row.push(el);
                             break;
                         }
 
-                        var leftDim = row[0].getBoundingClientRect();
+                        const leftDim = row[0].getBoundingClientRect();
 
                         if (dim.top >= Math.floor(leftDim.bottom)) {
                             rows.push([el]);
@@ -56,7 +55,7 @@ export default function (UIkit) {
 
                         if (Math.floor(dim.bottom) > leftDim.top) {
 
-                            this.stacks = false;
+                            data.stacks = false;
 
                             if (dim.left < leftDim.left && !isRtl) {
                                 row.unshift(el);
@@ -76,18 +75,18 @@ export default function (UIkit) {
 
                 }
 
-                this.rows = rows;
+                data.rows = rows;
 
             },
 
-            write() {
+            write({rows}) {
 
-                this.rows && this.rows.forEach((row, i) =>
+                rows.forEach((row, i) =>
                     row.forEach((el, j) => {
                         toggleClass(el, this.margin, i !== 0);
                         toggleClass(el, this.firstColumn, j === 0);
                     })
-                )
+                );
 
             },
 

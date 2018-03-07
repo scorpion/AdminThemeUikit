@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -7,6 +7,8 @@
 }(this, (function () { 'use strict';
 
 function plugin(UIkit) {
+    var obj;
+
 
     if (plugin.installed) {
         return;
@@ -16,9 +18,8 @@ function plugin(UIkit) {
     var mixin = UIkit.mixin;
     var append = util.append;
     var attr = util.attr;
-    var doc = util.doc;
-    var fastdom = util.fastdom;
     var flipPosition = util.flipPosition;
+    var hasAttr = util.hasAttr;
     var includes = util.includes;
     var isTouch = util.isTouch;
     var isVisible = util.isVisible;
@@ -35,6 +36,8 @@ function plugin(UIkit) {
     UIkit.component('tooltip', {
 
         attrs: true,
+
+        args: 'title',
 
         mixins: [mixin.container, mixin.togglable, mixin.position],
 
@@ -53,14 +56,14 @@ function plugin(UIkit) {
             clsPos: 'uk-tooltip'
         },
 
-        connected: function connected() {
-            var this$1 = this;
-
-            fastdom.mutate(function () { return attr(this$1.$el, {title: null, 'aria-expanded': false}); });
+        beforeConnect: function beforeConnect() {
+            this._hasTitle = hasAttr(this.$el, 'title');
+            attr(this.$el, {title: '', 'aria-expanded': false});
         },
 
         disconnected: function disconnected() {
             this.hide();
+            attr(this.$el, {title: this._hasTitle ? this.title : null, 'aria-expanded': null});
         },
 
         methods: {
@@ -76,7 +79,7 @@ function plugin(UIkit) {
                 actives.forEach(function (active) { return active.hide(); });
                 actives.push(this);
 
-                this._unbind = on(doc, 'click', function (e) { return !within(e.target, this$1.$el) && this$1.hide(); });
+                this._unbind = on(document, 'click', function (e) { return !within(e.target, this$1.$el) && this$1.hide(); });
 
                 clearTimeout(this.showTimer);
 
@@ -107,7 +110,7 @@ function plugin(UIkit) {
 
                 var index = actives.indexOf(this);
 
-                if (!~index || matches(this.$el, 'input') && this.$el === doc.activeElement) {
+                if (!~index || matches(this.$el, 'input') && this.$el === document.activeElement) {
                     return;
                 }
 
@@ -125,22 +128,17 @@ function plugin(UIkit) {
 
         },
 
-        events: ( obj = {
-
-            'blur': 'hide'
-
-        }, obj[("focus " + pointerEnter + " " + pointerDown)] = function (e) {
+        events: ( obj = {}, obj[("focus " + pointerEnter + " " + pointerDown)] = function (e) {
                 if (e.type !== pointerDown || !isTouch(e)) {
                     this.show();
                 }
-            }, obj[pointerLeave] = function (e) {
+            }, obj.blur = 'hide', obj[pointerLeave] = function (e) {
                 if (!isTouch(e)) {
                     this.hide();
                 }
-            }, obj )
+            }, obj)
 
     });
-    var obj;
 
 }
 

@@ -1,4 +1,4 @@
-import { addClass } from '../util/index';
+import {addClass} from '../util/index';
 
 export default {
 
@@ -6,4 +6,4 @@ export default {
         addClass(this.$el, this.$name);
     }
 
-}
+};

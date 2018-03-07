@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -14,7 +14,6 @@ function plugin(UIkit) {
 
     var ref = UIkit.util;
     var $ = ref.$;
-    var doc = ref.doc;
     var empty = ref.empty;
     var html = ref.html;
 
@@ -91,12 +90,12 @@ function plugin(UIkit) {
 
                 name: 'visibilitychange',
 
-                el: doc,
+                el: document,
 
                 handler: function handler() {
-                    if (doc.hidden) {
+                    if (document.hidden) {
                         this.stop();
-                    } else  {
+                    } else {
                         this.start();
                     }
                 }

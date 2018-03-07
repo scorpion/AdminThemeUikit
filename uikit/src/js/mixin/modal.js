@@ -1,16 +1,16 @@
-import { $, addClass, append, css, doc, docEl, hasClass, on, once, Promise, removeClass, requestAnimationFrame, toMs, transitionend, width, win, within } from '../util/index';
+import {$, addClass, append, css, hasClass, on, once, Promise, removeClass, toMs, width, within} from '../util/index';
 import Class from './class';
 import Container from './container';
 import Togglable from './togglable';
 
-var active;
+let active;
 
 export default {
 
     mixins: [Class, Container, Togglable],
 
     props: {
-        clsPanel: String,
+        selPanel: String,
         selClose: String,
         escClose: Boolean,
         bgClose: Boolean,
@@ -27,8 +27,8 @@ export default {
 
     computed: {
 
-        panel({clsPanel}, $el) {
-            return $(`.${clsPanel}`, $el);
+        panel({selPanel}, $el) {
+            return $(selPanel, $el);
         },
 
         transitionElement() {
@@ -77,6 +77,50 @@ export default {
         },
 
         {
+            name: 'beforeshow',
+
+            self: true,
+
+            handler(e) {
+
+                const prev = active && active !== this && active;
+
+                active = this;
+
+                if (prev) {
+                    if (this.stack) {
+                        this.prev = prev;
+                    } else {
+                        prev.hide().then(this.show);
+                        e.preventDefault();
+                        return;
+                    }
+                }
+
+                registerEvents();
+
+            }
+
+        },
+
+        {
+            name: 'beforehide',
+
+            self: true,
+
+            handler() {
+
+                active = active && active !== this && active || this.prev;
+
+                if (!active) {
+                    deregisterEvents();
+                }
+
+            }
+
+        },
+
+        {
 
             name: 'show',
 
@@ -84,12 +128,12 @@ export default {
 
             handler() {
 
-                if (!hasClass(docEl, this.clsPage)) {
-                    this.scrollbarWidth = width(win) - docEl.offsetWidth;
-                    css(doc.body, 'overflowY', this.scrollbarWidth && this.overlay ? 'scroll' : '');
+                if (!hasClass(document.documentElement, this.clsPage)) {
+                    this.scrollbarWidth = width(window) - width(document);
+                    css(document.body, 'overflowY', this.scrollbarWidth && this.overlay ? 'scroll' : '');
                 }
 
-                addClass(docEl, this.clsPage);
+                addClass(document.documentElement, this.clsPage);
 
             }
 
@@ -103,7 +147,7 @@ export default {
 
             handler() {
 
-                var found, prev = this.prev;
+                let found, {prev} = this;
 
                 while (prev) {
 
@@ -117,11 +161,11 @@ export default {
                 }
 
                 if (!found) {
-                    removeClass(docEl, this.clsPage);
+                    removeClass(document.documentElement, this.clsPage);
 
                 }
 
-                !this.prev && css(doc.body, 'overflowY', '');
+                !this.prev && css(document.body, 'overflowY', '');
             }
 
         }
@@ -142,40 +186,16 @@ export default {
 
             if (this.container && this.$el.parentNode !== this.container) {
                 append(this.container, this.$el);
-                this._callConnected()
+                this._callConnected();
             }
-
-            var prev = active && active !== this && active;
-
-            active = this;
-
-            if (prev) {
-                if (this.stack) {
-                    this.prev = prev;
-                } else {
-                    prev.hide().then(this.show);
-                    return;
-                }
-            }
-
-            registerEvents();
 
             return this.toggleNow(this.$el, true);
         },
 
         hide() {
-
-            if (!this.isToggled()) {
-                return;
+            if (this.isToggled()) {
+                return this.toggleNow(this.$el, false);
             }
-
-            active = active && active !== this && active || this.prev;
-
-            if (!active) {
-                deregisterEvents();
-            }
-
-            return this.toggleNow(this.$el, false);
         },
 
         getActive() {
@@ -188,7 +208,7 @@ export default {
                     this._toggle(el, show);
 
                     if (this.transitionDuration) {
-                        once(this.transitionElement, transitionend, resolve, false, e => e.target === this.transitionElement);
+                        once(this.transitionElement, 'transitionend', resolve, false, e => e.target === this.transitionElement);
                     } else {
                         resolve();
                     }
@@ -198,9 +218,9 @@ export default {
 
     }
 
-}
+};
 
-var events;
+let events;
 
 function registerEvents() {
 
@@ -209,12 +229,12 @@ function registerEvents() {
     }
 
     events = [
-        on(docEl, 'click', ({target, defaultPrevented}) => {
-            if (active && active.bgClose && !defaultPrevented && !within(target, active.panel)) {
+        on(document, 'click', ({target, defaultPrevented}) => {
+            if (active && active.bgClose && !defaultPrevented && !within(target, (active.panel || active.$el))) {
                 active.hide();
             }
         }),
-        on(doc, 'keydown', e => {
+        on(document, 'keydown', e => {
             if (e.keyCode === 27 && active && active.escClose) {
                 e.preventDefault();
                 active.hide();

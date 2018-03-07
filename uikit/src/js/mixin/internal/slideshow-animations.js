@@ -1,8 +1,8 @@
 export default function (UIkit) {
 
-    var {css} = UIkit.util;
+    const {css} = UIkit.util;
 
-    var Animations = {
+    const Animations = {
 
         slide: {
 
@@ -27,17 +27,17 @@ export default function (UIkit) {
         },
 
         translated(el) {
-            return Math.abs(css(el, 'transform').split(',')[4] / el.offsetWidth)
+            return Math.abs(css(el, 'transform').split(',')[4] / el.offsetWidth) || 0;
         }
 
     };
 
     return Animations;
 
-};
+}
 
-export function translate(value = 0) {
-    return `translate(${value}${value ? '%' : ''}, 0)`; // currently not translate3d to support IE, translate3d within translate3d does not work while transitioning
+export function translate(value = 0, unit = '%') {
+    return `translateX(${value}${value ? unit : ''})`; // currently not translate3d to support IE, translate3d within translate3d does not work while transitioning
 }
 
 export function scale3d(value) {

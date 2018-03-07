@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -7,6 +7,8 @@
 }(this, (function () { 'use strict';
 
 function plugin(UIkit) {
+    var obj;
+
 
     if (plugin.installed) {
         return;
@@ -14,9 +16,9 @@ function plugin(UIkit) {
 
     var ref = UIkit.util;
     var append = ref.append;
+    var apply = ref.apply;
     var closest = ref.closest;
     var css = ref.css;
-    var each = ref.each;
     var pointerEnter = ref.pointerEnter;
     var pointerLeave = ref.pointerLeave;
     var remove = ref.remove;
@@ -61,7 +63,7 @@ function plugin(UIkit) {
 
             var marginBottom = toFloat(css(this.$el, 'marginBottom'));
             Transition.start(
-                css(this.$el, {opacity: 0, marginTop: -1 * this.$el.offsetHeight, marginBottom: 0}),
+                css(this.$el, {opacity: 0, marginTop: -this.$el.offsetHeight, marginBottom: 0}),
                 {opacity: 1, marginTop: 0, marginBottom: marginBottom}
             ).then(function () {
                 if (this$1.timeout) {
@@ -88,7 +90,7 @@ function plugin(UIkit) {
                 if (this.timeout) {
                     this.timer = setTimeout(this.close, this.timeout);
                 }
-            }, obj ),
+            }, obj),
 
         methods: {
 
@@ -116,7 +118,7 @@ function plugin(UIkit) {
                 } else {
                     Transition.start(this.$el, {
                         opacity: 0,
-                        marginTop: -1 * this.$el.offsetHeight,
+                        marginTop: -this.$el.offsetHeight,
                         marginBottom: 0
                     }).then(removeFn);
                 }
@@ -125,12 +127,12 @@ function plugin(UIkit) {
         }
 
     });
-    var obj;
 
     UIkit.notification.closeAll = function (group, immediate) {
-        each(UIkit.instances, function (component) {
-            if (component.$options.name === 'notification' && (!group || group === component.group)) {
-                component.close(immediate);
+        apply(document.body, function (el) {
+            var notification = UIkit.getComponent(el, 'notification');
+            if (notification && (!group || group === notification.group)) {
+                notification.close(immediate);
             }
         });
     };

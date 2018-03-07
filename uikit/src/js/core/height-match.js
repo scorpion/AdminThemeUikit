@@ -1,4 +1,4 @@
-import { $$, attr, css, isUndefined, isVisible } from '../util/index';
+import {$$, attr, css, isUndefined, isVisible} from '../util/index';
 
 export default function (UIkit) {
 
@@ -28,30 +28,32 @@ export default function (UIkit) {
 
             read() {
 
-                var lastOffset = false;
+                let lastOffset = false;
 
                 css(this.elements, 'minHeight', '');
 
-                this.rows = !this.row
-                    ? [this.match(this.elements)]
-                    : this.elements.reduce((rows, el) => {
+                return {
+                    rows: !this.row
+                        ? [this.match(this.elements)]
+                        : this.elements.reduce((rows, el) => {
 
-                        if (lastOffset !== el.offsetTop) {
-                            rows.push([el]);
-                        } else {
-                            rows[rows.length - 1].push(el);
-                        }
+                            if (lastOffset !== el.offsetTop) {
+                                rows.push([el]);
+                            } else {
+                                rows[rows.length - 1].push(el);
+                            }
 
-                        lastOffset = el.offsetTop;
+                            lastOffset = el.offsetTop;
 
-                        return rows;
+                            return rows;
 
-                    }, []).map(elements => this.match(elements));
+                        }, []).map(elements => this.match(elements))
+                };
             },
 
-            write() {
+            write({rows}) {
 
-                this.rows.forEach(({height, elements}) => css(elements, 'minHeight', height));
+                rows.forEach(({height, elements}) => css(elements, 'minHeight', height));
 
             },
 
@@ -67,12 +69,13 @@ export default function (UIkit) {
                     return {};
                 }
 
-                var max = 0, heights = [];
+                const heights = [];
+                let max = 0;
 
                 elements
                     .forEach(el => {
 
-                        var style, hidden;
+                        let style, hidden;
 
                         if (!isVisible(el)) {
                             style = attr(el, 'style');

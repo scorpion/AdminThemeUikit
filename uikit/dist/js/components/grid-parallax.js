@@ -1,4 +1,4 @@
-/*! UIkit 3.0.0-beta.34 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -13,12 +13,11 @@ function plugin(UIkit) {
     }
 
     var ref = UIkit.util;
-    var $$ = ref.$$;
     var addClass = ref.addClass;
     var css = ref.css;
     var scrolledOver = ref.scrolledOver;
+    var sortBy = ref.sortBy;
     var toFloat = ref.toFloat;
-    var toNodes = ref.toNodes;
 
     UIkit.component('grid-parallax', UIkit.components.grid.extend({
 
@@ -38,12 +37,6 @@ function plugin(UIkit) {
                 var translate = ref.translate;
 
                 return Math.abs(translate);
-            },
-
-            items: function items(ref, $el) {
-                var target = ref.target;
-
-                return target ? $$(target, $el) : toNodes($el.children);
             }
 
         },
@@ -61,13 +54,19 @@ function plugin(UIkit) {
 
             {
 
-                read: function read() {
-                    this.columns = this.rows && this.rows[0] && this.rows[0].length || 0;
-                    this.rows = this.rows && this.rows.map(function (elements) { return sortBy(elements, 'offsetLeft'); });
+                read: function read(ref) {
+                    var rows = ref.rows;
+
+                    return {
+                        columns: rows && rows[0] && rows[0].length || 0,
+                        rows: rows && rows.map(function (elements) { return sortBy(elements, 'offsetLeft'); })
+                    };
                 },
 
-                write: function write() {
-                    css(this.$el, 'marginBottom', this.columns > 1
+                write: function write(ref) {
+                    var columns = ref.columns;
+
+                    css(this.$el, 'marginBottom', columns > 1
                         ? this.translate + toFloat(css(css(this.$el, 'marginBottom', ''), 'marginBottom'))
                         : '');
                 },
@@ -78,20 +77,20 @@ function plugin(UIkit) {
             {
 
                 read: function read() {
-
-                    this.scrolled = scrolledOver(this.$el) * this.translate;
-
+                    return {scrolled: scrolledOver(this.$el) * this.translate};
                 },
 
-                write: function write() {
-                    var this$1 = this;
+                write: function write(ref) {
+                    var rows = ref.rows;
+                    var columns = ref.columns;
+                    var scrolled = ref.scrolled;
 
 
-                    if (!this.rows || this.columns === 1 || !this.scrolled) {
+                    if (!rows || columns === 1 || !scrolled) {
                         return this.reset();
                     }
 
-                    this.rows.forEach(function (row) { return row.forEach(function (el, i) { return css(el, 'transform', ("translateY(" + (i % 2 ? this$1.scrolled : this$1.scrolled / 8) + "px)")); }
+                    rows.forEach(function (row) { return row.forEach(function (el, i) { return css(el, 'transform', ("translateY(" + (i % 2 ? scrolled : scrolled / 8) + "px)")); }
                         ); }
                     );
 
@@ -104,14 +103,14 @@ function plugin(UIkit) {
         methods: {
 
             reset: function reset() {
-                css(this.items, 'transform', '');
+                css(this.$el.children, 'transform', '');
             }
 
         }
 
     }));
 
-    UIkit.component('grid-parallax').options.update.unshift({
+    UIkit.components.gridParallax.options.update.unshift({
 
         read: function read() {
             this.reset();
@@ -120,15 +119,6 @@ function plugin(UIkit) {
         events: ['load', 'resize']
 
     });
-
-    function sortBy(collection, prop) {
-        return collection.sort(function (a, b) { return a[prop] > b[prop]
-                ? 1
-                : b[prop] > a[prop]
-                    ? -1
-                    : 0; }
-        )
-    }
 
 }
 

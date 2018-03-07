@@ -1,4 +1,4 @@
-import { $, $$, addClass, closest, doc, filter, height, isInView, offset, removeClass, trigger, win } from '../util/index';
+import {$, $$, addClass, closest, filter, height, isInView, offset, removeClass, trigger} from '../util/index';
 
 export default function (UIkit) {
 
@@ -50,16 +50,18 @@ export default function (UIkit) {
 
             {
 
-                read() {
+                read(data) {
 
-                    var scroll = win.pageYOffset + this.offset + 1,
-                        max = height(doc) - height(win) + this.offset;
+                    const scroll = window.pageYOffset + this.offset + 1;
+                    const max = height(document) - height(window) + this.offset;
 
-                    this.active = false;
+                    data.active = false;
 
                     this.targets.every((el, i) => {
 
-                        var top = offset(el).top, last = i + 1 === this.targets.length;
+                        const {top} = offset(el);
+                        const last = i + 1 === this.targets.length;
+
                         if (!this.overflow && (i === 0 && top > scroll || last && top + el.offsetTop < scroll)) {
                             return false;
                         }
@@ -69,7 +71,7 @@ export default function (UIkit) {
                         }
 
                         if (scroll >= max) {
-                            for (var j = this.targets.length - 1; j > i; j--) {
+                            for (let j = this.targets.length - 1; j > i; j--) {
                                 if (isInView(this.targets[j])) {
                                     el = this.targets[j];
                                     break;
@@ -77,22 +79,19 @@ export default function (UIkit) {
                             }
                         }
 
-                        return !(this.active = $(filter(this.links, `[href="#${el.id}"]`)));
+                        return !(data.active = $(filter(this.links, `[href="#${el.id}"]`)));
 
                     });
 
                 },
 
-                write() {
+                write({active}) {
 
                     this.links.forEach(el => el.blur());
                     removeClass(this.elements, this.cls);
 
-                    if (this.active) {
-                        trigger(this.$el, 'active', [
-                            this.active,
-                            addClass(this.closest ? closest(this.active, this.closest) : this.active, this.cls)
-                        ]);
+                    if (active) {
+                        trigger(this.$el, 'active', [active, addClass(this.closest ? closest(active, this.closest) : active, this.cls)]);
                     }
 
                 },

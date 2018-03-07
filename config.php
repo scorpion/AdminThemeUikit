@@ -290,6 +290,26 @@ function AdminThemeUikitConfig(AdminTheme $adminTheme, InputfieldWrapper $inputf
 	$f->showIf = 'test_radios=1|2';
 	$f->columnWidth = 35;
 	$inputfields->add($f);
+
+	// These inputfields should appear as a second row
+	$f = $modules->get('InputfieldText');
+	$f->attr('name', 'test_text3');
+	$f->label = 'Test text 3';
+	$f->columnWidth = 35;
+	$inputfields->add($f);
+
+	$f = $modules->get('InputfieldText');
+	$f->attr('name', 'test_text4');
+	$f->label = 'Test text 4';
+	$f->columnWidth = 25;
+	$inputfields->add($f);
+
+	$f = $modules->get('InputfieldText');
+	$f->attr('name', 'test_text5');
+	$f->label = 'Test text 5';
+	//$f->showIf = 'test_radios=3';
+	$f->columnWidth = 75;
+	$inputfields->add($f);
 	*/
 
 }

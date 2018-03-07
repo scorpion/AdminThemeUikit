@@ -1,4 +1,4 @@
-import { $, clamp, doc, height, isString, offset, requestAnimationFrame, trigger, win } from '../util/index';
+import {$, clamp, escape, height, offset, trigger} from '../util/index';
 
 export default function (UIkit) {
 
@@ -18,12 +18,12 @@ export default function (UIkit) {
 
             scrollTo(el) {
 
-                el = el && $(isString(el) ? el.replace(/\//g, '\\/') : el) || doc.body;
+                el = el && $(el) || document.body;
 
-                var target = offset(el).top - this.offset,
-                    docHeight = height(doc),
-                    winHeight = height(win);
+                const docHeight = height(document);
+                const winHeight = height(window);
 
+                let target = offset(el).top - this.offset;
                 if (target + winHeight > docHeight) {
                     target = docHeight - winHeight;
                 }
@@ -32,20 +32,22 @@ export default function (UIkit) {
                     return;
                 }
 
-                var start = Date.now(),
-                    startY = win.pageYOffset,
-                    step = () => {
-                        var currentY = startY + (target - startY) * ease(clamp((Date.now() - start) / this.duration));
+                const start = Date.now();
+                const startY = window.pageYOffset;
+                const step = () => {
 
-                        win.scrollTo(win.pageXOffset, currentY);
+                    const currentY = startY + (target - startY) * ease(clamp((Date.now() - start) / this.duration));
 
-                        // scroll more if we have not reached our destination
-                        if (currentY !== target) {
-                            requestAnimationFrame(step);
-                        } else {
-                            trigger(this.$el, 'scrolled', [this, el])
-                        }
-                    };
+                    window.scrollTo(window.pageXOffset, currentY);
+
+                    // scroll more if we have not reached our destination
+                    if (currentY !== target) {
+                        requestAnimationFrame(step);
+                    } else {
+                        trigger(this.$el, 'scrolled', [this, el]);
+                    }
+
+                };
 
                 step();
 
@@ -62,7 +64,7 @@ export default function (UIkit) {
                 }
 
                 e.preventDefault();
-                this.scrollTo(this.$el.hash);
+                this.scrollTo(escape(this.$el.hash).substr(1));
             }
 
         }

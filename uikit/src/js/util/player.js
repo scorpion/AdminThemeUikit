@@ -1,6 +1,9 @@
-import { assign, attr, includes, isString, once, Promise, toNode, win } from './index';
+import {attr} from './attr';
+import {once} from './event';
+import {Promise} from './promise';
+import {assign, includes, isString, toNode} from './lang';
 
-var id = 0;
+let id = 0;
 
 export class Player {
 
@@ -22,7 +25,7 @@ export class Player {
     }
 
     isYoutube() {
-        return this.isIFrame() && !!this.el.src.match(/\/\/.*?youtube\.[a-z]+\/(watch\?v=[^&\s]+|embed)|youtu\.be\/.*/);
+        return this.isIFrame() && !!this.el.src.match(/\/\/.*?youtube(-nocookie)?\.[a-z]+\/(watch\?v=[^&\s]+|embed)|youtu\.be\/.*/);
     }
 
     isVimeo() {
@@ -35,7 +38,10 @@ export class Player {
             return this.ready;
         }
 
-        var youtube = this.isYoutube(), vimeo = this.isVimeo(), poller;
+        const youtube = this.isYoutube();
+        const vimeo = this.isVimeo();
+
+        let poller;
 
         if (youtube || vimeo) {
 
@@ -43,7 +49,7 @@ export class Player {
 
                 once(this.el, 'load', () => {
                     if (youtube) {
-                        var listener = () => post(this.el, {event: 'listening', id: this.id});
+                        const listener = () => post(this.el, {event: 'listening', id: this.id});
                         poller = setInterval(listener, 100);
                         listener();
                     }
@@ -72,9 +78,11 @@ export class Player {
         }
 
         if (this.isIFrame()) {
-            this.enableApi().then(() => post(this.el, {func: 'playVideo', method: 'play'}))
+            this.enableApi().then(() => post(this.el, {func: 'playVideo', method: 'play'}));
         } else if (this.isHTML5()) {
-            this.el.play();
+            try {
+                this.el.play();
+            } catch (e) {}
         }
     }
 
@@ -85,7 +93,7 @@ export class Player {
         }
 
         if (this.isIFrame()) {
-            this.enableApi().then(() => post(this.el, {func: 'pauseVideo', method: 'pause'}))
+            this.enableApi().then(() => post(this.el, {func: 'pauseVideo', method: 'pause'}));
         } else if (this.isHTML5()) {
             this.el.pause();
         }
@@ -98,7 +106,7 @@ export class Player {
         }
 
         if (this.isIFrame()) {
-            this.enableApi().then(() => post(this.el, {func: 'mute', method: 'setVolume', value: 0}))
+            this.enableApi().then(() => post(this.el, {func: 'mute', method: 'setVolume', value: 0}));
         } else if (this.isHTML5()) {
             this.el.muted = true;
             attr(this.el, 'muted', '');
@@ -118,7 +126,7 @@ function listen(cb) {
 
     return new Promise(resolve => {
 
-        once(win, 'message', (_, data) => resolve(data), false, ({data}) => {
+        once(window, 'message', (_, data) => resolve(data), false, ({data}) => {
 
             if (!data || !isString(data)) {
                 return;

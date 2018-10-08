@@ -611,15 +611,7 @@ class AdminThemeUikitConfigHelper extends Wire {
 		$f->addOption(1, 'Option 1');
 		$f->addOption(2, 'Option 2');
 		$f->addOption(3, 'Option 3');
-		$f->columnWidth = 50;
-		$fieldset->add($f);
-
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'test_texty');
-		$f->label = 'SHOW ME';
-		$f->description = 'Shown only if option 2 is selected.';
 		$f->columnWidth = 25;
-		$f->showIf = 'test_radios=2';
 		$fieldset->add($f);
 
 		/** @var InputfieldCheckbox $f */

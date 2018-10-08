@@ -83,3 +83,18 @@ table.AdminDataTable:not(.uk-table) {
   }
 
 }
+
+.pw-table-resizable {
+  td, th {
+    border-left-style: solid;
+    border-left-color: @table-divider-border;
+    border-left-width: @table-divider-border-width;
+  }
+  td:first-child,
+  th:first-child {
+    border-left: none;
+  }
+  .tablesorter-resizable-handle {
+    margin-left: 37px; // why necessary only in AdminThemeUikit?
+  }
+}

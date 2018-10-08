@@ -70,6 +70,8 @@
 @reno-inputfield-border: 1px solid #d9e1ea;
 @reno-inputfield-input-background: #f0f3f7;
 @reno-inputfield-input-border-color: #b1c3d4 #cbd7e3 #cbd7e3 #cbd7e3;
+@reno-inputfield-select-background: #f0f3f7;
+@reno-inputfield-select-border-color: #cbd7e3;
 @reno-form-radio-checked-background: @reno-muted-text-color-alternate;
 @reno-offcanvas-text-color: @reno-text-color;
 @reno-offcanvas-link-color: @reno-text-color;
@@ -158,7 +160,7 @@
 @pw-inputfield-repeater-background-none: @pw-inputfield-repeater-background;
 @pw-inputfield-color-primary: @reno-primary-headline-color;
 @pw-inputfield-background-primary: lighten(@reno-primary-headline-color, 70%);
-@pw-inputfield-border-primary: 1px solid @pw-inputfield-background-primary;
+// @pw-inputfield-border-primary: 1px solid @pw-inputfield-background-primary;
 @pw-inputfield-color-warning: @reno-warning-color;
 @pw-inputfield-background-warning: lighten(@reno-warning-background, 20%);
 @pw-inputfield-background-danger: lighten(@reno-danger-background, 50%);
@@ -408,6 +410,12 @@
           z-index: 99;
         }
       }
+      & > a.hover:after,
+      & > a:hover:after {
+        // white triangle: hovered only
+        z-index: 200;
+      }
+      
       /*
       &.uk-active > a:not(.hover):not(:hover):after {
         border-color: transparent transparent rgba(255,255,255,0.5) transparent;
@@ -533,16 +541,31 @@ html.pw-sidebar-frame body {
 
 .Inputfields {
   // background color for text fields
-  input:not([type=submit]):not([type=file]):not([type=checkbox]):not([type=radio]),
-  textarea {
-    background: @reno-inputfield-input-background;
+  input:not([type=submit]):not([type=file]):not([type=checkbox]):not([type=radio]):not(.uk-form-blank),
+  textarea:not(.uk-form-blank) {
+    background-color: @reno-inputfield-input-background;
     border: 1px solid; 
     border-color: @reno-inputfield-input-border-color;
     -webkit-appearance: none;
     &:focus {
-      background: lighten(@reno-inputfield-input-background, 2%);
+      background-color: lighten(@reno-inputfield-input-background, 2%);
       border-color: @reno-inputfield-input-border-color;
     }
+  }
+  select.uk-select:not(.uk-form-blank) {
+    // border-radius: 3px;
+    background-color: @reno-inputfield-select-background;
+    border: 1px solid;
+    border-color: @reno-inputfield-select-border-color;
+    -webkit-appearance: none;
+    &:focus {
+      background-color: lighten(@reno-inputfield-select-background, 2%);
+      border-color: @reno-inputfield-select-border-color;
+    }
+  }
+  input.uk-form-blank:focus,
+  textarea.uk-form-blank:focus {
+    background-color: lighten(@reno-inputfield-select-background, 2%);
   }
 }
 img.pw-logo {

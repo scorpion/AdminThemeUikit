@@ -5,9 +5,6 @@ body.pw-init .pw-button-dropdown {
 body.pw-init .WireTab {
   display: none;
 }
-body.pw-init #pw-masthead > * {
-  display: none;
-}
 ul.uk-navbar-nav ul {
   display: none;
 }

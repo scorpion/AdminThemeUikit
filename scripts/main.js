@@ -1,7 +1,7 @@
 /**
  * ProcessWire Admin Theme jQuery/Javascript
  *
- * Copyright 2017 by Ryan Cramer
+ * Copyright 2018 by Ryan Cramer
  *
  */
 
@@ -301,12 +301,24 @@ var ProcessWireAdminTheme = {
 			},
 			_renderItem: function(ul, item) {
 				if(item.label == item.template) item.template = '';
-				return $("<li></li>")
-					.append(
-						"<a href='" + item.edit_url + "'>" + item.label + " " + 
-						"<small class='uk-text-muted'>" + item.template + "</small></a>"
-					)
-					.appendTo(ul);
+				var $label = $("<span></span>").text(item.label).css('margin-right', '3px'); 
+				if(item.unpublished) $label.css('text-decoration', 'line-through');
+				if(item.hidden) $label.addClass('ui-priority-secondary');
+				if(item.icon.length) {
+					var $icon = $('<i></i>').addClass('fa fa-fw fa-' + item.icon).css('margin-right', '2px');
+					$label.prepend($icon);
+				}
+				var $a = $("<a></a>")
+					.attr('href', item.edit_url)
+					.attr('title', item.tip)
+					.append($label)
+					.append($("<small class='uk-text-muted'></small>").text(item.template));
+				
+				if(item.edit_url == '#' || !item.edit_url.length) {
+					$a.removeAttr('href');
+				}
+				
+				return $("<li></li>").append($a).appendTo(ul);
 			}
 		});
 
@@ -338,8 +350,7 @@ var ProcessWireAdminTheme = {
 				close: function(event, ui) {
 				},
 				source: function(request, response) {
-					var url = $input.parents('form').attr('data-action') +
-						'for?get=template_label,title&include=all&admin_search=' + request.term;
+					var url = $input.parents('form').attr('data-action') + '?q=' + request.term;
 					$.getJSON(url, function(data) {
 						var len = data.matches.length;
 						if(len < data.total) {
@@ -356,20 +367,27 @@ var ProcessWireAdminTheme = {
 								page_id: item.id,
 								template: item.template_label ? item.template_label : '',
 								edit_url: item.editUrl,
-								type: item.type
+								type: item.type,
+								tip: item.tip,
+								unpublished: (typeof item.unpublished != "undefined" ? item.unpublished : false), 
+								hidden: (typeof item.hidden != "undefined" ? item.hidden : false), 
+								locked: (typeof item.locked != "undefined" ? item.locked : false),
+								icon: (typeof item.icon != "undefined" ? item.icon : ''),
 							}
 						}));
 					});
 				},
 				select: function(event, ui) {
 					// follow the link if the Enter/Return key is tapped
-					
 					$(this).val('');
-					event.preventDefault();
-					if(typeof parent.isPresent == "undefined") {
-						window.location = ui.item.edit_url;
-					} else {
-						parent.jQuery('#pw-admin-main')[0].contentWindow.document.location.href = ui.item.edit_url;
+					if(typeof event.key !== 'undefined') {
+						event.preventDefault();
+						if(ui.item.edit_url === '#' || ui.item.edit_url.length < 1) return false;
+						if(typeof parent.isPresent == "undefined") {
+							window.location = ui.item.edit_url;
+						} else {
+							parent.jQuery('#pw-admin-main')[0].contentWindow.document.location.href = ui.item.edit_url;
+						}
 					}
 				}
 			}).focus(function() {
@@ -477,9 +495,12 @@ var ProcessWireAdminTheme = {
 	 * 
 	 */
 	setupInputfields: function() {
+		
+		var noGrid = $('body').hasClass('AdminThemeUikitNoGrid'); 
 
-		function initFormMarkup() {
-			// horizontal forms setup
+		function initFormMarkup($target) {
+			
+			// horizontal forms setup (currently not used)
 			$("form.uk-form-horizontal").each(function() {
 				$(this).find('.InputfieldContent > .Inputfields').each(function() {
 					var $content = $(this);
@@ -521,6 +542,17 @@ var ProcessWireAdminTheme = {
 			$('.MarkupPagerNav:not(.uk-pagination)').each(function() {
 				$(this).addClass('uk-pagination');
 			});
+			
+			 // apply to inputs that don’t already have Uikit classes 
+			if(typeof $target == "undefined") $target = $('.InputfieldForm');
+			var $selects = $('select:not([multiple]):not(.uk-select)', $target); 
+			$selects.addClass('uk-select'); 
+			/* add support for the following as needed:
+			var $inputs = $('input:not(.uk-input):not(:checkbox):not(:radio):not(:button):not(:submit):not(:hidden)', $target);
+			var $textareas = $('textarea:not(.uk-textarea)', $target);
+			var $checkboxes = $('input:checkbox:not(.uk-checkbox)', $target);
+			var $radios = $('input:radio:not(.uk-radio)', $target);
+			*/
 		}
 		
 		function identifyFirstLastRows($inputfields) {
@@ -543,10 +575,20 @@ var ProcessWireAdminTheme = {
 			} while($in.hasClass('InputfieldColumnWidth'));
 		}
 
+		var ukGridClassCache = [];
 		// get or set uk-width class
 		// width: may be integer of width, or classes you want to set (if $in is also provided)
 		// $in: An optional Inputfield that you want to populate given or auto-determined classes to
 		function ukGridClass(width, $in) {
+			
+			if(noGrid && typeof $in != "undefined") {
+				if(typeof width == "string") {
+					$in.addClass(width);
+				} else {
+					$in.css('width', width + '%');
+				}
+				return '';
+			}
 			
 			var ukGridClassDefault = 'uk-width-1-1';
 			var ukGridClass = ukGridClassDefault;
@@ -559,29 +601,35 @@ var ProcessWireAdminTheme = {
 			} else if(!width || width >= 100) {
 				// full width
 				ukGridClass = ukGridClassDefault;
+			} else if(typeof ukGridClassCache[width] != "undefined") {
+				// use previously cached value
+				ukGridClass = 'uk-width-' + ukGridClassCache[width];
 			} else {
 				// determine width from predefined setting
 				for(var pct in ProcessWire.config.ukGridWidths) {
 					var cn = ProcessWire.config.ukGridWidths[pct];
 					pct = parseInt(pct);
 					if(width >= pct) {
-						ukGridClass = 'uk-width-' + cn;
-						// ukGrid = cn.split('-');	
+						ukGridClass = cn;
 						break;
 					}
 				}
+				if(ukGridClass.length) {
+					ukGridClassCache[width] = ukGridClass;
+					ukGridClass = 'uk-width-' + ukGridClass;
+				}
 			}
 			
-			if(!widthIsClass && ukGridClass != ukGridClassDefault) {
+			if(!widthIsClass && ukGridClass && ukGridClass != ukGridClassDefault) {
 				ukGridClass += '@m';
 			}
 
 			if(typeof $in != "undefined") {
-				if($in.hasClass(ukGridClass)) {
+				if(ukGridClass && $in.hasClass(ukGridClass)) {
 					// no need to do anything
 				} else {
 					removeUkGridClass($in);
-					$in.addClass(ukGridClass);
+					if(ukGridClass) $in.addClass(ukGridClass);
 				}
 			}
 			
@@ -596,7 +644,7 @@ var ProcessWireAdminTheme = {
 				str = $in.attr('class');
 			}
 			if(str.indexOf('uk-width-') > -1) {
-				var cls = str.replace(/uk-width-(\d-\d@m|\d-\d|expand)\s*/g, '');
+				var cls = str.replace(/uk-width-(\d-\d|expand)[@smxl]*\s*/g, '');
 				if($in !== null) $in.attr('class', cls);
 			}
 			return str;
@@ -613,7 +661,7 @@ var ProcessWireAdminTheme = {
 			var widthHidden = 0; // amount of width in row occupied by hidden field(s)
 			var w = 0; // current Inputfield width
 			var lastW = 0; // last Inputfield non-hidden Inputfield width
-			var debug = true; // verbose console.log messages
+			var debug = false; // verbose console.log messages
 
 			function consoleLog(msg, $in) {
 				if(!debug) return;
@@ -625,7 +673,13 @@ var ProcessWireAdminTheme = {
 			
 			function expandLastInputfield($in) {
 				if(typeof $in == "undefined") $in = $lastInputfield;
-				if($in) ukGridClass('InputfieldColumnWidthLast uk-width-expand', $in); 
+				if($in) {
+					if(noGrid) {
+						$in.addClass('InputfieldColumnWidthLast'); 
+					} else {
+						ukGridClass('InputfieldColumnWidthLast uk-width-expand', $in);
+					}
+				}
 			}
 			
 			function applyHiddenInputfield() {
@@ -633,7 +687,7 @@ var ProcessWireAdminTheme = {
 				if(debug) consoleLog('A: hidden', $inputfield);
 				lastW += w;
 				width += w;
-				if($lastInputfield && width >= 100) {
+				if($lastInputfield && width >= 95) {
 					// finishing out row, update last visible column to include the width of the hidden column
 					lastW += widthHidden;
 					if(debug) consoleLog('Updating last visible Inputfield to width=' + lastW, $lastInputfield);
@@ -674,7 +728,7 @@ var ProcessWireAdminTheme = {
 				// if column has width defined, pull from its data-colwidth property
 				w = hasWidth ? parseInt($inputfield.attr('data-colwidth')) : 0;
 
-				if(!w || w >= 100) {
+				if(!w || w >= 95) {
 					// full-width
 					applyFullWidthInputfield();
 					return;
@@ -702,6 +756,11 @@ var ProcessWireAdminTheme = {
 					// width comes to exactly 100% so make this the last column in the row
 					isLastColumn = true; 
 					if(debug) consoleLog('D: width is exactly 100%, so this is the last column', $inputfield);
+				} else if(width + w >= 95) {
+					// width is close enough to 100% so treat it the same
+					isLastColumn = true;
+					w = 100 - width;
+					if(debug) consoleLog('D2: width is close enough to 100%, so this is the last column', $inputfield);
 				} else {
 					// column that isn't first or last column
 					if(debug) consoleLog('E: not first or last column', $inputfield);
@@ -767,7 +826,7 @@ var ProcessWireAdminTheme = {
 		};
 
 		
-		$(document).on('reloaded', function() { initFormMarkup() }); // function() intentional
+		$(document).on('reloaded', function() { initFormMarkup($(this)) }); // function() intentional
 		$(document).on('hideInputfield', showHideInputfield);
 		$(document).on('showInputfield', showHideInputfield);
 

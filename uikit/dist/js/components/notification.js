@@ -1,39 +1,22 @@
-/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-rc.17 | http://www.getuikit.com | (c) 2014 - 2018 YOOtheme | MIT License */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define('uikitnotification', factory) :
-	(global.UIkitNotification = factory());
-}(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
+    typeof define === 'function' && define.amd ? define('uikitnotification', ['uikit-util'], factory) :
+    (global.UIkitNotification = factory(global.UIkit.util));
+}(this, (function (uikitUtil) { 'use strict';
 
-function plugin(UIkit) {
     var obj;
 
-
-    if (plugin.installed) {
-        return;
-    }
-
-    var ref = UIkit.util;
-    var append = ref.append;
-    var apply = ref.apply;
-    var closest = ref.closest;
-    var css = ref.css;
-    var pointerEnter = ref.pointerEnter;
-    var pointerLeave = ref.pointerLeave;
-    var remove = ref.remove;
-    var toFloat = ref.toFloat;
-    var Transition = ref.Transition;
-    var trigger = ref.trigger;
     var containers = {};
 
-    UIkit.component('notification', {
+    var Component = {
 
         functional: true,
 
         args: ['message', 'status'],
 
-        defaults: {
+        data: {
             message: '',
             status: '',
             timeout: 5000,
@@ -43,27 +26,29 @@ function plugin(UIkit) {
             clsMsg: 'uk-notification-message'
         },
 
-        created: function created() {
+        install: install,
+
+        created: function() {
 
             if (!containers[this.pos]) {
-                containers[this.pos] = append(UIkit.container, ("<div class=\"uk-notification uk-notification-" + (this.pos) + "\"></div>"));
+                containers[this.pos] = uikitUtil.append(this.$container, ("<div class=\"uk-notification uk-notification-" + (this.pos) + "\"></div>"));
             }
 
-            var container = css(containers[this.pos], 'display', 'block');
+            var container = uikitUtil.css(containers[this.pos], 'display', 'block');
 
-            this.$mount(append(container,
+            this.$mount(uikitUtil.append(container,
                 ("<div class=\"" + (this.clsMsg) + (this.status ? (" " + (this.clsMsg) + "-" + (this.status)) : '') + "\"> <a href=\"#\" class=\"" + (this.clsClose) + "\" data-uk-close></a> <div>" + (this.message) + "</div> </div>")
             ));
 
         },
 
-        ready: function ready() {
+        connected: function() {
             var this$1 = this;
 
 
-            var marginBottom = toFloat(css(this.$el, 'marginBottom'));
-            Transition.start(
-                css(this.$el, {opacity: 0, marginTop: -this.$el.offsetHeight, marginBottom: 0}),
+            var marginBottom = uikitUtil.toFloat(uikitUtil.css(this.$el, 'marginBottom'));
+            uikitUtil.Transition.start(
+                uikitUtil.css(this.$el, {opacity: 0, marginTop: -this.$el.offsetHeight, marginBottom: 0}),
                 {opacity: 1, marginTop: 0, marginBottom: marginBottom}
             ).then(function () {
                 if (this$1.timeout) {
@@ -75,36 +60,36 @@ function plugin(UIkit) {
 
         events: ( obj = {
 
-            click: function click(e) {
-                if (closest(e.target, 'a[href="#"]')) {
+            click: function(e) {
+                if (uikitUtil.closest(e.target, 'a[href="#"]')) {
                     e.preventDefault();
                 }
                 this.close();
             }
 
-        }, obj[pointerEnter] = function () {
+        }, obj[uikitUtil.pointerEnter] = function () {
                 if (this.timer) {
                     clearTimeout(this.timer);
                 }
-            }, obj[pointerLeave] = function () {
+            }, obj[uikitUtil.pointerLeave] = function () {
                 if (this.timeout) {
                     this.timer = setTimeout(this.close, this.timeout);
                 }
-            }, obj),
+            }, obj ),
 
         methods: {
 
-            close: function close(immediate) {
+            close: function(immediate) {
                 var this$1 = this;
 
 
                 var removeFn = function () {
 
-                    trigger(this$1.$el, 'close', [this$1]);
-                    remove(this$1.$el);
+                    uikitUtil.trigger(this$1.$el, 'close', [this$1]);
+                    uikitUtil.remove(this$1.$el);
 
                     if (!containers[this$1.pos].children.length) {
-                        css(containers[this$1.pos], 'display', 'none');
+                        uikitUtil.css(containers[this$1.pos], 'display', 'none');
                     }
 
                 };
@@ -116,7 +101,7 @@ function plugin(UIkit) {
                 if (immediate) {
                     removeFn();
                 } else {
-                    Transition.start(this.$el, {
+                    uikitUtil.Transition.start(this.$el, {
                         opacity: 0,
                         marginTop: -this.$el.offsetHeight,
                         marginBottom: 0
@@ -126,23 +111,25 @@ function plugin(UIkit) {
 
         }
 
-    });
-
-    UIkit.notification.closeAll = function (group, immediate) {
-        apply(document.body, function (el) {
-            var notification = UIkit.getComponent(el, 'notification');
-            if (notification && (!group || group === notification.group)) {
-                notification.close(immediate);
-            }
-        });
     };
 
-}
+    function install(UIkit) {
+        UIkit.notification.closeAll = function (group, immediate) {
+            uikitUtil.apply(document.body, function (el) {
+                var notification = UIkit.getComponent(el, 'notification');
+                if (notification && (!group || group === notification.group)) {
+                    notification.close(immediate);
+                }
+            });
+        };
+    }
 
-if (!false && typeof window !== 'undefined' && window.UIkit) {
-    window.UIkit.use(plugin);
-}
+    /* global UIkit, 'notification' */
 
-return plugin;
+    if (typeof window !== 'undefined' && window.UIkit) {
+        window.UIkit.component('notification', Component);
+    }
+
+    return Component;
 
 })));

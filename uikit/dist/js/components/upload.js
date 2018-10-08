@@ -1,33 +1,19 @@
-/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-rc.17 | http://www.getuikit.com | (c) 2014 - 2018 YOOtheme | MIT License */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define('uikitupload', factory) :
-	(global.UIkitUpload = factory());
-}(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
+    typeof define === 'function' && define.amd ? define('uikitupload', ['uikit-util'], factory) :
+    (global.UIkitUpload = factory(global.UIkit.util));
+}(this, (function (uikitUtil) { 'use strict';
 
-function plugin(UIkit) {
-
-    if (plugin.installed) {
-        return;
-    }
-
-    var ref = UIkit.util;
-    var addClass = ref.addClass;
-    var ajax = ref.ajax;
-    var matches = ref.matches;
-    var noop = ref.noop;
-    var on = ref.on;
-    var removeClass = ref.removeClass;
-    var trigger = ref.trigger;
-
-    UIkit.component('upload', {
+    var Component = {
 
         props: {
             allow: String,
             clsDragover: String,
             concurrent: Number,
             maxSize: Number,
+            method: String,
             mime: String,
             msgInvalidMime: String,
             msgInvalidName: String,
@@ -39,38 +25,39 @@ function plugin(UIkit) {
             url: String,
         },
 
-        defaults: {
+        data: {
             allow: false,
             clsDragover: 'uk-dragover',
             concurrent: 1,
             maxSize: 0,
+            method: 'POST',
             mime: false,
             msgInvalidMime: 'Invalid File Type: %s',
             msgInvalidName: 'Invalid File Name: %s',
-            msgInvalidSize: 'Invalid File Size: %s Bytes Max',
+            msgInvalidSize: 'Invalid File Size: %s Kilobytes Max',
             multiple: false,
             name: 'files[]',
             params: {},
-            type: 'POST',
+            type: '',
             url: '',
-            abort: noop,
-            beforeAll: noop,
-            beforeSend: noop,
-            complete: noop,
-            completeAll: noop,
-            error: noop,
-            fail: noop,
-            load: noop,
-            loadEnd: noop,
-            loadStart: noop,
-            progress: noop
+            abort: uikitUtil.noop,
+            beforeAll: uikitUtil.noop,
+            beforeSend: uikitUtil.noop,
+            complete: uikitUtil.noop,
+            completeAll: uikitUtil.noop,
+            error: uikitUtil.noop,
+            fail: uikitUtil.noop,
+            load: uikitUtil.noop,
+            loadEnd: uikitUtil.noop,
+            loadStart: uikitUtil.noop,
+            progress: uikitUtil.noop
         },
 
         events: {
 
-            change: function change(e) {
+            change: function(e) {
 
-                if (!matches(e.target, 'input[type="file"]')) {
+                if (!uikitUtil.matches(e.target, 'input[type="file"]')) {
                     return;
                 }
 
@@ -83,7 +70,7 @@ function plugin(UIkit) {
                 e.target.value = '';
             },
 
-            drop: function drop(e) {
+            drop: function(e) {
                 stop(e);
 
                 var transfer = e.dataTransfer;
@@ -92,30 +79,30 @@ function plugin(UIkit) {
                     return;
                 }
 
-                removeClass(this.$el, this.clsDragover);
+                uikitUtil.removeClass(this.$el, this.clsDragover);
 
                 this.upload(transfer.files);
             },
 
-            dragenter: function dragenter(e) {
+            dragenter: function(e) {
                 stop(e);
             },
 
-            dragover: function dragover(e) {
+            dragover: function(e) {
                 stop(e);
-                addClass(this.$el, this.clsDragover);
+                uikitUtil.addClass(this.$el, this.clsDragover);
             },
 
-            dragleave: function dragleave(e) {
+            dragleave: function(e) {
                 stop(e);
-                removeClass(this.$el, this.clsDragover);
+                uikitUtil.removeClass(this.$el, this.clsDragover);
             }
 
         },
 
         methods: {
 
-            upload: function upload(files) {
+            upload: function(files) {
                 var this$1 = this;
 
 
@@ -123,12 +110,12 @@ function plugin(UIkit) {
                     return;
                 }
 
-                trigger(this.$el, 'upload', [files]);
+                uikitUtil.trigger(this.$el, 'upload', [files]);
 
                 for (var i = 0; i < files.length; i++) {
 
                     if (this$1.maxSize && this$1.maxSize * 1000 < files[i].size) {
-                        this$1.fail(this$1.msgInvalidSize.replace('%s', this$1.allow));
+                        this$1.fail(this$1.msgInvalidSize.replace('%s', this$1.maxSize));
                         return;
                     }
 
@@ -161,14 +148,15 @@ function plugin(UIkit) {
                         data.append(key, this$1.params[key]);
                     }
 
-                    ajax(this$1.url, {
+                    uikitUtil.ajax(this$1.url, {
                         data: data,
-                        method: this$1.type,
+                        method: this$1.method,
+                        responseType: this$1.type,
                         beforeSend: function (env) {
 
                             var xhr = env.xhr;
-                            xhr.upload && on(xhr.upload, 'progress', this$1.progress);
-                            ['loadStart', 'load', 'loadEnd', 'abort'].forEach(function (type) { return on(xhr, type.toLowerCase(), this$1[type]); }
+                            xhr.upload && uikitUtil.on(xhr.upload, 'progress', this$1.progress);
+                            ['loadStart', 'load', 'loadEnd', 'abort'].forEach(function (type) { return uikitUtil.on(xhr, type.toLowerCase(), this$1[type]); }
                             );
 
                             this$1.beforeSend(env);
@@ -186,7 +174,7 @@ function plugin(UIkit) {
                             }
 
                         },
-                        function (e) { return this$1.error(e.message); }
+                        function (e) { return this$1.error(e); }
                     );
 
                 };
@@ -197,7 +185,7 @@ function plugin(UIkit) {
 
         }
 
-    });
+    };
 
     function match(pattern, path) {
         return path.match(new RegExp(("^" + (pattern.replace(/\//g, '\\/').replace(/\*\*/g, '(\\/[^\\/]+)*').replace(/\*/g, '[^\\/]+').replace(/((?!\\))\?/g, '$1.')) + "$"), 'i'));
@@ -220,12 +208,12 @@ function plugin(UIkit) {
         e.stopPropagation();
     }
 
-}
+    /* global UIkit, 'upload' */
 
-if (!false && typeof window !== 'undefined' && window.UIkit) {
-    window.UIkit.use(plugin);
-}
+    if (typeof window !== 'undefined' && window.UIkit) {
+        window.UIkit.component('upload', Component);
+    }
 
-return plugin;
+    return Component;
 
 })));

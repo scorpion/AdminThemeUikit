@@ -1,71 +1,66 @@
-/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-rc.17 | http://www.getuikit.com | (c) 2014 - 2018 YOOtheme | MIT License */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define('uikitcountdown', factory) :
-	(global.UIkitCountdown = factory());
-}(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
+    typeof define === 'function' && define.amd ? define('uikitcountdown', ['uikit-util'], factory) :
+    (global.UIkitCountdown = factory(global.UIkit.util));
+}(this, (function (uikitUtil) { 'use strict';
 
-function plugin(UIkit) {
+    var Class = {
 
-    if (plugin.installed) {
-        return;
-    }
+        connected: function() {
+            !uikitUtil.hasClass(this.$el, this.$name) && uikitUtil.addClass(this.$el, this.$name);
+        }
 
-    var ref = UIkit.util;
-    var $ = ref.$;
-    var empty = ref.empty;
-    var html = ref.html;
+    };
 
-    UIkit.component('countdown', {
+    var Component = {
 
-        mixins: [UIkit.mixin.class],
-
-        attrs: true,
+        mixins: [Class],
 
         props: {
             date: String,
             clsWrapper: String
         },
 
-        defaults: {
+        data: {
             date: '',
             clsWrapper: '.uk-countdown-%unit%'
         },
 
         computed: {
 
-            date: function date(ref) {
+            date: function(ref) {
                 var date = ref.date;
 
                 return Date.parse(date);
             },
 
-            days: function days(ref, $el) {
+            days: function(ref, $el) {
                 var clsWrapper = ref.clsWrapper;
 
-                return $(clsWrapper.replace('%unit%', 'days'), $el);
+                return uikitUtil.$(clsWrapper.replace('%unit%', 'days'), $el);
             },
 
-            hours: function hours(ref, $el) {
+            hours: function(ref, $el) {
                 var clsWrapper = ref.clsWrapper;
 
-                return $(clsWrapper.replace('%unit%', 'hours'), $el);
+                return uikitUtil.$(clsWrapper.replace('%unit%', 'hours'), $el);
             },
 
-            minutes: function minutes(ref, $el) {
+            minutes: function(ref, $el) {
                 var clsWrapper = ref.clsWrapper;
 
-                return $(clsWrapper.replace('%unit%', 'minutes'), $el);
+                return uikitUtil.$(clsWrapper.replace('%unit%', 'minutes'), $el);
             },
 
-            seconds: function seconds(ref, $el) {
+            seconds: function(ref, $el) {
                 var clsWrapper = ref.clsWrapper;
 
-                return $(clsWrapper.replace('%unit%', 'seconds'), $el);
+                return uikitUtil.$(clsWrapper.replace('%unit%', 'seconds'), $el);
             },
 
-            units: function units() {
+            units: function() {
                 var this$1 = this;
 
                 return ['days', 'hours', 'minutes', 'seconds'].filter(function (unit) { return this$1[unit]; });
@@ -73,15 +68,15 @@ function plugin(UIkit) {
 
         },
 
-        connected: function connected() {
+        connected: function() {
             this.start();
         },
 
-        disconnected: function disconnected() {
+        disconnected: function() {
             var this$1 = this;
 
             this.stop();
-            this.units.forEach(function (unit) { return empty(this$1[unit]); });
+            this.units.forEach(function (unit) { return uikitUtil.empty(this$1[unit]); });
         },
 
         events: [
@@ -92,7 +87,7 @@ function plugin(UIkit) {
 
                 el: document,
 
-                handler: function handler() {
+                handler: function() {
                     if (document.hidden) {
                         this.stop();
                     } else {
@@ -106,7 +101,7 @@ function plugin(UIkit) {
 
         update: {
 
-            write: function write() {
+            write: function() {
                 var this$1 = this;
 
 
@@ -134,7 +129,7 @@ function plugin(UIkit) {
                         digits = digits.split('');
 
                         if (digits.length !== el.children.length) {
-                            html(el, digits.map(function () { return '<span></span>'; }).join(''));
+                            uikitUtil.html(el, digits.map(function () { return '<span></span>'; }).join(''));
                         }
 
                         digits.forEach(function (digit, i) { return el.children[i].textContent = digit; });
@@ -148,7 +143,7 @@ function plugin(UIkit) {
 
         methods: {
 
-            start: function start() {
+            start: function() {
                 var this$1 = this;
 
 
@@ -161,7 +156,7 @@ function plugin(UIkit) {
 
             },
 
-            stop: function stop() {
+            stop: function() {
 
                 if (this.timer) {
                     clearInterval(this.timer);
@@ -172,7 +167,7 @@ function plugin(UIkit) {
 
         }
 
-    });
+    };
 
     function getTimeSpan(date) {
 
@@ -187,12 +182,12 @@ function plugin(UIkit) {
         };
     }
 
-}
+    /* global UIkit, 'countdown' */
 
-if (!false && typeof window !== 'undefined' && window.UIkit) {
-    window.UIkit.use(plugin);
-}
+    if (typeof window !== 'undefined' && window.UIkit) {
+        window.UIkit.component('countdown', Component);
+    }
 
-return plugin;
+    return Component;
 
 })));

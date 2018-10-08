@@ -1,55 +1,71 @@
-/*! UIkit 3.0.0-beta.40 | http://www.getuikit.com | (c) 2014 - 2017 YOOtheme | MIT License */
+/*! UIkit 3.0.0-rc.17 | http://www.getuikit.com | (c) 2014 - 2018 YOOtheme | MIT License */
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define('uikitparallax', factory) :
-	(global.UIkitParallax = factory());
-}(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
+    typeof define === 'function' && define.amd ? define('uikitparallax', ['uikit-util'], factory) :
+    (global.UIkitParallax = factory(global.UIkit.util));
+}(this, (function (uikitUtil) { 'use strict';
 
-function plugin(UIkit) {
+    var Media = {
 
-    if (plugin.installed) {
-        return;
+        props: {
+            media: Boolean
+        },
+
+        data: {
+            media: false
+        },
+
+        computed: {
+
+            matchMedia: function() {
+                var media = toMedia(this.media);
+                return !media || window.matchMedia(media).matches;
+            }
+
+        }
+
+    };
+
+    function toMedia(value) {
+
+        if (uikitUtil.isString(value)) {
+            if (value[0] === '@') {
+                var name = "breakpoint-" + (value.substr(1));
+                value = uikitUtil.toFloat(uikitUtil.getCssVar(name));
+            } else if (isNaN(value)) {
+                return value;
+            }
+        }
+
+        return value && !isNaN(value) ? ("(min-width: " + value + "px)") : false;
     }
-
-    var mixin = UIkit.mixin;
-    var util = UIkit.util;
-    var css = util.css;
-    var Dimensions = util.Dimensions;
-    var each = util.each;
-    var getImage = util.getImage;
-    var includes = util.includes;
-    var isNumber = util.isNumber;
-    var isUndefined = util.isUndefined;
-    var toFloat = util.toFloat;
 
     var props = ['x', 'y', 'bgx', 'bgy', 'rotate', 'scale', 'color', 'backgroundColor', 'borderColor', 'opacity', 'blur', 'hue', 'grayscale', 'invert', 'saturate', 'sepia', 'fopacity'];
 
-    mixin.parallax = {
+    var Parallax = {
+
+        mixins: [Media],
 
         props: props.reduce(function (props, prop) {
             props[prop] = 'list';
             return props;
-        }, {
-            media: 'media'
-        }),
+        }, {}),
 
-        defaults: props.reduce(function (defaults, prop) {
-            defaults[prop] = undefined;
-            return defaults;
-        }, {
-            media: false
-        }),
+        data: props.reduce(function (data, prop) {
+            data[prop] = undefined;
+            return data;
+        }, {}),
 
         computed: {
 
-            props: function props$1(properties, $el) {
+            props: function(properties, $el) {
                 var this$1 = this;
 
 
                 return props.reduce(function (props, prop) {
 
-                    if (isUndefined(properties[prop])) {
+                    if (uikitUtil.isUndefined(properties[prop])) {
                         return props;
                     }
 
@@ -60,18 +76,18 @@ function plugin(UIkit) {
                     var steps = properties[prop].slice(0);
 
                     if (isCssProp) {
-                        css($el, prop, '');
+                        uikitUtil.css($el, prop, '');
                     }
 
                     if (steps.length < 2) {
                         steps.unshift((prop === 'scale'
                             ? 1
                             : isCssProp
-                                ? css($el, prop)
+                                ? uikitUtil.css($el, prop)
                                 : 0) || 0);
                     }
 
-                    var unit = includes(steps.join(''), '%') ? '%' : 'px';
+                    var unit = uikitUtil.includes(steps.join(''), '%') ? '%' : 'px';
 
                     if (isColor) {
 
@@ -82,14 +98,14 @@ function plugin(UIkit) {
 
                     } else {
 
-                        steps = steps.map(toFloat);
+                        steps = steps.map(uikitUtil.toFloat);
 
                     }
 
                     if (prop.match(/^bg/)) {
 
-                        css($el, ("background-position-" + (prop[2])), '');
-                        bgPos = css($el, 'backgroundPosition').split(' ')[prop[2] === 'x' ? 0 : 1]; // IE 11 can't read background-position-[x|y]
+                        uikitUtil.css($el, ("background-position-" + (prop[2])), '');
+                        bgPos = uikitUtil.css($el, 'backgroundPosition').split(' ')[prop[2] === 'x' ? 0 : 1]; // IE 11 can't read background-position-[x|y]
 
                         if (this$1.covers) {
 
@@ -117,130 +133,124 @@ function plugin(UIkit) {
 
             },
 
-            bgProps: function bgProps() {
+            bgProps: function() {
                 var this$1 = this;
 
                 return ['bgx', 'bgy'].filter(function (bg) { return bg in this$1.props; });
             },
 
-            covers: function covers(_, $el) {
-                return css($el.style.backgroundSize !== '' ? css($el, 'backgroundSize', '') : $el, 'backgroundSize') === 'cover';
+            covers: function(_, $el) {
+                return covers($el);
             }
 
         },
 
-        disconnected: function disconnected() {
+        disconnected: function() {
             delete this._image;
         },
 
-        update: [
+        update: {
 
-            {
-
-                read: function read(data) {
-                    var this$1 = this;
+            read: function(data) {
+                var this$1 = this;
 
 
-                    data.active = !this.media || window.matchMedia(this.media).matches;
+                data.active = this.matchMedia;
 
-                    if (data.image) {
-                        data.image.dimEl = {
-                            width: this.$el.offsetWidth,
-                            height: this.$el.offsetHeight
-                        };
-                    }
+                data.dimEl = {
+                    width: this.$el.offsetWidth,
+                    height: this.$el.offsetHeight
+                };
 
-                    if ('image' in data || !this.covers || !this.bgProps.length) {
+                if ('image' in data || !this.covers || !this.bgProps.length) {
+                    return;
+                }
+
+                var src = uikitUtil.css(this.$el, 'backgroundImage').replace(/^none|url\(["']?(.+?)["']?\)$/, '$1');
+
+                if (!src) {
+                    return;
+                }
+
+                var img = new Image();
+                img.src = src;
+                data.image = img;
+
+                if (!img.naturalWidth) {
+                    img.onload = function () { return this$1.$emit(); };
+                }
+            },
+
+            write: function(ref) {
+                var this$1 = this;
+                var dimEl = ref.dimEl;
+                var image = ref.image;
+                var active = ref.active;
+
+
+                if (!image || !image.naturalWidth) {
+                    return;
+                }
+
+                if (!active) {
+                    uikitUtil.css(this.$el, {backgroundSize: '', backgroundRepeat: ''});
+                    return;
+                }
+
+                var imageDim = {
+                    width: image.naturalWidth,
+                    height: image.naturalHeight
+                };
+
+                var dim = uikitUtil.Dimensions.cover(imageDim, dimEl);
+
+                this.bgProps.forEach(function (prop) {
+
+                    var ref = this$1.props[prop];
+                    var diff = ref.diff;
+                    var bgPos = ref.bgPos;
+                    var steps = ref.steps;
+                    var attr = prop === 'bgy' ? 'height' : 'width';
+                    var span = dim[attr] - dimEl[attr];
+
+                    if (!bgPos.match(/%$|0px/)) {
                         return;
                     }
 
-                    var src = css(this.$el, 'backgroundImage').replace(/^none|url\(["']?(.+?)["']?\)$/, '$1');
+                    if (span < diff) {
+                        dimEl[attr] = dim[attr] + diff - span;
+                    } else if (span > diff) {
 
-                    if (!src) {
-                        return;
-                    }
+                        var bgPosFloat = parseFloat(bgPos);
 
-                    data.image = false;
-
-                    getImage(src).then(function (img) {
-                        data.image = {
-                            width: img.naturalWidth,
-                            height: img.naturalHeight
-                        };
-
-                        this$1.$emit();
-                    });
-
-                },
-
-                write: function write(ref) {
-                    var this$1 = this;
-                    var image = ref.image;
-                    var active = ref.active;
-
-
-                    if (!image) {
-                        return;
-                    }
-
-                    if (!active) {
-                        css(this.$el, {backgroundSize: '', backgroundRepeat: ''});
-                        return;
-                    }
-
-                    var dimEl = image.dimEl;
-
-                    var dim = Dimensions.cover(image, dimEl);
-
-                    this.bgProps.forEach(function (prop) {
-
-                        var ref = this$1.props[prop];
-                        var diff = ref.diff;
-                        var bgPos = ref.bgPos;
-                        var steps = ref.steps;
-                        var attr = prop === 'bgy' ? 'height' : 'width';
-                        var span = dim[attr] - dimEl[attr];
-
-                        if (!bgPos.match(/%$|0px/)) {
-                            return;
+                        if (bgPosFloat) {
+                            this$1.props[prop].steps = steps.map(function (step) { return step - (span - diff) / (100 / bgPosFloat); });
                         }
+                    }
 
-                        if (span < diff) {
-                            dimEl[attr] = dim[attr] + diff - span;
-                        } else if (span > diff) {
+                    dim = uikitUtil.Dimensions.cover(imageDim, dimEl);
+                });
 
-                            var bgPosFloat = parseFloat(bgPos);
+                uikitUtil.css(this.$el, {
+                    backgroundSize: ((dim.width) + "px " + (dim.height) + "px"),
+                    backgroundRepeat: 'no-repeat'
+                });
 
-                            if (bgPosFloat) {
-                                this$1.props[prop].steps = steps.map(function (step) { return step - (span - diff) / (100 / bgPosFloat); });
-                            }
-                        }
+            },
 
-                        dim = Dimensions.cover(image, dimEl);
-                    });
+            events: ['load', 'resize']
 
-                    css(this.$el, {
-                        backgroundSize: ((dim.width) + "px " + (dim.height) + "px"),
-                        backgroundRepeat: 'no-repeat'
-                    });
-
-                },
-
-                events: ['load', 'resize']
-
-            }
-
-        ],
+        },
 
         methods: {
 
-            reset: function reset() {
+            reset: function() {
                 var this$1 = this;
 
-                each(this.getCss(0), function (_, prop) { return css(this$1.$el, prop, ''); });
+                uikitUtil.each(this.getCss(0), function (_, prop) { return uikitUtil.css(this$1.$el, prop, ''); });
             },
 
-            getCss: function getCss(percent) {
+            getCss: function(percent) {
 
                 var ref = this;
                 var props = ref.props;
@@ -265,9 +275,9 @@ function plugin(UIkit) {
                             }
 
                             var ref$1 = ['x', 'y'].map(function (dir) { return prop === dir
-                                ? value + unit
+                                ? uikitUtil.toFloat(value).toFixed(0) + unit
                                 : props[dir]
-                                    ? getValue(props[dir].steps, percent) + props[dir].unit
+                                    ? getValue(props[dir].steps, percent, 0) + props[dir].unit
                                     : 0; }
                             );
                     var x = ref$1[0];
@@ -300,7 +310,7 @@ function plugin(UIkit) {
 
                             css[prop] = "rgba(" + (start.map(function (value, i) {
                                     value = value + p * (end[i] - value);
-                                    return i === 3 ? toFloat(value) : parseInt(value, 10);
+                                    return i === 3 ? uikitUtil.toFloat(value) : parseInt(value, 10);
                                 }).join(',')) + ")";
                             break;
 
@@ -336,7 +346,7 @@ function plugin(UIkit) {
     };
 
     function parseColor(el, color) {
-        return css(css(el, 'color', color), 'color').split(/[(),]/g).slice(1, -1).concat(1).slice(0, 4).map(function (n) { return toFloat(n); });
+        return uikitUtil.css(uikitUtil.css(el, 'color', color), 'color').split(/[(),]/g).slice(1, -1).concat(1).slice(0, 4).map(function (n) { return uikitUtil.toFloat(n); });
     }
 
     function getStep(steps, percent) {
@@ -349,41 +359,30 @@ function plugin(UIkit) {
         return step;
     }
 
-    function getValue(steps, percent) {
+    function getValue(steps, percent, digits) {
+        if ( digits === void 0 ) digits = 2;
+
         var ref = getStep(steps, percent);
         var start = ref[0];
         var end = ref[1];
         var p = ref[2];
-        return (isNumber(start)
-            ? start + Math.abs(start - end) * p * (start < end ? 1 : -1)
-            : +end
-        ).toFixed(2);
+        return (uikitUtil.isNumber(start)
+                ? start + Math.abs(start - end) * p * (start < end ? 1 : -1)
+                : +end
+        ).toFixed(digits);
     }
 
-}
-
-if (!false && typeof window !== 'undefined' && window.UIkit) {
-    window.UIkit.use(plugin);
-}
-
-function plugin$1(UIkit) {
-
-    if (plugin$1.installed) {
-        return;
+    function covers(el) {
+        var ref = el.style;
+        var backgroundSize = ref.backgroundSize;
+        var covers = uikitUtil.css(uikitUtil.css(el, 'backgroundSize', ''), 'backgroundSize') === 'cover';
+        el.style.backgroundSize = backgroundSize;
+        return covers;
     }
 
-    UIkit.use(plugin);
+    var Component = {
 
-    var mixin = UIkit.mixin;
-    var util = UIkit.util;
-    var clamp = util.clamp;
-    var css = util.css;
-    var scrolledOver = util.scrolledOver;
-    var query = util.query;
-
-    UIkit.component('parallax', {
-
-        mixins: [mixin.parallax],
+        mixins: [Parallax],
 
         props: {
             target: String,
@@ -391,7 +390,7 @@ function plugin$1(UIkit) {
             easing: Number,
         },
 
-        defaults: {
+        data: {
             target: false,
             viewport: 1,
             easing: 1,
@@ -399,66 +398,68 @@ function plugin$1(UIkit) {
 
         computed: {
 
-            target: function target(ref, $el) {
+            target: function(ref, $el) {
                 var target = ref.target;
 
-                return target && query(target, $el) || $el;
+                return target && uikitUtil.query(target, $el) || $el;
             }
 
         },
 
-        update: [
+        update: {
 
-            {
-
-                read: function read(ref) {
-                    var percent = ref.percent;
-
-                    return {
-                        prev: percent,
-                        percent: ease(scrolledOver(this.target) / (this.viewport || 1), this.easing)
-                    };
-                },
-
-                write: function write(ref, ref$1) {
-                    var prev = ref.prev;
-                    var percent = ref.percent;
-                    var active = ref.active;
-                    var type = ref$1.type;
+            read: function(ref, ref$1) {
+                var percent = ref.percent;
+                var active = ref.active;
+                var type = ref$1.type;
 
 
-                    if (type !== 'scroll') {
-                        prev = false;
-                    }
+                if (type !== 'scroll') {
+                    percent = false;
+                }
 
-                    if (!active) {
-                        this.reset();
-                        return;
-                    }
+                if (!active) {
+                    return;
+                }
 
-                    if (prev !== percent) {
-                        css(this.$el, this.getCss(percent));
-                    }
+                var prev = percent;
+                percent = ease(uikitUtil.scrolledOver(this.target) / (this.viewport || 1), this.easing);
 
-                },
+                return {
+                    percent: percent,
+                    style: prev !== percent ? this.getCss(percent) : false
+                };
+            },
 
-                events: ['scroll', 'load', 'resize']
-            }
+            write: function(ref) {
+                var style = ref.style;
+                var active = ref.active;
 
-        ]
 
-    });
+                if (!active) {
+                    this.reset();
+                    return;
+                }
+
+                style && uikitUtil.css(this.$el, style);
+
+            },
+
+            events: ['scroll', 'load', 'resize']
+        }
+
+    };
 
     function ease(percent, easing) {
-        return clamp(percent * (1 - (easing - easing * percent)));
+        return uikitUtil.clamp(percent * (1 - (easing - easing * percent)));
     }
 
-}
+    /* global UIkit, 'parallax' */
 
-if (!false && typeof window !== 'undefined' && window.UIkit) {
-    window.UIkit.use(plugin$1);
-}
+    if (typeof window !== 'undefined' && window.UIkit) {
+        window.UIkit.component('parallax', Component);
+    }
 
-return plugin$1;
+    return Component;
 
 })));

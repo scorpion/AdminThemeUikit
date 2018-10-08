@@ -12,3 +12,9 @@
 /uikit/gitignore
 /git
 /.uikit-prev
+/.ignore
+/uikit/package-lock.json
+/uikit/yarn.lock
+uikit/.eslintrc.js
+uikit/.github
+uikit/.npmignore

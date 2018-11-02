@@ -15298,6 +15298,11 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
     float: none;
   }
 }
+@media screen and (max-width: 767px) {
+  body:not(.pw-ready) #pw-masthead > * {
+    display: none;
+  }
+}
 .pw-sidebar-nav > li {
   border-top: 1px solid #d5dfe8;
   padding: 5px 0;
@@ -15350,6 +15355,10 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 .pw-sidebar-nav > li > ul > li > ul > li {
   padding: 0;
   line-height: 1.1em;
+}
+.pw-sidebar-nav > li .pw-avatar {
+  height: 30px;
+  border-radius: 15px;
 }
 .pw-layout-sidenav-tree .ProDraftsNotice {
   margin-top: 20px;

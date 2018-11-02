@@ -347,7 +347,7 @@ class AdminThemeUikit extends AdminThemeFramework implements Module, Configurabl
 		
 		if(!$themeBorder) {
 			if($formSettings['useBorders'] === false || in_array($class, $this->noBorderTypes)) {
-				$themeBorder = $columnWidth == 100 ? 'none' : 'hide';
+				$themeBorder = (!$columnWidth || $columnWidth == 100) ? 'none' : 'hide';
 			} else if(in_array($class, $this->cardTypes)) {
 				$themeBorder = 'card';
 			} else {

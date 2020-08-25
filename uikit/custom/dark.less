@@ -1,0 +1,645 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+
+	███╗   ███╗███████╗████████╗ █████╗ 
+	████╗ ████║██╔════╝╚══██╔══╝██╔══██╗
+	██╔████╔██║█████╗     ██║   ███████║
+	██║╚██╔╝██║██╔══╝     ██║   ██╔══██║
+	██║ ╚═╝ ██║███████╗   ██║   ██║  ██║
+	╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝
+
+	LESS Theme for meta based on UIkit.
+	This is the dark version of the theme.
+*/
+
+// Import UIkit
+@import '../src/less/uikit.theme.less';
+
+// Import default meta theme
+@import './meta/_import.less';
+
+// Import light styles from base theme.
+@import './meta.less';
+
+// Color variables (appears count calculates by raw css)
+@grey_superdarkHover: #191c22;
+@grey_superdark: #1a1e24;
+@grey_darker: #1d2027;
+@grey_dark: #21252d;
+@grey_mid: #2f333a;
+@purple: #2b303b;
+@purple_border: #3d304e;
+@purple_light: rgba(120, 144, 197, 0.15);
+@purple_light2: rgba(120, 144, 197, 0.233);
+@purple_light3: #373d4b;
+@grey: #65737e;
+@grey_light: #959ba7;
+@grey_lighter: #b9c0cc;
+@white: #eff1f5;
+@white_80: rgb(237, 239, 245, 0.8);
+@white_50: rgb(237, 239, 245, 0.5);
+
+@foam: #96b5b4;
+@spearmint: #a3be8c;
+@red_light: #bf616a;
+@blue_light: #8fa1b3;
+@info: #3d362a;
+@info_text: #5c5240;
+@yellow_light: #ebcb8b;
+@peach_dark: #d08770;
+@pink_light: #cc99cd;
+@blue: #1772c3;
+@blue_light: #3a88cc;
+@green: #60a62f;
+@green_light: #53971f;
+@red: #b03131;
+@red_light: #c53c3c;
+
+@border: rgba(120, 144, 197, 0.301);
+@selection_focused: #384d66;
+@selection_selected: #314358;
+@tab_text: rgb(156, 160, 168);
+@menu_bg: #252d37;
+
+@black_light: #111820;
+@black: #090c10;
+
+@pure: #fff;
+@pure_black: #000;
+
+html {
+    background: @grey_dark !important;
+}
+body {
+    background: @grey_dark !important;
+    .ProDraftsNotice {
+        background: @color14;
+    }
+    .pw-panel-container {
+        .pw-panel-button.ui-button {
+            background: @grey_dark;
+            i.fa {
+                color: @color7;
+            }
+        }
+    }
+    .pw-panel-content {
+        background: @grey_dark !important;
+    }
+}
+
+::selection {
+    background: @selection_focused;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.Inputfields
+    input:not([type='submit']):not([type='file']):not([type='checkbox']):not([type='radio']):not(.uk-form-blank),
+.Inputfields textarea:not(.uk-form-blank) {
+    background-color: @black;
+    border: 1px solid;
+    border-top-color: currentcolor;
+    border-right-color: currentcolor;
+    border-bottom-color: currentcolor;
+    border-left-color: currentcolor;
+    border-color: @border;
+    color: @grey_light;
+    &:focus {
+        background-color: @black;
+        border-color: @blue;
+    }
+}
+
+.uk-breadcrumb a {
+    color: @grey_light;
+}
+
+.AdminDataTable {
+    background-color: @purple_light;
+    border-bottom: 0px solid #d9e1ea !important;
+    border-left: 1px solid @purple_light !important;
+    border-right: 0px solid #d9e1ea !important;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    border-top: 2px solid #2185d0;
+}
+
+.tablesorter-headerRow {
+    background: #f5f6fa;
+}
+.uk-table.AdminDataTableSortable {
+    tr.tablesorter-headerRow {
+        th {
+            &:hover {
+                color: rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+}
+
+.uk-table tr:nth-child(2n) {
+    background-color: @purple_light2;
+}
+
+h1,
+h2,
+h3,
+.uk-h2,
+#pw-content-head h1 {
+    color: @grey_light;
+}
+
+.ui-widget-content {
+    border: 0px solid #aaaaaa;
+    background: @purple;
+    color: @grey_light;
+}
+
+.pwapi-method-sections.ui-accordion {
+    border: 0px solid @purple;
+}
+
+.pw-content #pwapi.pwapi-admin .pwapi-method-description p,
+.pw-content #pwapi.pwapi-admin .pwapi-method-description li {
+    color: @grey;
+}
+
+.pw-content #pwapi.pwapi-admin .pwapi-method-select,
+.pw-content #pwapi.pwapi-admin .pwapi-main-select {
+    background-color: @purple;
+    color: @pink_light;
+    border: 1px solid @purple;
+}
+
+:not(pre) > code[class*='language-'],
+pre[class*='language-'] {
+    border: 1px solid @border !important;
+}
+
+.InputfieldFieldset > .InputfieldContent > .Inputfields .Inputfield {
+    background: @purple;
+}
+
+.InputfieldContent {
+    background: @grey_superdark;
+    color: @grey;
+    padding: 1px 20px 23px 20px;
+}
+
+.InputfieldStateCollapsed > .InputfieldHeader {
+    background: @purple;
+    color: @white_80 !important;
+}
+
+.InputfieldHeader {
+    background: @grey_superdark;
+    color: @white_80 !important;
+}
+
+.InputfieldHeader.InputfieldStateToggle {
+    &:hover {
+        background: @grey_superdark !important;
+        color: @white !important;
+    }
+}
+
+.InputfieldFieldset > .InputfieldHeader.InputfieldStateToggle {
+    &:hover {
+        background: @purple !important;
+        color: @white !important;
+    }
+}
+
+.Inputfield.InputfieldStateCollapsed > .InputfieldHeader:hover {
+    background: @purple_light3 !important;
+}
+
+.Inputfield {
+    display: block;
+    color: @blue;
+    border: none;
+    outline: 1px solid @border;
+}
+
+.InputfieldFieldset.InputfieldStateCollapsed > .InputfieldHeader {
+    background: @purple;
+}
+
+.InputfieldFieldset > .InputfieldContent {
+    background: @purple;
+}
+
+.InputfieldFieldset > .InputfieldHeader {
+    background: @purple;
+}
+
+.uk-navbar-nav > li.uk-active {
+    background: rgba(255, 255, 255, 0.08);
+    color: @color0;
+}
+.uk-navbar-nav > li.uk-active > a {
+    background: rgba(255, 255, 255, 0.08);
+    color: @color0;
+    &:after {
+        display: none;
+    }
+}
+
+.uk-tab {
+    color: @white !important;
+}
+
+.uk-tab::before {
+    border-bottom: 1px solid @border;
+}
+
+.uk-tab > li.uk-active {
+    background: @grey_superdark;
+    #_ProcessListerActionsForm,
+    #_tab_bookmarks {
+        background: @purple !important;
+        border-bottom-color: @purple !important;
+    }
+}
+
+.uk-tab > .uk-active a {
+    border-top: 2px solid @green!important;
+    color: @white !important;
+}
+
+.uk-tab > .uk-active > a {
+    color: @white;
+    border: 1px solid @border;
+    border-bottom-color: @grey_superdark;
+}
+
+.uk-tab > * > a {
+    color: @tab_text !important;
+    &:hover {
+        color: @white !important;
+    }
+}
+
+.pw-dropdown-toggle {
+    color: @white !important;
+}
+
+.uk-tab::before {
+    border-bottom: 1px solid @border;
+}
+
+.Inputfield .InputfieldFieldset {
+    background: @grey_superdark;
+}
+
+.WireTabs.uk-tab > li.uk-active.pw-tab-muted {
+    background: @purple !important;
+}
+
+.graphqlQueriesBG {
+    background: @purple;
+}
+
+.graphiql-container .topBarWrap {
+    background: @grey_dark;
+}
+
+.graphiql-container .topBar {
+    background: @grey_dark !important;
+}
+
+.result-window .CodeMirror {
+    background: @grey_dark !important;
+}
+
+.graphiql-container .docExplorerShow {
+    background: @grey_dark !important;
+    color: @blue !important;
+}
+
+.CodeMirror {
+    background: @purple !important;
+}
+
+.CodeMirror-linenumber {
+    color: @grey !important;
+    padding: 0 3px 0 5px;
+}
+
+.CodeMirror-gutters {
+    background-color: @grey_darker !important;
+    border-right: 1px solid @purple_light3 !important;
+}
+
+/* CURSOR */
+
+.CodeMirror .CodeMirror-cursor {
+    border-left: 2px solid @grey_lighter !important;
+}
+
+.graphiql-container .queryWrap {
+    border-bottom: 1px solid @purple_light3 !important;
+}
+
+.graphiql-container .result-window .CodeMirror-gutters {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+.graphiql-container .queryWrap {
+    border-top: 1px solid @purple_light3 !important;
+}
+
+.graphiql-container .resultWrap {
+    border-left: solid 1px @purple_light3 !important;
+}
+
+.graphiql-container .variable-editor-title {
+    background: @grey_superdark !important;
+    border-bottom: 1px solid @purple_light3 !important;
+    border-top: 1px solid @purple_light3 !important;
+    color: @grey_light !important;
+    box-shadow: 0 5px 8px -8px @color5 !important;
+}
+
+.graphiql-container .variable-editor-title:hover {
+    background: @grey_superdarkHover !important;
+}
+
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+    background: @selection_focused !important;
+}
+.CodeMirror-line::-moz-selection,
+.CodeMirror-line > span::-moz-selection,
+.CodeMirror-line > span > span::-moz-selection {
+    background: @selection_focused !important;
+}
+
+.CodeMirror-info .type-name {
+    color: #ca9800 !important;
+}
+
+.CodeMirror-info .field-name {
+    color: #1f61a0 !important;
+}
+
+.CodeMirror-info .enum-value {
+    color: #0b7fc7 !important;
+}
+
+.CodeMirror-info .arg-name {
+    color: #8b2bb9 !important;
+}
+
+.CodeMirror-info .directive-name {
+    color: #b33086 !important;
+}
+
+.graphiql-container .doc-category-item {
+    color: #555 !important;
+}
+
+.graphiql-container .keyword {
+    color: #b11a04 !important;
+}
+
+.graphiql-container .type-name {
+    color: #ca9800 !important;
+}
+
+.graphiql-container .field-name {
+    color: #1f61a0 !important;
+}
+
+.graphiql-container .field-short-description {
+    color: #999 !important;
+}
+
+.graphiql-container .enum-value {
+    color: @blue !important;
+}
+
+.graphiql-container .arg-name {
+    color: #8b2bb9 !important;
+}
+
+.graphiql-container .docExplorerShow {
+    color: @pink_light !important;
+}
+
+.graphiql-container .docExplorerShow::before {
+    border-left: 2px solid @pink_light !important;
+    border-top: 2px solid @pink_light !important;
+}
+
+/* Meta GraphQL Dark Mode Theme */
+.cm-keyword {
+    color: #708 !important;
+}
+.cm-atom {
+    color: #219 !important;
+}
+.cm-number {
+    color: @yellow_light !important;
+}
+.cm-def {
+    color: @pink_light !important;
+}
+.cm-punctuation {
+    color: @grey !important;
+}
+.cm-property {
+    color: @foam !important;
+}
+.cm-operator {
+    color: @blue !important;
+} // no equivelent...
+.cm-variable {
+    color: #397d13 !important;
+}
+.cm-variable-2 {
+    color: @blue !important;
+}
+.cm-variable-3 {
+    color: #085 !important;
+}
+.cm-comment {
+    color: @grey !important;
+}
+.cm-string {
+    color: @spearmint !important;
+}
+.cm-string-2 {
+    color: #f50 !important;
+}
+.cm-meta {
+    color: #555 !important;
+}
+.cm-qualifier {
+    color: #555 !important;
+}
+.cm-builtin {
+    color: #30a !important;
+}
+.cm-bracket {
+    color: #997 !important;
+}
+.cm-tag {
+    color: #170 !important;
+}
+.cm-attribute {
+    color: @peach_dark !important;
+}
+.cm-header {
+    color: blue !important;
+}
+.cm-quote {
+    color: #090 !important;
+}
+.cm-hr {
+    color: #999 !important;
+}
+.cm-link {
+    color: #00c !important;
+}
+
+.cm-negative {
+    color: #d44 !important;
+}
+.cm-positive {
+    color: #292 !important;
+}
+
+.cm-error {
+    color: #f00 !important;
+}
+.cm-invalidchar {
+    color: #f00 !important;
+}
+
+/* Default styles for common GraphQL addons */
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+    color: #0f0 !important;
+}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+    color: #f22 !important;
+}
+.CodeMirror-matchingtag {
+    background: rgba(255, 150, 0, 0.3) !important;
+}
+.CodeMirror-activeline-background {
+    background: #e8f2ff !important;
+}
+
+.CodeMirror-selected {
+    background: @selection_selected !important;
+}
+.CodeMirror-focused .CodeMirror-selected {
+    background: @selection_focused !important;
+}
+
+#main .notes {
+    color: @foam !important;
+    background: @purple_light3;
+    border: 1px solid @border;
+}
+
+//////////////////////////////////////
+// Menu
+//////////////////////////////////////
+.ui-menu {
+    box-shadow: 0 5px 7px rgba(0, 0, 0, 0.175);
+}
+
+.pw-dropdown-menu {
+    background: @menu_bg;
+    color: #c4cde0;
+}
+ul.ui-menu {
+    border: 1px solid @border;
+    border-top: 1px @menu_bg;
+}
+.ui-menu .ui-menu-item a {
+    color: @grey_light;
+    padding: 0.5em 15px;
+    border: none;
+    border-radius: 0;
+    margin: 0 !important;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+// hover
+.ui-menu .ui-menu-item a:hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active {
+    color: #fff;
+    background: @border;
+}
+
+.ui-menu .ui-menu-item a i.fa {
+    margin-left: -2px;
+    color: @grey_light;
+}
+
+#pw-masthead .uk-navbar-nav a {
+    border-left: 1px solid transparent !important;
+    border-right: 1px solid transparent !important;
+}
+
+#pw-masthead .uk-active {
+    border-left: 1px solid transparent !important;
+    border-right: 1px solid transparent !important;
+    background: none !important;
+}
+
+#pw-masthead .uk-navbar-nav a:hover {
+    border-left: 1px solid @border !important;
+    border-right: 1px solid @border !important;
+}
+
+#pw-masthead .uk-navbar-nav > li.uk-active > a {
+    background: @menu_bg;
+    color: #ffffff;
+}
+
+#pw-masthead .uk-navbar-nav > li > a.hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-left: 1px solid @border !important;
+    border-right: 1px solid @border !important;
+}
+
+#pw-masthead .uk-navbar-nav > li.uk-active > a {
+    background: #0e1115;
+    color: #ffffff;
+}
+
+#pw-masthead .uk-navbar-nav > li.uk-active > a:hover {
+    background: @menu_bg;
+    color: #ffffff;
+}
+
+body .ProDraftsNotice {
+    background: @purple;
+    color: @grey_light;
+    border-top: 0px transparent;
+}

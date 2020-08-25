@@ -1,0 +1,1501 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+
+	This is the light version of the theme.
+*/
+
+// Import UIkit
+@import '../src/less/uikit.theme.less';
+
+// Import default meta theme
+@import 'meta/_import.less';
+
+// Color variables (appears count calculates by raw css)
+@color0: #ffffff; // Appears 47 times
+@color1: #1772c3; // Appears 37 times
+@color2: #3a88cc; // Appears 29 times
+@color3: #d9e1ea; // Appears 19 times
+@color4: #f1f5f8; // Appears 16 times
+@color5: #000000; // Appears 11 times
+@color6: #60a62f; // Appears 10 times
+@color7: #b03131; // Appears 6 times
+@color8: #ffffdd; // Appears 4 times
+@color9: #53971f; // Appears 4 times
+@color10: #e5e5e5; // Appears 4 times
+@color11: #f9fafb; // Appears 4 times
+@color12: #333333; // Appears 3 times
+@color13: #ecedee; // Appears 3 times
+@color14: #e1e5ea; // Appears 3 times
+@color15: #d0d0d0; // Appears 3 times
+@color16: #354b60; // Appears 3 times
+@color17: #2185d0; // Appears 3 times
+@color18: #c53c3c; // Appears 3 times
+@color19: #fafbfc; // Appears 2 times
+
+@offcanvas-bar-width: 350px;
+
+@pw-icon-font-size: 14px;
+@pw-tiny-font-size: 12px;
+@pw-tabs-margin-bottom: 0; // margin between tabs and whatever is below
+@pw-body-background: #f1f5f8;
+
+// Width variables (appears count calculates by raw css)
+@width4: 60px; // Appears 2 times
+
+// Height variables (appears count calculates by raw css)
+@height1: 60px; // Appears 7 times
+
+.pw-bullets {
+    li {
+        display: list-item;
+        list-style: disc;
+        margin: 0 0 0 1.25em;
+    }
+}
+.pw-numbers {
+    li {
+        display: list-item;
+        list-style: decimal;
+        margin: 0 0 0 1.25em;
+    }
+}
+.pw-align-left {
+    float: left;
+    margin: 0 1em 0.5em 0;
+}
+.align_left {
+    float: left;
+    margin: 0 1em 0.5em 0;
+}
+.align-left {
+    float: left;
+    margin: 0 1em 0.5em 0;
+}
+.pw-align-right {
+    float: right;
+    margin: 0 0 0.5em 1em;
+}
+.align_right {
+    float: right;
+    margin: 0 0 0.5em 1em;
+}
+.align-right {
+    float: right;
+    margin: 0 0 0.5em 1em;
+}
+.pw-align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.align_center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.pw-no-select {
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+html {
+    background: @color4 !important;
+}
+body {
+    background: @color4 !important;
+    .ProDraftsNotice {
+        background: @color14;
+        margin-top: 0px !important;
+    }
+    .pw-panel-container {
+        .pw-panel-button.ui-button {
+            background: @color4;
+            i.fa {
+                bottom: -4px;
+                color: @color7;
+                font-size: 20px;
+                position: relative;
+                transform: rotate(-90deg);
+            }
+        }
+    }
+}
+.uk-table {
+    border-collapse: collapse !important;
+    tr {
+        &:nth-child(even) {
+            background-color: @color11;
+        }
+    }
+    th {
+        color: @color12;
+        font-size: 13px;
+        text-transform: none;
+    }
+    tbody {
+        tr {
+            &:hover {
+                background: rgba(233, 236, 241, 0.5);
+                transition: background 0.1s ease, color 0.1s ease;
+            }
+        }
+    }
+}
+.uk-h3 {
+    color: @color12;
+    opacity: 1;
+}
+h3 {
+    color: @color12;
+    opacity: 1;
+}
+.ui-priority-secondary {
+    font-size: 0.6em;
+    opacity: 1;
+}
+.ui-widget-content {
+    .ui-priority-secondary {
+        opacity: 1;
+    }
+}
+.ui-widget-header {
+    .ui-priority-secondary {
+        opacity: 1;
+    }
+}
+.tablesorter-header {
+    border-top: 2px solid @color17;
+}
+.AdminDataTable {
+    background-color: @color0;
+    border-bottom: 1px solid @color3 !important;
+    border-left: 1px solid @color3 !important;
+    border-right: 1px solid @color3 !important;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    border-top: 2px solid @color17;
+    .fa {
+        margin-right: 4px;
+        padding-right: 0px;
+        padding-right: 4px;
+    }
+}
+table.AdminDataTable {
+    thead {
+        th {
+            border-bottom: 2px solid @color3 !important;
+            border-top-left-radius: 4px !important;
+            border-top-left-radius: 4px !important;
+            border-top-right-radius: 4px !important;
+            border-top-right-radius: 4px !important;
+            color: rgba(0, 0, 0, 0.8);
+            transition: background 0.1s ease, color 0.1s ease;
+            white-space: nowrap;
+        }
+    }
+}
+#pw-masthead {
+    background: #131b26;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    height: @height1;
+    opacity: 96%;
+    .uk-navbar-nav > li > a.hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: @color0;
+        &:after {
+            display: none;
+        }
+    }
+    .uk-navbar-nav > li > a {
+        color: rgba(255, 255, 255, 0.8);
+        &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: @color0;
+            &::after {
+                display: none;
+            }
+            i {
+                color: @color0;
+            }
+        }
+        i {
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin-bottom: 3px;
+            &:hover {
+                color: @color0;
+            }
+        }
+        &:active {
+            i {
+                color: @color0;
+            }
+        }
+    }
+    .uk-navbar-nav > li.uk-active {
+        background: rgba(255, 255, 255, 0.08);
+        color: @color0;
+    }
+    .uk-navbar-nav > li.uk-active > a {
+        background: rgba(255, 255, 255, 0.08);
+        color: @color0;
+        &:after {
+            display: none;
+        }
+    }
+    .uk-navbar-nav > li {
+        color: rgba(255, 255, 255, 0.8);
+        i {
+            color: @color0;
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin-bottom: 3px;
+        }
+    }
+    .pw-search-form {
+        .pw-search-input {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(100, 100, 100, 0.4);
+            color: rgba(255, 255, 255, 0.6);
+            &:focus {
+                background: @color5;
+                border-color: rgba(100, 100, 100, 0.6);
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+    }
+}
+.ProDraftsNotice {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+}
+.pw-wiretabs-item {
+    background: @color0 !important;
+    border-top: none;
+    border: 1px solid @color3;
+    margin-left: -1px;
+    margin-top: -1px;
+    padding: 10px;
+}
+.AdminThemeUikit {
+    padding: 0px 0px !important;
+}
+.field-revisions {
+    .diff {
+        position: relative !important;
+    }
+}
+#ProcessListerResults {
+    outline: 0px solid @color3 !important;
+    outline: 1px solid @color3;
+    padding-bottom: 20px;
+    #ProcessListerTable {
+        table.ProcessListerTable > tbody > tr > td {
+            &:first-child {
+                padding-left: 12px !important;
+                padding-right: 10px;
+            }
+            &:first-child > a {
+                padding-right: 10px;
+            }
+        }
+        table.ProcessListerTable > thead {
+            th {
+                &:first-child {
+                    padding-left: 12px !important;
+                }
+            }
+        }
+    }
+    .MarkupPagerNav {
+        padding-top: 20px;
+    }
+}
+#ProcessListerResults + a {
+    button {
+        margin-top: 20px !important;
+    }
+}
+#pwapi {
+    .WireTabs {
+        margin-left: 1px;
+    }
+    .AdminDataTable {
+        border: 1px 0px solid @color3;
+        tbody > tr > td {
+            border: 1px 0px solid @color3;
+            &:first-child {
+                padding-left: 8px !important;
+            }
+        }
+        thead > tr > th {
+            font-size: 13px;
+            padding: 0.7em !important;
+            &:first-child {
+                padding-left: 8px !important;
+            }
+        }
+        thead {
+            background-color: @color11;
+            border-top: 2px solid #7b24e6;
+        }
+    }
+}
+
+/* Default GraphQL Theme */
+/*
+.cm-keyword {color: #708 !important;}
+.cm-atom {color: #219 !important;}
+.cm-number {color: #164 !important;}
+.cm-def {color: #00f !important;}
+.cm-punctuation {color: #555 !important;}
+.cm-property {color: #1F61A0 !important;}
+.cm-operator {color: #1F61A0 !important;} // no equivelent...
+.cm-variable {color: #397D13 !important;}
+.cm-variable-2 {color: #05a !important;}
+.cm-variable-3 {color: #085 !important;}
+.cm-comment {color: #a50 !important;}
+.cm-string {color: #a11 !important;}
+.cm-string-2 {color: #f50 !important;}
+.cm-meta {color: #555 !important;}
+.cm-qualifier {color: #555 !important;}
+.cm-builtin {color: #30a !important;}
+.cm-bracket {color: #997 !important;}
+.cm-tag {color: #170 !important;}
+.cm-attribute {color: #00c !important;}
+.cm-header {color: blue !important;}
+.cm-quote {color: #090 !important;}
+.cm-hr {color: #999 !important;}
+.cm-link {color: #00c !important;}
+
+.cm-negative {color: #d44 !important;}
+.cm-positive {color: #292 !important;}
+
+.cm-error {color: #f00 !important;}
+.cm-invalidchar {color: #f00 !important;}
+*/
+
+.graphiql-container {
+    background-color: @color4 !important;
+    .toolbar-button {
+        background: @color1 !important;
+        border-radius: 3px;
+        box-shadow: 0 5px 8px -8px @color5 !important;
+        color: rgba(255, 255, 255, 0.86) !important;
+        cursor: pointer;
+        display: inline-block;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif !important;
+        margin: 0 5px;
+        max-width: 150px;
+        padding: 3px 11px 5px;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        transition: background 0.1s ease, color 0.1s ease;
+        white-space: nowrap;
+        &:hover {
+            background: @color2 !important;
+            color: @color0 !important;
+        }
+    }
+    .variable-editor-title {
+        background: @color13 !important;
+        border-bottom: 1px solid #d6d6d6;
+        border-top: 1px solid #e0e0e0;
+        color: #777777;
+        font-variant: none !important;
+        font-weight: bold;
+        letter-spacing: 0px !important;
+        line-height: 15px !important;
+        padding: 5px 0 8px 43px !important;
+    }
+    .queryWrap {
+        border-top: 1px solid @color10 !important;
+    }
+    .topBar {
+        background: @color4 !important;
+        border-bottom: 0px solid @color15 !important;
+        padding: 14px 14px 9px !important;
+    }
+    .result-window {
+        .CodeMirror-gutters {
+            background-color: @color4 !important;
+            border-color: @color4 !important;
+            cursor: col-resize;
+        }
+    }
+    .execute-button {
+        background: @color1 !important;
+        border-radius: 17px;
+        border: 0px solid rgba(0, 0, 0, 0.25) !important;
+        box-shadow: 0 5px 8px -8px @color5 !important;
+        fill: rgba(255, 255, 255, 0.86) !important;
+        height: 34px;
+        transition: background 0.1s ease, color 0.1s ease;
+        width: 34px;
+        &:hover {
+            background: @color2 !important;
+            fill: #fff !important;
+        }
+        svg {
+            margin-left: 1px !important;
+            margin-top: 1px;
+        }
+    }
+    .docExplorerShow {
+        background: @color4 !important;
+        border-bottom: 0px solid @color15 !important;
+        border-left: 0px solid rgba(0, 0, 0, 0.2) !important;
+        color: @color1 !important;
+        font-size: 18px !important;
+        margin-right: 25px !important;
+        &:hover {
+            color: @color2 !important;
+        }
+        &:before {
+            -ms-transform: rotate(-45deg);
+            border-left: 2px solid @color1 !important;
+            border-top: 2px solid @color1 !important;
+            content: '';
+            display: inline-block;
+            font-weight: bold;
+            height: 9px !important;
+            margin: 0 3px 2px 0 !important;
+            position: relative;
+            transform: rotate(-45deg);
+            width: 9px;
+        }
+    }
+    .historyShow {
+        background: @color4 !important;
+        border-bottom: 0px solid @color15 !important;
+        color: @color1 !important;
+        font-size: 18px !important;
+        &:hover {
+            color: @color2 !important;
+        }
+    }
+    .history-contents > p {
+        &:hover {
+            background: @color1 !important;
+            color: @color0 !important;
+        }
+    }
+}
+
+.graphiql-container .toolbar {
+    margin-left: 50px;
+}
+
+/* CURSOR */
+
+.CodeMirror .CodeMirror-cursor {
+    border-left: 1px solid black;
+}
+
+.graphqlQueryButton {
+    position: absolute;
+    top: 69px;
+    left: 87px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 3;
+    color: rgba(255, 255, 255, 0.86);
+
+    background: @color1;
+    border-radius: 17px;
+    border: 0px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 5px 8px -8px @color5;
+    fill: rgba(255, 255, 255, 0.86);
+    height: 34px;
+    transition: background 0.1s ease, color 0.1s ease;
+    width: 34px;
+    &:hover {
+        background: @color2;
+        fill: #fff;
+        color: #fff;
+    }
+}
+
+.graphqlQueryButtonFloat {
+    margin-top: 8px;
+}
+
+.graphqlQueriesButton {
+    position: fixed;
+    top: 74px;
+    left: 436px;
+    z-index: 3;
+    border: 0px solid #e5e5e5;
+    background: @color1;
+    border-radius: 3px;
+    box-shadow: 0 5px 8px -8px @color5;
+    color: rgba(255, 255, 255, 0.86);
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+    margin: 0 5px;
+    max-width: 150px;
+    padding: 3px 11px 5px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    transition: background 0.1s ease, color 0.1s ease;
+    white-space: nowrap;
+    font-size: 15px;
+    line-height: 16px;
+    &:hover {
+        background: @color2;
+        fill: #fff;
+        color: #fff;
+    }
+}
+
+#graphiql {
+    border: 0px solid #efefef !important;
+    height: 88vh !important;
+    left: 0;
+    position: absolute;
+    top: 55px;
+    width: 100%;
+    z-index: 1;
+    .title {
+        display: none;
+    }
+}
+.CodeMirror-gutters {
+    background-color: @color11 !important;
+    border-right: 1px solid @color10;
+}
+.result-window {
+    .CodeMirror {
+        background: @color4 !important;
+    }
+}
+.CodeMirror {
+    background: @color0 !important;
+}
+.doc-explorer-title-bar {
+    background: @color13 !important;
+}
+.history-title-bar {
+    background: @color13 !important;
+}
+#pwapi-tab-variables {
+    background-color: @color0;
+    border: 1px solid @color3;
+    margin-top: -1px;
+    padding: 15px;
+}
+#pwapi-tab-classes {
+    background-color: @color0;
+    border: 1px solid @color3;
+    margin-top: -1px;
+    padding: 15px;
+}
+#pwapi-tab-modules {
+    background-color: @color0;
+    border: 1px solid @color3;
+    margin-top: -1px;
+    padding: 15px;
+}
+#pwapi-tab-functions {
+    background-color: @color0;
+    border: 1px solid @color3;
+    margin-top: -1px;
+    padding: 15px;
+}
+.pwapi-type-group {
+    padding-top: 20px;
+}
+.pwapi-group-content {
+    background-color: @color0;
+    border: 1px solid @color3;
+}
+.pwapi-method-sections.ui-accordion {
+    border: 1px solid @color3;
+}
+.pwapi-headline {
+    margin-top: 0px;
+}
+.pwapi-main-select {
+    border-radius: 6px !important;
+    box-shadow: 0 5px 8px -8px @color5 !important;
+}
+.pwapi-method-select {
+    border-radius: 6px !important;
+    box-shadow: 0 5px 8px -8px @color5 !important;
+}
+.uk-navbar-item {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    min-height: @height1;
+    padding: 0 20px;
+}
+.uk-navbar-nav > li > a {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    min-height: @height1;
+    padding: 0 20px;
+}
+.uk-navbar-toggle {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    min-height: @height1;
+    padding: 0 20px;
+}
+#pw-masthead-mobile {
+    height: @height1;
+}
+img.pw-logo {
+    margin-top: -3px;
+}
+.uk-link {
+    color: @color1;
+    color: @color2;
+    text-decoration: none !important;
+}
+a {
+    color: @color1;
+    &:hover {
+        color: @color2;
+        text-decoration: none !important;
+    }
+}
+.InputfieldButtonLink {
+    &:hover {
+        color: @color2;
+    }
+}
+.ui-button.ui-state-hover {
+    background-color: @color2;
+    box-shadow: 0 5px 8px -8px @color5;
+    color: @color0;
+    color: #fff !important;
+    cursor: pointer;
+    padding: 0 16px;
+    transition: background 0.1s ease, color 0.1s ease;
+}
+.ui-button {
+    box-shadow: 0 5px 8px -8px @color5;
+    padding: 0 16px;
+    &:hover {
+        background-color: @color2;
+        color: @color0;
+        cursor: pointer;
+    }
+    .ui-button-text {
+        .fa {
+            padding: 0 4px 0 0;
+        }
+    }
+}
+.uk-tab > * > a {
+    border-top: 2px solid transparent;
+    color: @color16;
+    &:hover {
+        color: @color2;
+    }
+}
+.uk-tab > .uk-active {
+    a {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-top: 2px solid @color9;
+        color: @color2;
+    }
+}
+.uk-pagination > * > * {
+    background: @color0;
+    transition: background 0.1s ease, color 0.1s ease;
+}
+.uk-pagination > .uk-active > * {
+    background: @color1;
+    border: 1px solid @color1;
+    color: @color0;
+    a {
+        background: @color1;
+        border: 1px solid @color1;
+        color: @color0;
+        &:hover {
+            background: @color2;
+        }
+    }
+    &:hover {
+        background: @color2;
+    }
+}
+.uk-h2 {
+    color: @color16;
+}
+h2 {
+    color: @color16;
+    display: block;
+    font-size: 1.5em;
+    margin-block-end: 0em;
+    margin-block-start: 0em;
+    margin-bottom: 10px;
+    margin-inline-end: 0px;
+    margin-inline-start: 0px;
+}
+.PageList {
+    .ProcessListerTable {
+        tr.open > td {
+            &:first-child {
+                a.actions_toggle {
+                    color: @color2;
+                }
+            }
+        }
+        tr.open {
+            background: rgb(255, 255, 221) !important;
+            &:hover {
+                background: rgb(255, 255, 204) !important;
+            }
+        }
+    }
+    .PageListerActions {
+        padding-left: 8px;
+        top: 0px;
+        a {
+            background: @color1;
+            color: @color0;
+            transition: background 0.1s ease, color 0.1s ease;
+            &:hover {
+                background: @color2;
+                color: @color0;
+            }
+        }
+        a.PageExtras {
+            font-size: 14px;
+            transition: background 0.1s ease, color 0.1s ease;
+            visibility: visible;
+        }
+    }
+    .PageListItem.PageListItemHover > a.PageListPage {
+        color: @color1 !important;
+        text-decoration: none !important;
+        transition: background 0.1s ease, color 0.1s ease;
+    }
+    .PageListItemOpen > a.PageListPage {
+        color: @color1 !important;
+        text-decoration: none !important;
+        transition: background 0.1s ease, color 0.1s ease;
+        &:hover {
+            color: @color2 !important;
+        }
+    }
+    .PageListItem > a.PageListPage {
+        color: @color1 !important;
+        text-decoration: none !important;
+        transition: background 0.1s ease, color 0.1s ease;
+        i {
+            color: @color1;
+            padding: 0 0.25em 0 0;
+        }
+        &:hover {
+            color: @color2 !important;
+            color: @color2 !important;
+            text-decoration: none !important;
+        }
+    }
+    .PageListItem.PageListItemOpen {
+        background: @color19;
+        transition: background 0.1s ease, color 0.1s ease;
+        &:hover {
+            background: @color0;
+        }
+    }
+    .PageListItemOpen.PageListNoChildren {
+        background: @color8;
+        &:hover {
+            background: #ffffcc;
+        }
+    }
+    .PageListActions {
+        a {
+            background: @color1;
+            transition: background 0.1s ease, color 0.1s ease;
+            &:hover {
+                background: @color2;
+            }
+        }
+    }
+    .PageListMoveNote {
+        a {
+            background: @color1;
+            transition: background 0.1s ease, color 0.1s ease;
+            &:hover {
+                background: @color2;
+            }
+        }
+    }
+    .PageListItem {
+        transition: background 0.1s ease, color 0.1s ease;
+        .PageListActions {
+            padding-left: 0.7em !important;
+            transition: background 0.1s ease, color 0.1s ease;
+        }
+        &:hover {
+            background-color: @color0;
+        }
+    }
+}
+.uk-table-justify {
+    td {
+        &:last-child {
+            padding-right: 10px;
+        }
+        &:first-child {
+            padding-left: 12px;
+        }
+    }
+    th {
+        &:first-child {
+            padding-left: 12px;
+        }
+        &:last-child {
+            margin-right: 12px;
+        }
+    }
+}
+.tablesorter-headerRow {
+    background: #f5f6fa;
+}
+.uk-table.AdminDataTableSortable {
+    tr.tablesorter-headerRow {
+        th {
+            &:hover {
+                color: rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+}
+.ProcessListerTable {
+    border-bottom: 1px solid @color3 !important;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    border-top: 2px solid @color17;
+}
+table.ProcessListerTable {
+    thead {
+        th {
+            border-bottom: 2px solid @color3 !important;
+            border-top-left-radius: 4px !important;
+            border-top-right-radius: 4px !important;
+            color: rgba(0, 0, 0, 0.8);
+            transition: background 0.1s ease, color 0.1s ease;
+            white-space: nowrap;
+            &:hover {
+                background: rgba(233, 236, 241, 0.83);
+                border-bottom: 2px solid #c8d0d8 !important;
+                color: rgba(0, 0, 0, 0.8);
+                text-decoration: none;
+            }
+        }
+    }
+}
+.Inputfield.InputfieldStateCollapsed > .InputfieldHeader {
+    color: @color1;
+    transition: background 0.1s ease, color 0.1s ease;
+    &:hover {
+        color: @color2;
+    }
+}
+.InputfieldHeader {
+    font-size: 15px;
+    transition: background 0.1s ease, color 0.1s ease;
+    &:hover {
+        background: #f5f7f8;
+        color: @color2;
+    }
+}
+.InputfieldHeader.InputfieldStateToggle {
+    &:hover {
+        background: @color0;
+    }
+}
+.InputfieldFieldset > .InputfieldContent {
+    background: @color0;
+}
+.InputfieldFieldset > .InputfieldHeader {
+    background: @color0;
+}
+.ui-button.ui-priority-secondary {
+    background: @color1;
+    color: @color0;
+    opacity: 1;
+}
+.ui-button.ui-state-default.ui-priority-secondary {
+    background: @color1;
+    color: @color0;
+    opacity: 1;
+}
+.ui-button.ui-state-hover.ui-priority-secondary {
+    background: @color1;
+    color: @color0;
+    opacity: 1;
+}
+.ui-button.ui-state-default {
+    background-color: @color1;
+    background: @color1;
+    border: 1px solid transparent;
+    box-shadow: 0 5px 8px -8px @color5;
+    color: rgba(255, 255, 255, 0.86) !important;
+    padding: 0 16px;
+    transition-property: color, background-color, border-color;
+}
+.pw-content {
+    .ui-widget-content {
+        li.ui-state-default {
+            background: @color1;
+            border-color: @color1;
+            color: @color0;
+            opacity: 97%;
+        }
+        li.ui-state-hover {
+            background: @color2;
+            border-color: @color2;
+            color: @color0;
+            transition: background 0.1s ease, color 0.1s ease;
+        }
+    }
+    li.ui-state-default {
+        background: @color1;
+        border-color: @color1;
+        color: @color0;
+        opacity: 97%;
+    }
+    li.ui-state-hover {
+        background: @color2;
+        border-color: @color2;
+        color: @color0;
+        transition: background 0.1s ease, color 0.1s ease;
+    }
+    .lister_headline {
+        margin-bottom: 0.2em !important;
+        margin-top: 1em !important;
+    }
+}
+.pw-button-dropdown-main {
+    background: @color9 !important;
+    transition: background 0.1s ease, color 0.1s ease;
+    &:hover {
+        background: @color6 !important;
+    }
+}
+.pw-button-dropdown-toggle.pw-head-button {
+    background: @color9 !important;
+    transition: background 0.1s ease, color 0.1s ease;
+    &:hover {
+        background: @color6 !important;
+    }
+    &:active {
+        background: @color6 !important;
+    }
+}
+#submit_delete.ui-button {
+    background: @color7 !important;
+    &:hover {
+        background: @color18 !important;
+    }
+}
+.Inputfield {
+    background: none;
+    select {
+        margin-bottom: 10px;
+    }
+}
+#content {
+    .lister_headline {
+        margin-bottom: 0.2em !important;
+        margin-top: 1em !important;
+    }
+}
+p.version {
+    clear: both;
+    display: none;
+}
+.uk-margin-large-bottom {
+    margin-bottom: 15px !important;
+}
+.uk-h1 {
+    font-size: 2rem !important;
+    line-height: 1.3;
+}
+h1 {
+    font-size: 2rem !important;
+    line-height: 1.3;
+}
+#ProcessListerTable {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.pw-table-responsive {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+* + ul {
+    margin-top: 0px;
+}
+ul.pw-dropdown-menu {
+    border: 1px solid @color3;
+    margin-top: -15px;
+}
+ul.ui-menu {
+    border: 1px solid @color3;
+    margin-top: -15px;
+}
+.ui-menu {
+    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.175);
+    padding: 0;
+    .ui-menu-item {
+        a {
+            transition: background 0.1s ease, color 0.1s ease;
+        }
+    }
+    .uk-nav-header {
+        color: @color1;
+    }
+}
+#tracy-debug[id^='tracy-debug-panel-'][class*='tracy-mode-'] > h1 {
+    font-size: 15px !important;
+}
+.InputfieldForm {
+    margin-bottom: 0px;
+}
+#pw-content-head {
+    h1 {
+        color: #1c2836;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 0.8em;
+        font-weight: bold;
+    }
+}
+.ui-dialog {
+    background-color: @color4;
+    .ui-dialog-titlebar {
+        background: @color1;
+    }
+    .ui-dialog-content {
+        background-color: @color4;
+    }
+    .ui-dialog-buttonpane {
+        background: @color4 !important;
+    }
+}
+html.highlightRows {
+    .AdminDataTable.AdminDataList {
+        tr {
+            td {
+                transition: background 0.1s ease, color 0.1s ease;
+            }
+        }
+    }
+    .PageListItem {
+        &:hover {
+            background: @color19;
+        }
+    }
+}
+.pListIconOnly {
+    a {
+        &:before {
+            background: none;
+            display: inline-block;
+            font-family: Fontawesome;
+            font-size: 15px;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            visibility: visible;
+        }
+    }
+    .PageListerActions {
+        a {
+            background: transparent;
+            color: @color1;
+            font-size: 0px;
+            padding: 0px 6px;
+            visibility: hidden;
+            &:hover {
+                background: transparent;
+                color: @color2;
+                opacity: 1;
+            }
+        }
+    }
+}
+#tab_bookmarks {
+    table {
+        tr > td {
+            &:first-child {
+                width: 20% !important;
+            }
+        }
+    }
+    .InputfieldContent {
+        table {
+            background: @color0;
+            padding: 0px;
+        }
+    }
+    .uk-table {
+        th {
+            background-color: @color11;
+            border-top: 1px solid @color10;
+            color: @color1;
+            color: rgba(0, 0, 0, 0.8);
+            text-transform: none;
+            white-space: nowrap;
+        }
+        tbody {
+            font-size: 15px;
+        }
+    }
+}
+.uk-input {
+    font-size: 15px;
+}
+.PageListRoot > .PageList {
+    background-color: #f0f3f7;
+    border: 1px solid @color10;
+    .PageList {
+        margin-left: 1.5em !important;
+    }
+}
+html.aos {
+    .PageListRoot[data-pid] {
+        &:after {
+            transform: translateY(-5px);
+        }
+    }
+    .PageListRoot.PageListSorting {
+        .PageListItem.PageListSortItem {
+            background: @color8 !important;
+        }
+    }
+    .pw-content {
+        .PageList {
+            .PageListItem > a.PageListPage {
+                &:hover > span {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+.PageListSortItem > a.PageListPage {
+    background-color: @color8 !important;
+}
+#pw-dropdown-toggle-submit_save_copy {
+    .ui-button-text {
+        padding: 0 0 0 4px;
+    }
+}
+.ui-dialog-titlebar-close {
+    box-shadow: none !important;
+}
+.ui-dialog-buttonpane {
+    box-shadow: 0 -5px 8px -8px @color5;
+}
+#pw-content-head-buttons {
+    .ui-button {
+        margin-left: 0px;
+    }
+}
+.pw-button-dropdown-wrap {
+    box-shadow: 0 5px 8px -8px @color5;
+    margin-right: 10px;
+    overflow: hidden;
+}
+#wrap_submit_save {
+    box-shadow: 0 5px 8px -8px @color5;
+    margin-right: 10px;
+    overflow: hidden;
+}
+#pw-dropdown-toggle-submit_save {
+    margin-right: 0px;
+}
+.uk-label {
+    background-color: @color1;
+    color: @color0;
+    text-transform: initial;
+}
+.uk-label-success {
+    background-color: @color9;
+    color: @color0;
+}
+.uk-label-warning {
+    background-color: #eaab0c;
+    color: @color0;
+}
+.uk-label-danger {
+    background-color: @color7;
+    color: @color0;
+}
+.pw-panel-content {
+    background: @color4 !important;
+}
+.ui-accordion.ui-widget {
+    .ui-accordion-header {
+        background: @color1;
+        border-radius: 0;
+        border: none;
+        color: rgba(255, 255, 255, 0.86) !important;
+        padding-left: 1.5em;
+        transition: background 0.1s ease, color 0.1s ease;
+        &:hover {
+            background: @color2;
+            color: #fff !important;
+        }
+    }
+    .ui-accordion-header > a {
+        border-radius: 0;
+        border: none;
+        color: @color0;
+        padding-left: 1.5em;
+        transition: background 0.1s ease, color 0.1s ease;
+        &:hover {
+            background: @color2;
+        }
+    }
+}
+#pw-uk-debug-toggle {
+    i {
+        color: @color7 !important;
+    }
+}
+.debugBy {
+    a {
+        color: #8d939e;
+    }
+}
+.delete-row {
+    * {
+        color: @color7 !important;
+        &:hover {
+            color: @color18 !important;
+        }
+    }
+}
+.uk-checkbox.input-or {
+    background-color: inherit;
+    margin-left: 15px;
+}
+.uk-checkbox {
+    &:checked {
+        background-color: @color6;
+        border-color: transparent;
+    }
+    &:indeterminate {
+        background-color: @color6;
+        border-color: transparent;
+    }
+}
+.uk-radio {
+    &:checked {
+        background-color: @color6;
+        border-color: transparent;
+    }
+}
+.InputfieldSelector {
+    .selector-row {
+        .opval {
+            input.input-or {
+                display: none;
+                margin-left: 15px !important;
+            }
+        }
+        .delete-row {
+            width: 28px !important;
+        }
+    }
+}
+.InputfieldToggleGroup {
+    label.InputfieldToggleCurrent {
+        background-color: @color6 !important;
+        border-color: @color6 !important;
+        color: @color0 !important;
+    }
+    input {
+        &:checked + label {
+            background-color: @color6 !important;
+            border-color: @color6 !important;
+            color: @color0 !important;
+        }
+        &:not {
+            &:checked + label {
+                &:not(.InputfieldToggleCurrent) {
+                    background-color: @color4 !important;
+                    transition: background 0.1s ease, color 0.1s ease;
+                    &:hover {
+                        background: @color14 !important;
+                    }
+                }
+            }
+        }
+    }
+    label {
+        &:not(.InputfieldToggleCurrent) {
+            background-color: @color4 !important;
+            transition: background 0.1s ease, color 0.1s ease;
+            &:hover {
+                background: @color14 !important;
+            }
+        }
+    }
+}
+p.notes {
+    z-index: 2 !important;
+}
+#PageListMoveFrom {
+    .PageListItem {
+        background: @color8 !important;
+    }
+}
+#main {
+    .notes {
+        margin: 15px 0 0 0;
+        padding: 8px;
+    }
+}
+.CodeMirror-lines {
+    * {
+        font-size: 13px;
+    }
+}
+.description {
+    font-size: 15px;
+}
+.pw-description {
+    font-size: 15px;
+}
+.redColor {
+    color: @color7;
+    transition: background 0.1s ease, color 0.1s ease;
+    &:hover {
+        color: @color18;
+    }
+}
+.byPadding {
+    margin-left: 12px;
+}
+.byIcons {
+    font-size: 0;
+    opacity: 100%;
+    transition: opacity 0.1s ease, color 0.1s ease;
+    &:hover {
+        opacity: 100%;
+    }
+}
+.byIcons * .fa,
+.byIcons * .fas {
+    font-size: 21px;
+    color: @color6;
+    position: relative;
+    top: 8px;
+    margin-right: 6px;
+}
+ul.byLine {
+    padding: 0px;
+    li {
+        display: inline;
+    }
+}
+.byMargin {
+    top: 5px;
+    position: relative;
+}
+.byIconPadding {
+    margin-right: 6px;
+}
+i.advancedBy {
+    color: #dd8803;
+    margin-left: 12px !important;
+    margin-right: 2px !important;
+}
+.uk-tooltip {
+    background-color: @color1;
+    border-color: 4px solid rgb(171, 199, 223);
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    opacity: 96%;
+    padding: 8px;
+}
+.graphqlIcon {
+    background-size: contain;
+    background: url(/site/templates/images/graphql.svg) no-repeat top left;
+    display: block;
+    height: @height1;
+    width: @width4;
+}
+.graphqlIconW {
+    background-size: contain;
+    background: url(/site/templates/images/graphqlw.svg) no-repeat top left;
+    display: block;
+    height: @height1;
+    width: @width4;
+}
+
+#pw-footer {
+    padding-top: 10px;
+    border-top: 0px solid #d9e1ea;
+}
+
+.footerFloatBottom {
+    position: absolute;
+    bottom: -4px;
+    z-index: 200;
+    width: 100%;
+}
+
+.footerFloatBottom * ul {
+    margin: 0px !important;
+}
+
+.pw-table-resizable .tablesorter-resizable-handle {
+    margin-left: 0px;
+}
+
+/* EXAMPLES:
+// mixin to add new declaration
+.hook-card() { 
+	// color: #000; 
+}
+
+// Should there be neither a variable nor a hook available, you can also create your own selector. 
+// To do so, use the .hook-card-misc hook and write your selector inside. This will sort your new o
+// selector to the right place of the compiled CSS file. 
+
+// misc mixin
+.hook-card-misc() {
+
+	// new rule
+	// .uk-card a { 
+	//	color: #f00; 
+	// }
+}
+*/

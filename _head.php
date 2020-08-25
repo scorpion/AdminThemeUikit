@@ -1,6 +1,8 @@
-<?php namespace ProcessWire;
+<?php
 
-if(!defined("PROCESSWIRE")) die();
+namespace ProcessWire;
+
+if (!defined("PROCESSWIRE")) die();
 
 /** @var Config $config */
 /** @var AdminThemeUikit $adminTheme */
@@ -16,39 +18,41 @@ if(!defined("PROCESSWIRE")) die();
 
 $version = $adminTheme->version . 'e';
 
-$config->styles->prepend($config->urls->root . "wire/templates-admin/styles/AdminTheme.css?v=$version");
-$config->styles->prepend($adminTheme->getUikitCSS());
-$config->styles->append($config->urls->root . "wire/templates-admin/styles/font-awesome/css/font-awesome.min.css?v=$version");
+$ext = $config->debug ? "" : ".min";
+$darkMode = $user->darkMode ? ".dark" : ".meta";
 
-$ext = $config->debug ? "js" : "min.js";
-$config->scripts->append($config->urls->root . "wire/templates-admin/scripts/inputfields.$ext?v=$version");
-$config->scripts->append($config->urls->root . "wire/templates-admin/scripts/main.$ext?v=$version");
-$config->scripts->append($config->urls->adminTemplates . "uikit/dist/js/uikit.min.js?v=$version");
+$config->styles->prepend($config->urls->adminTemplates . "uikit/dist/css/uikit$darkMode$ext.css?v=" . $version);
+$config->styles->append($config->urls->root . "site/templates-admin/styles/font-awesome/css/all$ext.css?v=$version");
+$config->styles->append($config->urls->root . "site/templates-admin/styles/font-awesome/css/font-awesome$ext.css?v=$version");
+
+$config->scripts->append($config->urls->root . "site/templates-admin/scripts/inputfields$ext.js?v=$version");
+$config->scripts->append($config->urls->root . "site/templates-admin/scripts/main$ext.js?v=$version");
+$config->scripts->append($config->urls->adminTemplates . "uikit/dist/js/uikit$ext.js?v=$version");
 $config->scripts->append($config->urls->adminTemplates . "uikit/dist/js/uikit-icons.min.js?v=$version");
-$config->scripts->append($config->urls->adminTemplates . "scripts/main.js?v=$version");
+$config->scripts->append($config->urls->adminTemplates . "scripts/main$ext.js?v=$version");
 
 ?>
 
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="robots" content="noindex, nofollow" />
-	<meta name="google" content="notranslate" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="google" content="notranslate" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title><?php echo $adminTheme->getBrowserTitle(); ?></title>
+<title><?php echo $adminTheme->getBrowserTitle(); ?></title>
 
-	<script>
-		<?php echo $adminTheme->getHeadJS(); ?>
-	</script>
+<script>
+    <?php echo $adminTheme->getHeadJS(); ?>
+</script>
 
-	<?php
-	foreach($config->styles as $file) {
-		echo "\n\t<link type='text/css' href='$file' rel='stylesheet' />";
-	}
-	if($adminTheme->maxWidth && strpos($layout, 'sidenav') === false) {
-		echo "\n\t<style type='text/css'>.pw-container { max-width: {$adminTheme->maxWidth}px; }</style>";
-	}
-	foreach($config->scripts as $file) {
-		echo "\n\t<script type='text/javascript' src='$file'></script>";
-	}
-	?>
+<?php
+foreach ($config->styles as $file) {
+    echo "\n\t<link type='text/css' href='$file' rel='stylesheet' />";
+}
+if ($adminTheme->maxWidth && strpos($layout, 'sidenav') === false) {
+    echo "\n\t<style type='text/css'>.pw-container { max-width: {$adminTheme->maxWidth}px; }</style>";
+}
+foreach ($config->scripts as $file) {
+    echo "\n\t<script type='text/javascript' src='$file'></script>";
+}
+?>

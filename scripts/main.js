@@ -85,8 +85,12 @@ var ProcessWireAdminTheme = {
 				// identify active tab and trigger event on it
 				var $activeTab = $tabs.children('.uk-active');
 				if($activeTab.length) {
-					var $activeContent = $($activeTab.find('a').attr('href'));
-					if($activeContent.length) ProcessWireAdminTheme.wireTabClick($activeContent);
+					var href = $activeTab.find('a').attr('href'); 
+					if(href.indexOf('#') === 0) {
+						// href points to an #element id in current document
+						var $activeContent = $(href);
+						if($activeContent.length) ProcessWireAdminTheme.wireTabClick($activeContent);
+					}
 				}
 			}, 500);
 		}
@@ -126,13 +130,11 @@ var ProcessWireAdminTheme = {
 			}
 		}
 		if(skip) return;
+		var hbc = $header.css('background-color').replace(/ /g, ''); // first field header background color
+		if(hbc === 'rgb(255,255,255)' || hbc === 'rgba(0,0,0,0)') return;
 		var $tab = $('#_' + $newTabContent.attr('id')).parent();
 		if(!$tab.length) return;
-		var $a = $tab.children('a');
-		var bgc = $header.css('background-color');
-		if($tab.css('background-color') != bgc && $a.css('background-color') != bgc) {
-			$tab.addClass('pw-tab-muted');
-		}
+		if($tab.css('background-color').replace(/ /g, '') != hbc) $tab.addClass('pw-tab-muted');
 	}, 
 
 	/**
@@ -689,7 +691,7 @@ var ProcessWireAdminTheme = {
 				width += w;
 				if($lastInputfield && width >= 95) {
 					// finishing out row, update last visible column to include the width of the hidden column
-					lastW += widthHidden;
+					// lastW += widthHidden;
 					if(debug) consoleLog('Updating last visible Inputfield to width=' + lastW, $lastInputfield);
 					ukGridClass(lastW, $lastInputfield);
 					width = 0;
@@ -829,6 +831,10 @@ var ProcessWireAdminTheme = {
 		$(document).on('reloaded', function() { initFormMarkup($(this)) }); // function() intentional
 		$(document).on('hideInputfield', showHideInputfield);
 		$(document).on('showInputfield', showHideInputfield);
+		$(document).on('columnWidth', '.Inputfield', function(e, width) {
+			ukGridClass(width, $(this)); 
+			return false;
+		}); 
 
 		$('body').addClass('InputfieldColumnWidthsInit');
 		initFormMarkup();

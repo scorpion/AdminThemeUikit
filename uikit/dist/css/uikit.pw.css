@@ -1566,7 +1566,7 @@ select.uk-form-width-xsmall {
   display: none;
 }
 /* 4 */
-.uk-select:not([multiple]):not([size]) option {
+.uk-select:not([multiple]):not([size]) option:not([disabled]) {
   color: #444;
 }
 /*
@@ -11756,7 +11756,7 @@ table.AdminDataTable:not(.uk-table) .pw-table-sort-value {
   border-left: none;
 }
 .pw-table-resizable .tablesorter-resizable-handle {
-  margin-left: 37px;
+  /*margin-left: 37px;*/
 }
 .uk-tab > li.uk-active {
   background: #fff;
@@ -13882,7 +13882,7 @@ a.tooltip:hover {
   border-top: none !important;
 }
 .ui-menu .ui-menu-item i.fa {
-  margin-right: 2px;
+  margin-right: 8px;
   color: #97aab4;
 }
 .ui-menu .ui-menu-item a {
@@ -13896,6 +13896,7 @@ a.tooltip:hover {
 }
 .ui-menu .ui-menu-item a i.fa {
   margin-left: -2px;
+  /*padding-left: 5px;*/
   color: #97aab4;
 }
 .ui-menu .ui-menu-item a.uk-active,
@@ -13999,7 +14000,7 @@ a.tooltip:hover {
   line-height: 1.4;
 }
 .PageList .ProcessListerTable tr.open {
-  background: linear-gradient(to right, transparent 0%, #f0f3f7 100%);
+  background: linear-gradient(to right, #fff 0%, #f0f3f7 100%);
 }
 .PageList .ProcessListerTable tr.open > td:first-child a.actions_toggle {
   color: #d21846;
@@ -15191,9 +15192,12 @@ body {
 em {
   color: inherit;
 }
+/*
+// removed because it causes horiz scrollbar at small mobile widths
 #pw-mastheads {
   position: relative;
 }
+*/
 #pw-masthead,
 #pw-masthead-mobile {
   height: 73px;
@@ -15363,22 +15367,28 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 .pw-layout-sidenav-tree .ProDraftsNotice {
   margin-top: 20px;
 }
-.ProcessLogin #pw-masthead {
+body.pw-guest #pw-masthead {
   display: none;
 }
-.ProcessLogin #pw-masthead-mobile {
+body.pw-guest #pw-masthead-mobile {
   display: block !important;
 }
-.ProcessLogin #pw-content-head {
+body.pw-guest #pw-content-head {
   display: none;
 }
-.ProcessLogin #pw-content-body {
+body.pw-guest #pw-content-body {
   text-align: center;
 }
-.ProcessLogin .pw-notices > li > .uk-container {
+body.pw-guest .pw-notices > li > .uk-container {
   text-align: center;
 }
-.ProcessLogin .pw-notices .notice-remove {
+body.pw-guest .pw-notices .notice-remove {
+  display: none;
+}
+body.pw-guest hr {
+  display: none;
+}
+body.pw-guest footer {
   display: none;
 }
 .ProcessLogin #ProcessLoginForm {
@@ -15411,12 +15421,6 @@ body.pw-layout-sidenav-side #pw-sidenav-bar {
 }
 .ProcessLogin #ProcessLoginForm #wrap_Inputfield_login_submit .ui-button {
   margin: 0;
-}
-.ProcessLogin hr {
-  display: none;
-}
-.ProcessLogin footer {
-  display: none;
 }
 body.pw-init .pw-dropdown-menu,
 body.pw-init .pw-button-dropdown {
